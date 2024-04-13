@@ -59,6 +59,37 @@ This tool tip is accessed by holding `Control + Alt + Shift` when hovering over 
 `cIQueryToolTipAppendTextHookTarget` as additional interface(s) on your GZCOM DLL director.
 3. Subscribe for the notifications in `PostCityInit` and unsubscribe in `PreCityShutdown`.
 
+### Notes for Developers
+
+#### cIBuildingQueryDialogHookTarget
+
+An implementation of this callback interface receives a message before and after the building query dialog is shown.    
+The intended use case for these callbacks is that the implementer can use the game's `cISCStringDetokenizer::AddUnknownTokenReplacementMethod` function
+to register a function to handle occupant-specific string tokens in their `BeforeDialogShown` method, and unregister it in their `AfterDialogShown` method.
+
+#### Tool Tip Advanced/Debug Query
+
+The Tool Tip hook callbacks have a `debugQuery` parameter, this parameter is set to `true` if the user activated the
+game's advanced/debug query mode by holding down `Control + Alt + Shift` before hovering over an item.
+
+#### cIBuildingQueryToolTipHookTarget and cINetworkQueryToolTipHookTarget
+
+An implementation of these callback interfaces should try to target a narrow set of activation conditions
+to avoid conflicts between different callback subscribers.    
+The tool tip callbacks for a specific occupant will be stopped after a subscriber reports that it handled
+the tool tip, the order that the callbacks are executed in is unspecified.
+If no subscriber set a custom tool tip for the specific occupant, the game's default tool tip will be shown.
+
+#### cIQueryToolTipAppendTextHookTarget
+
+An implementation of this callback interface allows callers to append one or more lines of text to the end of
+the current tool tip. Multiple lines of text can be added by separating them with `\n`.    
+The number of lines added to the query and the length of each line should be kept as small as possible. SC4
+has a limited amount of space that it reserves for the query tool tip text, and it may fail to display a tool
+tip that exceeds its limits.
+
+### Sample Implementations
+
 See [BuildingQueryVariablesDllDirector.cpp](src/child-directors/BuildingQueryVariablesDllDirector.cpp) and [NetworkQueryToolTipDllDirector.cpp](src/child-directors/NetworkQueryToolTipDllDirector.cpp).
 
 ## System Requirements
