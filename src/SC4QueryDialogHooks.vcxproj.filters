@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\GZCOM">
+      <UniqueIdentifier>{634b96ad-93c3-4d7e-81f2-492a2d0f96d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EASTL">
+      <UniqueIdentifier>{e6636fd3-168e-425b-a128-09d78c7839a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GZCOM">
+      <UniqueIdentifier>{55969e5e-2491-4049-8687-619fc7c065a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Public Headers">
+      <UniqueIdentifier>{13e8318c-dc42-47e8-a043-f82b0dafa3d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Child Directors">
+      <UniqueIdentifier>{1c679b13-9a58-4d2b-8c72-79fd25b2481f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Child Directors">
+      <UniqueIdentifier>{2a6e3443-9bd4-4727-a49e-aece63029b2e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cRZBaseString.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cRZBaseVariant.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cRZCOMDllDirector.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cRZMessage2.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cRZMessage2Standard.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cS3DVector3.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cSCBaseProperty.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\EASTLAllocatorSC4.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\StringResourceManager.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\assert.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\atomic.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\fixed_pool.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\hashtable.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\intrusive_list.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\numeric_limits.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\red_black_tree.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\string.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\EASTL\source\thread_support.cpp">
+      <Filter>Source Files\EASTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\SC4UI.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\SCPropertyUtil.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryUIHooksDllDirector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SC4VersionDetection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingQueryHookServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingQueryHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Patcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkQueryHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkQueryToolTipHookServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryToolHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="child-directors\BuildingQueryVariablesDllDirector.cpp">
+      <Filter>Source Files\Child Directors</Filter>
+    </ClCompile>
+    <ClCompile Include="child-directors\NetworkQueryToolTipDllDirector.cpp">
+      <Filter>Source Files\Child Directors</Filter>
+    </ClCompile>
+    <ClCompile Include="GZStringUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceKey.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceManager.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4App.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cIGZPersistDBRecord.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cGZPersistResourceKey.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cIGZPersistResourceManager.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cIGZPersistResource.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cIGZPersistResourceFactory.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\SCPropertyUtil.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cRZCOMDllDirector.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cIBuildingQueryDialogHookTarget.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SC4VersionDetection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingQueryHookServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cIBuildingQueryHookServer.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingQueryHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cIBuildingQueryCustomToolTipHookTarget.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Patcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalHookServerPointers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISCStringDetokenizer.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cINetworkQueryToolTipHookServer.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cINetworkQueryCustomToolTipHookTarget.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkQueryHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkQueryToolTipHookServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryToolHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="child-directors\NetworkQueryToolTipDllDirector.h">
+      <Filter>Header Files\Child Directors</Filter>
+    </ClInclude>
+    <ClInclude Include="child-directors\BuildingQueryVariablesDllDirector.h">
+      <Filter>Header Files\Child Directors</Filter>
+    </ClInclude>
+    <ClInclude Include="GZStringUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4Occupant.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4NetworkOccupant.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cIQueryToolTipAppendTextHookTarget.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4LotManager.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4BuildingDevelopmentSimulator.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cSC4EdgeConnectionStore.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include="packages.config" />
+    <None Include="vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="version.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
+  </ItemGroup>
+</Project>
