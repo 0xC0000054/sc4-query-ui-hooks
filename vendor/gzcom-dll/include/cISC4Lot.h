@@ -89,7 +89,7 @@ class cISC4Lot : public cIGZUnknown
 		virtual uint16_t GetCapacity(uint32_t dwDeveloperType, bool bForceCalculation) = 0;
 		virtual uint32_t GetAvailableCapacity(uint32_t dwDeveloperType, bool bForceCalculation) = 0;
 
-		virtual uint32_t GetPopulation(uint32_t dwDeveloperType) = 0;
+		virtual uint16_t GetPopulation(uint32_t dwDeveloperType) = 0;
 		virtual uint32_t GetPopulations(void) = 0;
 		virtual bool SetPopulation(uint32_t dwDeveloperType, uint16_t wPopulation) = 0;
 
