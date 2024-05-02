@@ -42,7 +42,7 @@ of a building query dialog in the form of `#variable_name#`.
 | iht_capacity | The I-HT occupant capacity. |
 </details>
 
-Multiple `*_occupant` and `*_capacity` variables can be combined in a LTEXT query to show the filled/available occupancy.
+Multiple `*_occupancy` and `*_capacity` variables can be combined in a LTEXT query to show the filled/available occupancy.
 e.g. `#cs1_occupancy#/#cs1_capacity#`.
 
 ### Advanced Network Query Tool Tip
