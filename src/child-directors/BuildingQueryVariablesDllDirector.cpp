@@ -11,6 +11,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "BuildingQueryVariablesDllDirector.h"
+#include "AvailableBuildingStyles.h"
 #include "cIBuildingQueryHookServer.h"
 #include "DebugUtil.h"
 #include "Logger.h"
@@ -168,13 +169,20 @@ namespace
 
 				const std::string_view seperator(", ");
 
+				const AvailableBuildingStyles& availableBuildingStyles = AvailableBuildingStyles::GetInstance();
+
 				char buffer[256]{};
 
 				for (uint32_t style : buildingStyles)
 				{
-					int length = std::snprintf(buffer, sizeof(buffer), "0x%x", style);
+					if (!availableBuildingStyles.AppendStyleName(style, outReplacement))
+					{
+						// If the style was not found in the list of available building styles,
+						// we print the style id as a hexadecimal number.
 
-					outReplacement.Append(buffer, static_cast<uint32_t>(length));
+						int length = std::snprintf(buffer, sizeof(buffer), "0x%x", style);
+						outReplacement.Append(buffer, static_cast<uint32_t>(length));
+					}
 
 					if (index < lastItemIndex)
 					{

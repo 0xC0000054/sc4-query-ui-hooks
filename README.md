@@ -15,7 +15,7 @@ of a building query dialog in the form of `#variable_name#`.
 
 | Name | Description |
 |------|-------------|
-| building_styles | Shows a list of the building's styles as hexadecimal numbers. |
+| building_styles | Shows a list of the building's styles. |
 | r1_occupancy | The current number of R§ occupants. |
 | r1_capacity | The R§ occupant capacity. |
 | r2_occupancy | The current number of R§§ occupants. |

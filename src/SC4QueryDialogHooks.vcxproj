@@ -31,6 +31,7 @@
     <ClCompile Include="..\vendor\gzcom-dll\src\SC4UI.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\SCPropertyUtil.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\StringResourceManager.cpp" />
+    <ClCompile Include="AvailableBuildingStyles.cpp" />
     <ClCompile Include="child-directors\BuildingQueryVariablesDllDirector.cpp" />
     <ClCompile Include="child-directors\NetworkQueryToolTipDllDirector.cpp" />
     <ClCompile Include="DebugUtil.cpp" />
@@ -63,6 +64,7 @@
     <ClInclude Include="..\vendor\gzcom-dll\include\SCPropertyUtil.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceKey.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceManager.h" />
+    <ClInclude Include="AvailableBuildingStyles.h" />
     <ClInclude Include="child-directors\BuildingQueryVariablesDllDirector.h" />
     <ClInclude Include="child-directors\NetworkQueryToolTipDllDirector.h" />
     <ClInclude Include="DebugUtil.h" />
