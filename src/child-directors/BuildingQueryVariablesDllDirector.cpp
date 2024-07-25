@@ -71,6 +71,25 @@ namespace
 		}
 	};
 
+	bool MakeNumberStringForCurrentLanguage(int64_t number, cIGZString& destination)
+	{
+		bool result = false;
+
+		cIGZLanguageManagerPtr pLM;
+
+		if (pLM)
+		{
+			cIGZLanguageUtility* pLU = pLM->GetLanguageUtility(pLM->GetCurrentLanguage());
+
+			if (pLU)
+			{
+				result = pLU->MakeNumberString(number, destination);
+			}
+		}
+
+		return result;
+	}
+
 	uint32_t GetDeveloperCapacity(const UnknownTokenContext* context, uint32_t developerType)
 	{
 		uint32_t capacity = 0;
@@ -205,17 +224,7 @@ namespace
 		{
 			uint32_t capacity = GetDeveloperCapacity(context, developerType);
 
-			cIGZLanguageManagerPtr pLM;
-
-			if (pLM)
-			{
-				cIGZLanguageUtility* pLU = pLM->GetLanguageUtility(pLM->GetCurrentLanguage());
-
-				if (pLU)
-				{
-					result = pLU->MakeNumberString(capacity, outReplacement);
-				}
-			}
+			result = MakeNumberStringForCurrentLanguage(capacity, outReplacement);
 		}
 
 		return result;
@@ -229,17 +238,7 @@ namespace
 		{
 			uint32_t occupancy = GetDeveloperOccupancy(context, developerType);
 
-			cIGZLanguageManagerPtr pLM;
-
-			if (pLM)
-			{
-				cIGZLanguageUtility* pLU = pLM->GetLanguageUtility(pLM->GetCurrentLanguage());
-
-				if (pLU)
-				{
-					result = pLU->MakeNumberString(occupancy, outReplacement);
-				}
-			}
+			result = MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
 		}
 
 		return result;
