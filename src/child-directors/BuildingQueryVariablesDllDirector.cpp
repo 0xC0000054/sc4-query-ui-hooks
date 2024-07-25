@@ -90,44 +90,6 @@ namespace
 		return result;
 	}
 
-	uint32_t GetDeveloperCapacity(const UnknownTokenContext* context, uint32_t developerType)
-	{
-		uint32_t capacity = 0;
-
-		if (context
-			&& context->pOccupant
-			&& context->lotManager)
-		{
-			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
-
-			if (pLot)
-			{
-				capacity = pLot->GetCapacity(developerType, true);
-			}
-		}
-
-		return capacity;
-	}
-
-	uint32_t GetDeveloperOccupancy(const UnknownTokenContext* context, uint32_t developerType)
-	{
-		uint32_t occupancy = 0;
-
-		if (context
-			&& context->pOccupant
-			&& context->lotManager)
-		{
-			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
-
-			if (pLot)
-			{
-				occupancy = pLot->GetPopulation(developerType);
-			}
-		}
-
-		return occupancy;
-	}
-
 	std::set<uint32_t> GetSupportedBuildingStyles(cISC4Occupant* pOccupant)
 	{
 		std::set<uint32_t> styles;
@@ -220,11 +182,17 @@ namespace
 	{
 		bool result = false;
 
-		if (context)
+		if (context
+			&& context->pOccupant
+			&& context->lotManager)
 		{
-			uint32_t capacity = GetDeveloperCapacity(context, developerType);
+			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
 
-			result = MakeNumberStringForCurrentLanguage(capacity, outReplacement);
+			if (pLot)
+			{
+				uint16_t capacity = pLot->GetCapacity(developerType, true);
+				result = MakeNumberStringForCurrentLanguage(capacity, outReplacement);
+			}
 		}
 
 		return result;
@@ -234,11 +202,17 @@ namespace
 	{
 		bool result = false;
 
-		if (context)
+		if (context
+			&& context->pOccupant
+			&& context->lotManager)
 		{
-			uint32_t occupancy = GetDeveloperOccupancy(context, developerType);
+			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
 
-			result = MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
+			if (pLot)
+			{
+				uint16_t occupancy = pLot->GetPopulation(developerType);
+				result = MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
+			}
 		}
 
 		return result;
