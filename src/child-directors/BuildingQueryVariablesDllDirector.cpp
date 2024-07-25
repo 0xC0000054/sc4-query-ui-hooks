@@ -31,6 +31,7 @@
 #include "cISC4BuildingDevelopmentSimulator.h"
 #include "cISC4City.h"
 #include "cISC4Lot.h"
+#include "cISC4LotConfiguration.h"
 #include "cISC4LotManager.h"
 #include "cISC4Occupant.h"
 #include "cRZAutoRefCount.h"
@@ -198,6 +199,31 @@ namespace
 		return result;
 	}
 
+	bool GetGrowthStageToken(const UnknownTokenContext* context, cIGZString& outReplacement)
+	{
+		bool result = false;
+
+		if (context
+			&& context->pOccupant
+			&& context->lotManager)
+		{
+			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
+
+			if (pLot)
+			{
+				cISC4LotConfiguration* pLotConfiguration = pLot->GetLotConfiguration();
+
+				if (pLotConfiguration)
+				{
+					uint8_t growthStage = pLotConfiguration->GetGrowthStage();
+					result = MakeNumberStringForCurrentLanguage(growthStage, outReplacement);
+				}
+			}
+		}
+
+		return result;
+	}
+
 	bool GetOccupancyToken(const UnknownTokenContext* context, cIGZString& outReplacement, uint32_t developerType)
 	{
 		bool result = false;
@@ -226,6 +252,7 @@ using namespace std::placeholders;
 static const std::unordered_map<std::string_view, TokenDataCallback> tokenDataCallbacks =
 {
 	{ "building_styles", GetBuildingStylesToken },
+	{ "growth_stage", GetGrowthStageToken },
 	{ "r1_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x1010) },
 	{ "r1_capacity", std::bind(GetCapacityToken, _1, _2, 0x1010) },
 	{ "r2_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x1020) },
