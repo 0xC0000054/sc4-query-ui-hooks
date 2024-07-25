@@ -468,16 +468,5 @@ void BuildingQueryVariablesDllDirector::DebugLogTokenizerVariables()
 			DebugUtil::PrintLineToDebugOutputFormatted("%s = %s", token.ToChar(), result.ToChar());
 		}
 	}
-
-	cRZBaseString cs1Occupancy;
-	cRZBaseString cs1Capacity;
-	if (stringDetokenizer->Detokenize(cRZBaseString("cs1_occupancy"), cs1Occupancy)
-		&& stringDetokenizer->Detokenize(cRZBaseString("cs1_capacity"), cs1Capacity))
-	{
-		DebugUtil::PrintLineToDebugOutputFormatted(
-			"Current Cs$ Jobs: %s/%s",
-			cs1Occupancy.ToChar(),
-			cs1Capacity.ToChar());
-	}
 }
 
