@@ -144,7 +144,7 @@ namespace
 		if (pOccupant)
 		{
 			constexpr size_t lastStyleIndex = MaxisBuildingStyles.size() - 1;
-			const std::string_view seperator(", ");
+			const std::string_view separator(", ");
 
 			for (size_t i = 0; i < MaxisBuildingStyles.size(); i++)
 			{
@@ -156,10 +156,17 @@ namespace
 
 					if (i < lastStyleIndex)
 					{
-						destination.Append(seperator.data(), seperator.size());
+						destination.Append(separator.data(), separator.size());
 					}
-					result = true;
 				}
+			}
+
+			// Check that at least one style name has been written to the destination.
+			if (destination.Strlen() > 0)
+			{
+				// Remove the trailing separator from the last style in the list.
+				destination.Resize(destination.Strlen() - separator.size());
+				result = true;
 			}
 		}
 
