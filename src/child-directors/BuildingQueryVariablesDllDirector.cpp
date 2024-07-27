@@ -63,15 +63,15 @@ namespace
 	{
 		cIGZCOM* pCOM;
 		cISC4Occupant* pOccupant;
-		cISC4LotManager* lotManager;
+		cISC4City* pCity;
 
 		UnknownTokenContext(
 			cIGZCOM* GZCOM,
 			cISC4Occupant* occupant,
-			cISC4LotManager* lotManager)
+			cISC4City* city)
 			: pCOM(GZCOM),
 			  pOccupant(occupant),
-			  lotManager(lotManager)
+			  pCity(city)
 		{
 		}
 	};
@@ -83,6 +83,23 @@ namespace
 		std::pair(0x2002, "Houston 1990"),
 		std::pair(0x2003, "Euro-Contemporary"),
 	};
+
+	cISC4Lot* GetOccupantLot(const UnknownTokenContext* context)
+	{
+		cISC4Lot* pLot = nullptr;
+
+		if (context && context->pCity && context->pOccupant)
+		{
+			cISC4LotManager* pLotManager = context->pCity->GetLotManager();
+
+			if (pLotManager)
+			{
+				pLot = pLotManager->GetOccupantLot(context->pOccupant);
+			}
+		}
+
+		return pLot;
+	}
 
 	bool MakeNumberStringForCurrentLanguage(int64_t number, cIGZString& destination)
 	{
@@ -168,15 +185,12 @@ namespace
 	{
 		bool result = false;
 
-		if (context && context->pOccupant && context->lotManager)
-		{
-			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
+		cISC4Lot* pLot = GetOccupantLot(context);
 
-			if (pLot)
-			{
-				uint16_t capacity = pLot->GetCapacity(developerType, true);
-				result = MakeNumberStringForCurrentLanguage(capacity, outReplacement);
-			}
+		if (pLot)
+		{
+			uint16_t capacity = pLot->GetCapacity(developerType, true);
+			result = MakeNumberStringForCurrentLanguage(capacity, outReplacement);
 		}
 
 		return result;
@@ -186,19 +200,16 @@ namespace
 	{
 		bool result = false;
 
-		if (context && context->pOccupant && context->lotManager)
+		cISC4Lot* pLot = GetOccupantLot(context);
+
+		if (pLot)
 		{
-			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
+			cISC4LotConfiguration* pLotConfiguration = pLot->GetLotConfiguration();
 
-			if (pLot)
+			if (pLotConfiguration)
 			{
-				cISC4LotConfiguration* pLotConfiguration = pLot->GetLotConfiguration();
-
-				if (pLotConfiguration)
-				{
-					uint8_t growthStage = pLotConfiguration->GetGrowthStage();
-					result = MakeNumberStringForCurrentLanguage(growthStage, outReplacement);
-				}
+				uint8_t growthStage = pLotConfiguration->GetGrowthStage();
+				result = MakeNumberStringForCurrentLanguage(growthStage, outReplacement);
 			}
 		}
 
@@ -212,15 +223,12 @@ namespace
 	{
 		bool result = false;
 
-		if (context && context->pOccupant && context->lotManager)
-		{
-			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
+		cISC4Lot* pLot = GetOccupantLot(context);
 
-			if (pLot)
-			{
-				uint16_t occupancy = pLot->GetPopulation(developerType);
-				result = MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
-			}
+		if (pLot)
+		{
+			uint16_t occupancy = pLot->GetPopulation(developerType);
+			result = MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
 		}
 
 		return result;
@@ -283,8 +291,8 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 }
 
 BuildingQueryVariablesDllDirector::BuildingQueryVariablesDllDirector()
-	: stringDetokenizer(nullptr),
-	  lotManager(nullptr)
+	: pStringDetokenizer(nullptr),
+	  pCity(nullptr)
 {
 }
 
@@ -338,7 +346,7 @@ bool BuildingQueryVariablesDllDirector::PostAppInit()
 
 	if (pSC4App)
 	{
-		stringDetokenizer = pSC4App->GetStringDetokenizer();
+		pStringDetokenizer = pSC4App->GetStringDetokenizer();
 	}
 
 	cIGZMessageServer2Ptr pMsgServ;
@@ -377,9 +385,7 @@ bool BuildingQueryVariablesDllDirector::DoMessage(cIGZMessage2* pMsg)
 
 void BuildingQueryVariablesDllDirector::PostCityInit(cIGZMessage2Standard* pStandardMsg)
 {
-	cISC4City* pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
-
-	lotManager = pCity->GetLotManager();
+	pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
 
 	cIGZCOM* const pCOM = GZCOM();
 
@@ -396,7 +402,7 @@ void BuildingQueryVariablesDllDirector::PostCityInit(cIGZMessage2Standard* pStan
 
 void BuildingQueryVariablesDllDirector::PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
 {
-	lotManager = nullptr;
+	pCity = nullptr;
 
 	cIGZCOM* const pCOM = GZCOM();
 
@@ -413,11 +419,11 @@ void BuildingQueryVariablesDllDirector::PreCityShutdown(cIGZMessage2Standard* pS
 
 void BuildingQueryVariablesDllDirector::BeforeDialogShown(cISC4Occupant* pOccupant)
 {
-	if (stringDetokenizer)
+	if (pStringDetokenizer)
 	{
-		UnknownTokenContext context(mpCOM, pOccupant, lotManager);
+		UnknownTokenContext context(mpCOM, pOccupant, pCity);
 
-		stringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &context, true);
+		pStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &context, true);
 
 #ifdef _DEBUG
 		DebugLogTokenizerVariables();
@@ -427,11 +433,11 @@ void BuildingQueryVariablesDllDirector::BeforeDialogShown(cISC4Occupant* pOccupa
 
 void BuildingQueryVariablesDllDirector::AfterDialogShown(cISC4Occupant* pOccupant)
 {
-	if (stringDetokenizer)
+	if (pStringDetokenizer)
 	{
-		UnknownTokenContext context(mpCOM, pOccupant, lotManager);
+		UnknownTokenContext context(mpCOM, pOccupant, pCity);
 
-		stringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &context, false);
+		pStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &context, false);
 	}
 }
 
@@ -445,7 +451,7 @@ void BuildingQueryVariablesDllDirector::DebugLogTokenizerVariables()
 
 		cRZBaseString result;
 
-		if (stringDetokenizer->Detokenize(token, result))
+		if (pStringDetokenizer->Detokenize(token, result))
 		{
 			DebugUtil::PrintLineToDebugOutputFormatted("%s = %s", token.ToChar(), result.ToChar());
 		}

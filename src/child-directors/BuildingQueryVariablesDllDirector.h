@@ -15,7 +15,7 @@
 #include "cRZMessage2COMDirector.h"
 
 class cIGZMessage2Standard;
-class cISC4LotManager;
+class cISC4City;
 class cISCStringDetokenizer;
 
 class BuildingQueryVariablesDllDirector final
@@ -50,6 +50,6 @@ private:
 
 	void DebugLogTokenizerVariables();
 
-	cISC4LotManager* lotManager;
-	cISCStringDetokenizer* stringDetokenizer;
+	cISC4City* pCity;;
+	cISCStringDetokenizer* pStringDetokenizer;
 };
