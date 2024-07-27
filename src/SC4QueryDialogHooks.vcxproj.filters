@@ -31,6 +31,9 @@
     <Filter Include="Source Files\Child Directors">
       <UniqueIdentifier>{2a6e3443-9bd4-4727-a49e-aece63029b2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MoreBuildingStyles">
+      <UniqueIdentifier>{391f3b64-90cc-432c-b732-2822fed6a4e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -133,9 +136,6 @@
       <Filter>Source Files\Child Directors</Filter>
     </ClCompile>
     <ClCompile Include="GZStringUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AvailableBuildingStyles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -251,8 +251,8 @@
     <ClInclude Include="..\vendor\gzcom-dll\include\cSC4EdgeConnectionStore.h">
       <Filter>Header Files\GZCOM</Filter>
     </ClInclude>
-    <ClInclude Include="AvailableBuildingStyles.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="more-building-styles\cIBuildingStyleInfo.h">
+      <Filter>Header Files\MoreBuildingStyles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

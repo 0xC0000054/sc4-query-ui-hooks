@@ -11,7 +11,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "BuildingQueryVariablesDllDirector.h"
-#include "AvailableBuildingStyles.h"
+#include "cIBuildingStyleInfo.h"
 #include "cIBuildingQueryHookServer.h"
 #include "DebugUtil.h"
 #include "Logger.h"
@@ -40,6 +40,7 @@
 #include <GZServPtrs.h>
 
 #include <algorithm>
+#include <array>
 #include <any>
 #include <cctype>
 #include <filesystem>
@@ -60,16 +61,27 @@ namespace
 {
 	struct UnknownTokenContext
 	{
+		cIGZCOM* pCOM;
 		cISC4Occupant* pOccupant;
 		cISC4LotManager* lotManager;
 
 		UnknownTokenContext(
+			cIGZCOM* GZCOM,
 			cISC4Occupant* occupant,
 			cISC4LotManager* lotManager)
-			: pOccupant(occupant),
+			: pCOM(GZCOM),
+			  pOccupant(occupant),
 			  lotManager(lotManager)
 		{
 		}
+	};
+
+	static constexpr std::array<std::pair<uint32_t, std::string_view>, 4> MaxisBuildingStyles =
+	{
+		std::pair(0x2000, "Chicago 1890"),
+		std::pair(0x2001, "New York 1940"),
+		std::pair(0x2002, "Houston 1990"),
+		std::pair(0x2003, "Euro-Contemporary"),
 	};
 
 	bool MakeNumberStringForCurrentLanguage(int64_t number, cIGZString& destination)
@@ -91,89 +103,59 @@ namespace
 		return result;
 	}
 
-	std::set<uint32_t> GetSupportedBuildingStyles(cISC4Occupant* pOccupant)
+	bool CheckForDefaultMaxisBuildingStyles(cISC4Occupant* pOccupant, cIGZString& destination)
 	{
-		std::set<uint32_t> styles;
+		bool result = false;
 
 		if (pOccupant)
 		{
-			cISCPropertyHolder* propertyHolder = pOccupant->AsPropertyHolder();
+			constexpr size_t lastStyleIndex = MaxisBuildingStyles.size() - 1;
+			const std::string_view seperator(", ");
 
-			if (propertyHolder)
+			for (size_t i = 0; i < MaxisBuildingStyles.size(); i++)
 			{
-				const cISCProperty* occupantGroups = propertyHolder->GetProperty(0xAA1DD396);
+				const auto& item = MaxisBuildingStyles[i];
 
-				if (occupantGroups)
+				if (pOccupant->IsOccupantGroup(item.first))
 				{
-					const cIGZVariant* variant = occupantGroups->GetPropertyValue();
+					destination.Append(item.second.data(), item.second.size());
 
-					if (variant)
+					if (i < lastStyleIndex)
 					{
-						const uint32_t count = variant->GetCount();
-						const uint16_t type = variant->GetType();
-
-						if (count > 0 && type == cIGZVariant::Type::Uint32Array)
-						{
-							const uint32_t* values = variant->RefUint32();
-
-							for (uint32_t i = 0; i < count; i++)
-							{
-								const uint32_t value = values[i];
-
-								// All building style values are in the
-								// range of 0x2000-0x2fff.
-								if (value >= 0x2000 && value <= 0x2fff)
-								{
-									styles.emplace(value);
-								}
-							}
-						}
+						destination.Append(seperator.data(), seperator.size());
 					}
+					result = true;
 				}
 			}
 		}
 
-		return styles;
+		return result;
 	}
 
 	bool GetBuildingStylesToken(const UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
 
-		if (context)
+		if (context && context->pCOM)
 		{
-			std::set<uint32_t> buildingStyles = GetSupportedBuildingStyles(context->pOccupant);
+			cRZAutoRefCount<cIBuildingStyleInfo> pBuildingStyleInfo;
 
-			if (buildingStyles.size() > 0)
+			if (context->pCOM->GetClassObject(
+				GZCLSID_cIBuildingStyleInfo,
+				GZIID_cIBuildingStyleInfo,
+				pBuildingStyleInfo.AsPPVoid()))
 			{
-				uint32_t index = 0;
-				const uint32_t lastItemIndex = buildingStyles.size() - 1;
-
-				const std::string_view seperator(", ");
-
-				const AvailableBuildingStyles& availableBuildingStyles = AvailableBuildingStyles::GetInstance();
-
-				char buffer[256]{};
-
-				for (uint32_t style : buildingStyles)
-				{
-					if (!availableBuildingStyles.AppendStyleName(style, outReplacement))
-					{
-						// If the style was not found in the list of available building styles,
-						// we print the style id as a hexadecimal number.
-
-						int length = std::snprintf(buffer, sizeof(buffer), "0x%x", style);
-						outReplacement.Append(buffer, static_cast<uint32_t>(length));
-					}
-
-					if (index < lastItemIndex)
-					{
-						outReplacement.Append(seperator.data(), seperator.size());
-					}
-					index++;
-				}
+				// If the More Building Styles DLL is installed we check the building's OccupantGroups
+				// for any styles that are present in the Building Style Control.
+				// The names of the styles are placed in the output string as comma-separated values.
+				result = pBuildingStyleInfo->GetBuildingStyleNames(context->pOccupant, outReplacement);
 			}
-			result = true;
+			else
+			{
+				// If the More Building Styles DLL is not installed we fall back to checking for
+				// the 4 built-in Maxis styles.
+				result = CheckForDefaultMaxisBuildingStyles(context->pOccupant, outReplacement);
+			}
 		}
 
 		return result;
@@ -183,9 +165,7 @@ namespace
 	{
 		bool result = false;
 
-		if (context
-			&& context->pOccupant
-			&& context->lotManager)
+		if (context && context->pOccupant && context->lotManager)
 		{
 			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
 
@@ -203,9 +183,7 @@ namespace
 	{
 		bool result = false;
 
-		if (context
-			&& context->pOccupant
-			&& context->lotManager)
+		if (context && context->pOccupant && context->lotManager)
 		{
 			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
 
@@ -228,9 +206,7 @@ namespace
 	{
 		bool result = false;
 
-		if (context
-			&& context->pOccupant
-			&& context->lotManager)
+		if (context && context->pOccupant && context->lotManager)
 		{
 			cISC4Lot* pLot = context->lotManager->GetOccupantLot(context->pOccupant);
 
@@ -433,7 +409,7 @@ void BuildingQueryVariablesDllDirector::BeforeDialogShown(cISC4Occupant* pOccupa
 {
 	if (stringDetokenizer)
 	{
-		UnknownTokenContext context(pOccupant, lotManager);
+		UnknownTokenContext context(mpCOM, pOccupant, lotManager);
 
 		stringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &context, true);
 
@@ -447,7 +423,7 @@ void BuildingQueryVariablesDllDirector::AfterDialogShown(cISC4Occupant* pOccupan
 {
 	if (stringDetokenizer)
 	{
-		UnknownTokenContext context(pOccupant, lotManager);
+		UnknownTokenContext context(mpCOM, pOccupant, lotManager);
 
 		stringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &context, false);
 	}
