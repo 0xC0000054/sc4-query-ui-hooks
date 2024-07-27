@@ -161,7 +161,10 @@ namespace
 		return result;
 	}
 
-	bool GetCapacityToken(const UnknownTokenContext* context, cIGZString& outReplacement, uint32_t developerType)
+	bool GetCapacityToken(
+		const UnknownTokenContext* context,
+		cIGZString& outReplacement,
+		cISC4BuildingDevelopmentSimulator::DeveloperType developerType)
 	{
 		bool result = false;
 
@@ -202,7 +205,10 @@ namespace
 		return result;
 	}
 
-	bool GetOccupancyToken(const UnknownTokenContext* context, cIGZString& outReplacement, uint32_t developerType)
+	bool GetOccupancyToken(
+		const UnknownTokenContext* context,
+		cIGZString& outReplacement,
+		cISC4BuildingDevelopmentSimulator::DeveloperType developerType)
 	{
 		bool result = false;
 
@@ -229,30 +235,30 @@ static const std::unordered_map<std::string_view, TokenDataCallback> tokenDataCa
 {
 	{ "building_styles", GetBuildingStylesToken },
 	{ "growth_stage", GetGrowthStageToken },
-	{ "r1_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x1010) },
-	{ "r1_capacity", std::bind(GetCapacityToken, _1, _2, 0x1010) },
-	{ "r2_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x1020) },
-	{ "r2_capacity", std::bind(GetCapacityToken, _1, _2, 0x1020) },
-	{ "r3_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x1030) },
-	{ "r3_capacity", std::bind(GetCapacityToken, _1, _2, 0x1030) },
-	{ "cs1_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x3110) },
-	{ "cs1_capacity", std::bind(GetCapacityToken, _1, _2, 0x3110) },
-	{ "cs2_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x3120) },
-	{ "cs2_capacity", std::bind(GetCapacityToken, _1, _2, 0x3120) },
-	{ "cs3_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x3130) },
-	{ "cs3_capacity", std::bind(GetCapacityToken, _1, _2, 0x3130) },
-	{ "co2_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x3320) },
-	{ "co2_capacity", std::bind(GetCapacityToken, _1, _2, 0x3320) },
-	{ "co3_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x3330) },
-	{ "co3_capacity", std::bind(GetCapacityToken, _1, _2, 0x3330) },
-	{ "ir_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x4100) },
-	{ "ir_capacity", std::bind(GetCapacityToken, _1, _2, 0x4100) },
-	{ "id_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x4200) },
-	{ "id_capacity", std::bind(GetCapacityToken, _1, _2, 0x4200) },
-	{ "im_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x4300) },
-	{ "im_capacity", std::bind(GetCapacityToken, _1, _2, 0x4300) },
-	{ "iht_occupancy", std::bind(GetOccupancyToken, _1, _2, 0x4400) },
-	{ "iht_capacity", std::bind(GetCapacityToken, _1, _2, 0x4400) },
+	{ "r1_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialLowWealth) },
+	{ "r1_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialLowWealth) },
+	{ "r2_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialMediumWealth) },
+	{ "r2_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialMediumWealth) },
+	{ "r3_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialHighWealth) },
+	{ "r3_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialHighWealth) },
+	{ "cs1_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialServicesLowWealth) },
+	{ "cs1_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialServicesLowWealth) },
+	{ "cs2_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialServicesMediumWealth) },
+	{ "cs2_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialServicesMediumWealth) },
+	{ "cs3_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialServicesHighWealth) },
+	{ "cs3_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialServicesHighWealth) },
+	{ "co2_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialOfficeMediumWealth) },
+	{ "co2_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialOfficeMediumWealth) },
+	{ "co3_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialOfficeHighWealth) },
+	{ "co3_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::CommercialOfficeHighWealth) },
+	{ "ir_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::IndustrialAgriculture) },
+	{ "ir_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::IndustrialAgriculture) },
+	{ "id_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::IndustrialProcessing) },
+	{ "id_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::IndustrialProcessing) },
+	{ "im_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::IndustrialManufacturing) },
+	{ "im_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::IndustrialManufacturing) },
+	{ "iht_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::IndustrialHighTech) },
+	{ "iht_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::IndustrialHighTech) },
 };
 
 static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplacement, void* pContext)
