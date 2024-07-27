@@ -14,6 +14,7 @@ class cISC4HistoryWarehouse;
 class cISC4LotConfigurationManager;
 class cISC4LotDeveloper;
 class cISC4LotManager;
+class cISC4MySimAgentSimulator;
 class cISC4NetworkManager;
 class cISC4OccupantManager;
 class cISC4OrdinanceSimulator;
@@ -112,7 +113,7 @@ class cISC4City : public cIGZUnknown
 		virtual cISC4ResidentialSimulator* GetResidentialSimulator(void) = 0;
 		virtual intptr_t GetTrafficSimulator(void) = 0;
 		virtual intptr_t GetWeatherSimulator(void) = 0;
-		virtual intptr_t GetMySimAgentSimulator(void) = 0;
+		virtual cISC4MySimAgentSimulator* GetMySimAgentSimulator(void) = 0;
 
 		virtual cISC4DisasterLayer* GetDisasterLayer(void) = 0;
 		virtual cISC4CivicBuildingSimulator* GetCivicBuildingSimulator(void) = 0;

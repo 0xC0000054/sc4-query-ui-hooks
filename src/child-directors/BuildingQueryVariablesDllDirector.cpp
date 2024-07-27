@@ -27,17 +27,21 @@
 #include "cISCProperty.h"
 #include "cISCPropertyHolder.h"
 #include "cISCStringDetokenizer.h"
+#include "cISC4Advisor.h"
 #include "cISC4App.h"
 #include "cISC4BuildingDevelopmentSimulator.h"
 #include "cISC4City.h"
 #include "cISC4Lot.h"
 #include "cISC4LotConfiguration.h"
 #include "cISC4LotManager.h"
+#include "cISC4MySim.h"
+#include "cISC4MySimAgentSimulator.h"
 #include "cISC4Occupant.h"
 #include "cRZAutoRefCount.h"
 #include "cRZBaseString.h"
 #include "cS3DVector3.h"
-#include <GZServPtrs.h>
+#include "GZServPtrs.h"
+#include "SC4String.h"
 
 #include <algorithm>
 #include <array>
@@ -118,6 +122,19 @@ namespace
 		}
 
 		return result;
+	}
+
+	bool CopySC4StringValue(const SC4String* pSC4String, cIGZString& destination)
+	{
+		bool result = false;
+
+		if (pSC4String)
+		{
+			destination.Copy(*pSC4String->AsIGZString());
+			result = true;
+		}
+
+		return true;
 	}
 
 	bool CheckForDefaultMaxisBuildingStyles(cISC4Occupant* pOccupant, cIGZString& destination)
@@ -216,6 +233,39 @@ namespace
 		return result;
 	}
 
+	bool GetMySimResidentName(const UnknownTokenContext* context, cIGZString& outReplacement)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant && context->pCity)
+		{
+			cRZAutoRefCount<cISC4BuildingOccupant> pBuildingOccupant;
+
+			if (context->pOccupant->QueryInterface(GZIID_cISC4BuildingOccupant, pBuildingOccupant.AsPPVoid()))
+			{
+				cISC4MySimAgentSimulator* pMySimAgentSimulator = context->pCity->GetMySimAgentSimulator();
+
+				if (pMySimAgentSimulator)
+				{
+					cISC4MySim* pMySim = pMySimAgentSimulator->MySimLivesHere(pBuildingOccupant);
+
+					if (pMySim)
+					{
+						cISC4Advisor* asAdvisor = pMySim->AsAdvisor();
+
+						if (asAdvisor)
+						{
+							result = CopySC4StringValue(asAdvisor->GetPersonalName(), outReplacement);
+						}
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
+
 	bool GetOccupancyToken(
 		const UnknownTokenContext* context,
 		cIGZString& outReplacement,
@@ -243,6 +293,7 @@ static const std::unordered_map<std::string_view, TokenDataCallback> tokenDataCa
 {
 	{ "building_styles", GetBuildingStylesToken },
 	{ "growth_stage", GetGrowthStageToken },
+	{ "mysim_name", GetMySimResidentName },
 	{ "r1_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialLowWealth) },
 	{ "r1_capacity", std::bind(GetCapacityToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialLowWealth) },
 	{ "r2_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialMediumWealth) },

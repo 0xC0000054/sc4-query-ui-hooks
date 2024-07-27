@@ -8,7 +8,7 @@ The plugin can be downloaded from the Releases tab: https://github.com/0xC000005
 
 ### Additional Building Query Dialog Variables
 
-The DLL provides 26 new variables that can be used in the LTEXT files
+The DLL provides a number of new variables that can be used in the LTEXT files
 of a building query dialog in the form of `#variable_name#`.
 <details>
 <summary>Variable List</summary>
@@ -17,6 +17,7 @@ of a building query dialog in the form of `#variable_name#`.
 |------|-------------|
 | building_styles | Shows a list of the building's styles. |
 | growth_stage | The growth stage of the building's lot. |
+| mysim_name | The name of the MySim that lives in the selected residence. |
 | r1_occupancy | The current number of R§ occupants. |
 | r1_capacity | The R§ occupant capacity. |
 | r2_occupancy | The current number of R§§ occupants. |
