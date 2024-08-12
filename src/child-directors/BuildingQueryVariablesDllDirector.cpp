@@ -29,6 +29,7 @@
 #include "cISCStringDetokenizer.h"
 #include "cISC4Advisor.h"
 #include "cISC4App.h"
+#include "cISC4BudgetSimulator.h"
 #include "cISC4BuildingDevelopmentSimulator.h"
 #include "cISC4City.h"
 #include "cISC4Lot.h"
@@ -105,7 +106,16 @@ namespace
 		return pLot;
 	}
 
-	bool MakeNumberStringForCurrentLanguage(int64_t number, cIGZString& destination)
+	enum class NumberType
+	{
+		Number = 0,
+		Money
+	};
+
+	bool MakeNumberStringForCurrentLanguage(
+		int64_t number,
+		cIGZString& destination,
+		NumberType type = NumberType::Number)
 	{
 		bool result = false;
 
@@ -117,7 +127,25 @@ namespace
 
 			if (pLU)
 			{
-				result = pLU->MakeNumberString(number, destination);
+				if (type == NumberType::Number)
+				{
+					result = pLU->MakeNumberString(number, destination);
+				}
+				else if (type == NumberType::Money)
+				{
+					// The currently symbol string is the hexadecimal-escaped UTF-8 encoding
+					// of the section symbol (§).
+					// The \xC2 value is the first byte in a two byte UTF-8 sequence, and the
+					// \xA7 value is the Unicode value of the section symbol (U+00A7).
+					// See the following page for more information on UTF-8 encoding:
+					// https://www.fileformat.info/info/unicode/utf8.htm
+					//
+					// UTF-8 is SC4's native string encoding.
+
+					static const cRZBaseString currencySymbol("\xC2\xA7");
+
+					result = pLU->MakeMoneyString(number, destination, &currencySymbol);
+				}
 			}
 		}
 
@@ -135,6 +163,79 @@ namespace
 		}
 
 		return true;
+	}
+
+	enum class BuildingFundingType
+	{
+		Capacity = 0,
+		Coverage
+	};
+
+	bool GetBuildingFullFundingToken(
+		const UnknownTokenContext* context,
+		cIGZString& outReplacement,
+		BuildingFundingType type)
+	{
+		bool result = false;
+
+		if (context && context->pCity && context->pOccupant)
+		{
+			cISC4BudgetSimulator* pBudgetSim = context->pCity->GetBudgetSimulator();
+
+			if (pBudgetSim)
+			{
+				eastl::vector<cISC4BudgetSimulator::BudgetItem> budgetItems;
+
+				if (pBudgetSim->GetBudgetItemInfo(context->pOccupant->AsPropertyHolder(), budgetItems))
+				{
+					int64_t value = 0;
+
+					const size_t count = budgetItems.size();
+
+					for (size_t i = 0; i < count && value == 0; i++)
+					{
+						const cISC4BudgetSimulator::BudgetItem& item = budgetItems[i];
+
+						// The built-in budget departments that use per-building variable funding
+						// can have up to two have two different purpose values: Capacity and coverage.
+						//
+						// Capacity is used for things like the number of patients a Health building can support or
+						// the coverage radius of a Fire/Police station.
+						// Coverage is the coverage radius for Education and Health buildings (School Bus/Ambulance).
+						if (type == BuildingFundingType::Capacity)
+						{
+							switch (item.purpose)
+							{
+							case 0xEA5654B6: // Education Staff
+							case 0xEA567BC3: // Fire Protection
+							case 0xCA565486: // Health Staff
+							case 0x0A567BAA: // Police Protection
+							case 0xCA58E540: // Power Production
+								value = item.cost;
+								break;
+							}
+						}
+						else // Coverage
+						{
+							switch (item.purpose)
+							{
+							case 0x4A5654BA: // Education Coverage
+							case 0xEA56549E: // Health Coverage
+								value = item.cost;
+								break;
+							}
+						}
+					}
+
+					result = MakeNumberStringForCurrentLanguage(
+						value,
+						outReplacement,
+						NumberType::Money);
+				}
+			}
+		}
+
+		return result;
 	}
 
 	bool GetBuildingStylesToken(const UnknownTokenContext* context, cIGZString& outReplacement)
@@ -281,6 +382,8 @@ using namespace std::placeholders;
 
 static const std::unordered_map<std::string_view, TokenDataCallback> tokenDataCallbacks =
 {
+	{ "building_full_funding_capacity", std::bind(GetBuildingFullFundingToken, _1, _2, BuildingFundingType::Capacity) },
+	{ "building_full_funding_coverage", std::bind(GetBuildingFullFundingToken, _1, _2, BuildingFundingType::Coverage) },
 	{ "building_styles", GetBuildingStylesToken },
 	{ "growth_stage", GetGrowthStageToken },
 	{ "mysim_name", GetMySimResidentName },

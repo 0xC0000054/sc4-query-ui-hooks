@@ -1,5 +1,6 @@
 #pragma once
 #include "cIGZUnknown.h"
+#include "SC4String.h"
 #include "EASTLConfigSC4.h"
 #include "EASTL\vector.h"
 
@@ -15,16 +16,10 @@ class cISC4BudgetSimulator : public cIGZUnknown
 		class BudgetGroupInfo
 		{
 		public:
-			intptr_t groupID;
-			intptr_t unknown2; // Possibly an IGZString
-			intptr_t unknown3; // Possibly a std::string
-			intptr_t unknown4;
-			intptr_t unknown5;
-			intptr_t unknown6;
-			intptr_t unknown7;
-			intptr_t unknown8;
-			intptr_t unknown9;
-			intptr_t unknown10;
+			uint32_t  groupID;
+			SC4String groupName;
+			int64_t   totalExpense;
+			int64_t   totalIncome;
 		};
 
 		class BudgetItem
@@ -32,24 +27,20 @@ class cISC4BudgetSimulator : public cIGZUnknown
 		public:
 			uint32_t departmentID;
 			uint32_t lineItem;
-			intptr_t unknown1;
-			intptr_t unknown2;
-			intptr_t unknown3;
-			intptr_t unknown4;
-			intptr_t unknown5;
+			uint32_t purpose;
+			int64_t  cost;
+			int32_t  index;
+			float    localFundingPercentage;
 		};
 
 		class LoanInfo
 		{
 		public:
-			intptr_t unknown1;
-			intptr_t unknown2;
-			intptr_t unknown3;
-			intptr_t unknown4;
-			intptr_t unknown5;
-			intptr_t unknown6;
-			intptr_t unknown7;
-			intptr_t unknown8;
+			uint32_t monthsRemaining;
+			uint32_t yearsRemaining;
+			int64_t  totalLoanAmount;
+			int64_t  remainingPayment;
+			int64_t  monthlyPayment;
 		};
 
 		virtual bool Init(void) = 0;
@@ -123,11 +114,11 @@ class cISC4BudgetSimulator : public cIGZUnknown
 
 		virtual bool GetBudgetItemInfo(cISCPropertyHolder* pProperty, eastl::vector<BudgetItem>& sBudgetInfo) = 0;
 		virtual bool GetBudgetItemForPurpose(cISCPropertyHolder* pProperty, uint32_t dwPurpose, BudgetItem& sBudgetItem) = 0;
-		virtual bool ChangeBudgetItemLine(cISCPropertyHolder* pProperty, uint32_t dwPurpose, uint32_t dwUnknown) = 0;
+		virtual bool ChangeBudgetItemLine(cISCPropertyHolder* pProperty, uint32_t dwPurpose, uint32_t dwLine) = 0;
 		virtual bool ChangeBudgetItemCost(cISCPropertyHolder* pProperty, uint32_t dwPurpose, int64_t llCost) = 0;
 		virtual bool ChangeBudgetItemLocalFunding(cISCPropertyHolder* pProperty, uint32_t dwPurpose, SC4Percentage const& sFunding) = 0;
 		virtual bool AddBudgetItemToBudget(cISCPropertyHolder* pProperty, uint32_t dwPurpose) = 0;
-		virtual bool RemoveBudgetItemToBudget(cISCPropertyHolder* pProperty, uint32_t dwPurpose) = 0;
+		virtual bool RemoveBudgetItemFromBudget(cISCPropertyHolder* pProperty, uint32_t dwPurpose) = 0;
 
 		virtual cISC4LineItem* GetLineItemFromBudgetItem(BudgetItem& pBudgetItem) = 0;
 		virtual bool CopyBudgetItemProperties(cISCPropertyHolder* pOriginal, cISCPropertyHolder* pCopy) = 0;
