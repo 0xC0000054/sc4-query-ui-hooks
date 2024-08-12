@@ -137,47 +137,11 @@ namespace
 		return true;
 	}
 
-	bool CheckForDefaultMaxisBuildingStyles(cISC4Occupant* pOccupant, cIGZString& destination)
-	{
-		bool result = false;
-
-		if (pOccupant)
-		{
-			constexpr size_t lastStyleIndex = MaxisBuildingStyles.size() - 1;
-			const std::string_view separator(", ");
-
-			for (size_t i = 0; i < MaxisBuildingStyles.size(); i++)
-			{
-				const auto& item = MaxisBuildingStyles[i];
-
-				if (pOccupant->IsOccupantGroup(item.first))
-				{
-					destination.Append(item.second.data(), item.second.size());
-
-					if (i < lastStyleIndex)
-					{
-						destination.Append(separator.data(), separator.size());
-					}
-				}
-			}
-
-			// Check that at least one style name has been written to the destination.
-			if (destination.Strlen() > 0)
-			{
-				// Remove the trailing separator from the last style in the list.
-				destination.Resize(destination.Strlen() - separator.size());
-				result = true;
-			}
-		}
-
-		return result;
-	}
-
 	bool GetBuildingStylesToken(const UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
 
-		if (context && context->pCOM)
+		if (context && context->pCOM && context->pOccupant)
 		{
 			cRZAutoRefCount<cIBuildingStyleInfo> pBuildingStyleInfo;
 
@@ -195,7 +159,31 @@ namespace
 			{
 				// If the More Building Styles DLL is not installed we fall back to checking for
 				// the 4 built-in Maxis styles.
-				result = CheckForDefaultMaxisBuildingStyles(context->pOccupant, outReplacement);
+				constexpr size_t lastStyleIndex = MaxisBuildingStyles.size() - 1;
+				const std::string_view separator(", ");
+
+				for (size_t i = 0; i < MaxisBuildingStyles.size(); i++)
+				{
+					const auto& item = MaxisBuildingStyles[i];
+
+					if (context->pOccupant->IsOccupantGroup(item.first))
+					{
+						outReplacement.Append(item.second.data(), item.second.size());
+
+						if (i < lastStyleIndex)
+						{
+							outReplacement.Append(separator.data(), separator.size());
+						}
+					}
+				}
+
+				// Check that at least one style name has been written to the destination.
+				if (outReplacement.Strlen() > 0)
+				{
+					// Remove the trailing separator from the last style in the list.
+					outReplacement.Resize(outReplacement.Strlen() - separator.size());
+					result = true;
+				}
 			}
 		}
 
