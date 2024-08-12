@@ -159,7 +159,6 @@ namespace
 			{
 				// If the More Building Styles DLL is not installed we fall back to checking for
 				// the 4 built-in Maxis styles.
-				constexpr size_t lastStyleIndex = MaxisBuildingStyles.size() - 1;
 				const std::string_view separator(", ");
 
 				for (size_t i = 0; i < MaxisBuildingStyles.size(); i++)
@@ -169,11 +168,7 @@ namespace
 					if (context->pOccupant->IsOccupantGroup(item.first))
 					{
 						outReplacement.Append(item.second.data(), item.second.size());
-
-						if (i < lastStyleIndex)
-						{
-							outReplacement.Append(separator.data(), separator.size());
-						}
+						outReplacement.Append(separator.data(), separator.size());
 					}
 				}
 
