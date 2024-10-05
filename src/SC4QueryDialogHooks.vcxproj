@@ -45,6 +45,7 @@
     <ClCompile Include="QueryUIHooksDllDirector.cpp" />
     <ClCompile Include="BuildingQueryHookServer.cpp" />
     <ClCompile Include="SC4VersionDetection.cpp" />
+    <ClCompile Include="Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\vendor\gzcom-dll\include\cGZPersistResourceKey.h" />
@@ -84,6 +85,7 @@
     <ClInclude Include="public\include\cIQueryToolTipAppendTextHookTarget.h" />
     <ClInclude Include="QueryToolHelpers.h" />
     <ClInclude Include="SC4VersionDetection.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,11 @@
 #include "wil/resource.h"
 #include "wil/win32_helpers.h"
 
+using namespace std::string_view_literals;
+
+static constexpr std::string_view PluginConfigFileName = "SC4QueryUIHooks.ini"sv;
+static constexpr std::string_view PluginLogFileName = "SC4QueryUIHooks.log"sv;
+
 namespace
 {
 	std::filesystem::path GetDllFolderPathCore()
@@ -25,11 +30,27 @@ namespace
 
 		return temp.parent_path();
 	}
+
+	std::filesystem::path GetDllFolderPath()
+	{
+		static std::filesystem::path path = GetDllFolderPathCore();
+
+		return path;
+	}
 }
 
-std::filesystem::path FileSystem::GetDllFolderPath()
+std::filesystem::path FileSystem::GetConfigFilePath()
 {
-	static std::filesystem::path path = GetDllFolderPathCore();
+	std::filesystem::path path = GetDllFolderPath();
+	path /= PluginConfigFileName;
+
+	return path;
+}
+
+std::filesystem::path FileSystem::GetLogFilePath()
+{
+	std::filesystem::path path = GetDllFolderPath();
+	path /= PluginLogFileName;
 
 	return path;
 }

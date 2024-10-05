@@ -328,10 +328,27 @@ namespace
 
 		Patcher::InstallCallHook(cSC4ViewInputControlQuery_DoMessage_Inject, &HookedGetBuildingOccupantTipInfo);
 	}
+
+	static void __cdecl HookedPlayOccupantQuerySound(cISC4Occupant* pOccupant)
+	{
+		// Do nothing.
+	}
+
+	void InstallPlayOccupantQuerySoundHook()
+	{
+		constexpr uintptr_t cSC4ViewInputControlQuery_DescribePick_Inject = 0x4D4406;
+
+		Patcher::InstallCallHook(cSC4ViewInputControlQuery_DescribePick_Inject, &HookedPlayOccupantQuerySound);
+	}
 }
 
-void BuildingQueryHooks::Install()
+void BuildingQueryHooks::Install(const Settings& settings)
 {
 	InstallDoQueryDialogHook();
 	InstallGetBuildingOccupantTipInfoHook();
+
+	if (!settings.EnableOccupantQuerySounds())
+	{
+		InstallPlayOccupantQuerySoundHook();
+	}
 }

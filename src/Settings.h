@@ -11,10 +11,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <filesystem>
 
-namespace FileSystem
+class Settings
 {
-	std::filesystem::path GetConfigFilePath();
-	std::filesystem::path GetLogFilePath();
-}
+public:
+	Settings();
+
+	bool EnableOccupantQuerySounds() const;
+
+	void Load();
+
+private:
+	bool enableOccupantQuerySounds;
+};
+

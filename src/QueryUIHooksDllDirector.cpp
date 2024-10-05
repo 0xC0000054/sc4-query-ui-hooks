@@ -51,16 +51,12 @@
 
 static constexpr uint32_t kQueryDialogHooksDirectorID = 0x5EBF9B1E;
 
-using namespace std::string_view_literals;
-
-static constexpr std::string_view PluginLogFileName = "SC4QueryUIHooks.log"sv;
-
 BuildingQueryHookServer* spBuildingQueryHookServer = nullptr;
 NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer = nullptr;
 
 namespace
 {
-	void InstallQueryUIHooks()
+	void InstallQueryUIHooks(const Settings& settings)
 	{
 		Logger& logger = Logger::GetInstance();
 
@@ -70,7 +66,7 @@ namespace
 		{
 			try
 			{
-				BuildingQueryHooks::Install();
+				BuildingQueryHooks::Install(settings);
 				NetworkQueryHooks::Install();
 
 				logger.WriteLine(LogLevel::Info, "Installed the query UI hooks.");
@@ -108,13 +104,8 @@ public:
 		spBuildingQueryHookServer = &buildingQueryHookServer;
 		spNetworkQueryToolTipHookServer = &networkQueryToolTipHookServer;
 
-		std::filesystem::path dllFolderPath = FileSystem::GetDllFolderPath();
-
-		std::filesystem::path logFilePath = dllFolderPath;
-		logFilePath /= PluginLogFileName;
-
 		Logger& logger = Logger::GetInstance();
-		logger.Init(logFilePath, LogLevel::Info, false);
+		logger.Init(FileSystem::GetLogFilePath(), LogLevel::Info, false);
 		logger.WriteLogFileHeader("SC4QueryUIHooks v" PLUGIN_VERSION_STR);
 	}
 
@@ -157,7 +148,9 @@ public:
 
 	bool OnStart(cIGZCOM* pCOM)
 	{
-		InstallQueryUIHooks();
+		settings.Load();
+
+		InstallQueryUIHooks(settings);
 
 		buildingQueryVariablesDirector.OnStart(pCOM);
 		networkQueryDirector.OnStart(pCOM);
@@ -170,6 +163,7 @@ private:
 	BuildingQueryVariablesDllDirector buildingQueryVariablesDirector;
 	NetworkQueryToolTipHookServer networkQueryToolTipHookServer;
 	NetworkQueryToolTipDllDirector networkQueryDirector;
+	Settings settings;
 };
 
 cRZCOMDllDirector* RZGetCOMDllDirector() {

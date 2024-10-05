@@ -61,6 +61,12 @@ This tool tip is accessed by holding `Control + Alt + Shift` when hovering over 
 Holding down the Shift key when clicking a building will activate the Place Lot tool with the building's lot selected.
 Note that the exact building may be different if the lot uses Building Families.
 
+## SC4QueryUIHooks INI File
+
+This file contains one setting that controls whether the query sounds are played when clicking on an item
+to open the query dialog or copy the lot.
+The occupant query sound properties affected by this option are SFX:Query Sound, SFX:Query Sound Abandoned and SFX:Query Sound Decayed.
+
 ## Using the Code
 
 1. Copy the headers from `src/public/include` folder into your GZCOM DLL project.
@@ -111,7 +117,7 @@ The plugin may work on Windows 7 or later with the [Microsoft Visual C++ 2022 x8
 ## Installation
 
 1. Close SimCity 4.
-2. Copy `SC4QueryUIHooks.dll` into the top-level of the Plugins folder in the SimCity 4 installation directory or Documents/SimCity 4 directory.
+2. Copy `SC4QueryUIHooks.dll` and `SC4QueryUIHooks.ini` into the top-level of the Plugins folder in the SimCity 4 installation directory or Documents/SimCity 4 directory.
 3. Start SimCity 4.
 
 ## Troubleshooting
@@ -132,6 +138,7 @@ See [LICENSE.txt](LICENSE.txt) for more information.
 [Windows Implementation Library](https://github.com/microsoft/wil) - MIT License    
 [SC4Fix](https://github.com/nsgomez/sc4fix) - MIT License    
 [Boost.Algorithm](https://www.boost.org/doc/libs/1_84_0/libs/algorithm/doc/html/index.html) - Boost Software License, Version 1.0.    
+[Boost.PropertyTree](https://www.boost.org/doc/libs/1_84_0/doc/html/property_tree.html) - Boost Software License, Version 1.0.    
 [sc4-more-building-styles](https://github.com/0xC0000054/sc4-more-building-styles) - MIT License
 
 # Source Code
