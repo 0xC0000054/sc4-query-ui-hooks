@@ -15,6 +15,13 @@ class cSC4ViewLevelInformation;
 class cISC4View3DWin : public cIGZUnknown
 {
 	public:
+		enum class ViewInputControlStackOperation : int32_t
+		{
+			None = 0,
+			RemoveCurrentControl,
+			RemoveAllControls
+		};
+
 		virtual cIGZWin* AsIGZWin(void) = 0;
 
 		virtual cISC43DRender* GetRenderer(void) = 0;
@@ -45,7 +52,7 @@ class cISC4View3DWin : public cIGZUnknown
 		virtual bool SetCurrentViewLevel(uint32_t nLevel) = 0;
 
 		virtual cISC4ViewInputControl* GetCurrentViewInputControl(void) = 0;
-		virtual bool SetCurrentViewInputControl(cISC4ViewInputControl* pControl, int32_t sOperation) = 0;
+		virtual bool SetCurrentViewInputControl(cISC4ViewInputControl* pControl, ViewInputControlStackOperation sOperation) = 0;
 		virtual bool RemoveCurrentViewInputControl(bool) = 0;
 		virtual bool RemoveAllViewInputControls(bool) = 0;
 
@@ -74,7 +81,7 @@ class cISC4View3DWin : public cIGZUnknown
 		virtual int32_t GetGlobalEffectTriggerState(uint32_t) = 0;
 		virtual int32_t AssertGlobalEffectTrigger(uint32_t) = 0;
 		virtual int32_t RetractGlobalEffectTrigger(uint32_t) = 0;
-		
+
 		virtual int32_t GetCoverageHelper(void) = 0;
 		virtual bool SetCursorTextPosition3D(cS3DVector3 const&) = 0;
 

@@ -30,7 +30,7 @@ public:
 	virtual bool OnMouseDownR(int32_t unknown1, uint32_t unknown2) = 0;
 	virtual bool OnMouseUpL(int32_t unknown1, uint32_t unknown2) = 0;
 	virtual bool OnMouseUpR(int32_t unknown1, uint32_t unknown2) = 0;
-	virtual bool OnMouseMove(int32_t unknown1, uint32_t unknown2) = 0;
+	virtual bool OnMouseMove(int32_t x, int32_t z, uint32_t unknown1) = 0;
 	virtual bool OnMouseWheel(int32_t unknown1, int32_t unknown2, uint32_t unknown3, int32_t unknown4) = 0;
 	virtual bool OnMouseExit() = 0;
 

@@ -18,17 +18,189 @@
 #include "Patcher.h"
 #include "QueryToolHelpers.h"
 #include "cGZPersistResourceKey.h"
+#include "cIGZAllocatorService.h"
 #include "cIGZString.h"
 #include "cIGZVariant.h"
+#include "cIGZWin.h"
+#include "cIGZWinMgr.h"
 #include "cISCProperty.h"
 #include "cISCPropertyHolder.h"
+#include "cISC4App.h"
+#include "cISC4City.h"
+#include "cISC4Lot.h"
+#include "cISC4LotConfiguration.h"
+#include "cISC4LotManager.h"
 #include "cISC4Occupant.h"
+#include "cISC4View3DWin.h"
+#include "cISC4ViewInputControl.h"
 #include "cRZAutoRefCount.h"
+#include "GZServPtrs.h"
 #include "StringResourceKey.h"
 #include "StringResourceManager.h"
 
+#include <Windows.h>
+
 namespace
 {
+	bool IsKeyDownNow(int virtualKeyCode)
+	{
+		if (virtualKeyCode == VK_LBUTTON)
+		{
+			if (GetSystemMetrics(SM_SWAPBUTTON))
+			{
+				// The left and right mouse buttons are swapped.
+				virtualKeyCode = VK_RBUTTON;
+			}
+		}
+
+		return (GetAsyncKeyState(virtualKeyCode) & 0x8000) != 0;
+	}
+
+	uint32_t GetOccupantLotExemplarID(cISC4App& sc4App,	cISC4Occupant* pOccupant)
+	{
+		uint32_t lotExemplarId = 0;
+
+		cISC4City* pCity = sc4App.GetCity();
+
+		if (pCity)
+		{
+			cISC4LotManager* pLotManager = pCity->GetLotManager();
+
+			if (pLotManager)
+			{
+				cISC4Lot* pOccupantLot = pLotManager->GetOccupantLot(pOccupant);
+
+				if (pOccupantLot)
+				{
+					cISC4LotConfiguration* pLotConfiguration = pOccupantLot->GetLotConfiguration();
+
+					if (pLotConfiguration)
+					{
+						lotExemplarId = pLotConfiguration->GetID();
+					}
+				}
+			}
+		}
+
+		return lotExemplarId;
+	}
+
+	class cSC4ViewInputControlPlaceLot : public cISC4ViewInputControl
+	{
+		uint8_t unknown[0x154];
+	};
+	static_assert(sizeof(cSC4ViewInputControlPlaceLot) == 0x158);
+
+	typedef cSC4ViewInputControlPlaceLot* (__thiscall* pfn_cSC4ViewInputControlPlaceLot_ctor)(
+		cSC4ViewInputControlPlaceLot* pThis,
+		int32_t isBuildingPlop,
+		uint32_t lotExemplarID,
+		uint32_t unknown1,
+		bool unknown2);
+
+	static const pfn_cSC4ViewInputControlPlaceLot_ctor cSC4ViewInputControlPlaceLot_ctor = reinterpret_cast<pfn_cSC4ViewInputControlPlaceLot_ctor>(0x4c0430);
+
+	bool CreateViewInputControlPlaceLot(uint32_t lotExemplarID, cRZAutoRefCount<cSC4ViewInputControlPlaceLot>& instance)
+	{
+		bool result = false;
+
+		cIGZAllocatorServicePtr pAllocatorService;
+
+		if (pAllocatorService)
+		{
+			auto pControl = static_cast<cSC4ViewInputControlPlaceLot*>(pAllocatorService->Allocate(sizeof(cSC4ViewInputControlPlaceLot)));
+
+			if (pControl)
+			{
+				cSC4ViewInputControlPlaceLot_ctor(pControl, 0, lotExemplarID, 0, false);
+
+				instance = pControl;
+				result = true;
+			}
+		}
+
+		return result;
+	}
+
+	typedef cIGZWin* (__cdecl* pfnGetChildWindowForCursorPosRecursive)(cIGZWin* pWin, int32_t cursorX, int32_t cursorZ);
+
+	static const pfnGetChildWindowForCursorPosRecursive GetChildWindowForCursorPosRecursive = reinterpret_cast<pfnGetChildWindowForCursorPosRecursive>(0x78d720);
+
+	bool PickOccupantLot(cISC4Occupant* pOccupant)
+	{
+		constexpr uint32_t kGZWin_WinSC4App = 0x6104489A;
+		constexpr uint32_t kGZWin_SC4View3DWin = 0x9a47b417;
+		constexpr uint32_t kGZIID_cISC4View3DWin = 0xFA47B3F9;
+
+		bool result = false;
+
+		cISC4AppPtr pSC4App;
+		cIGZWinMgrPtr pWM;
+
+		if (pSC4App && pWM)
+		{
+			const uint32_t lotExemplarID = GetOccupantLotExemplarID(*pSC4App, pOccupant);
+
+			if (lotExemplarID != 0)
+			{
+				cIGZWin* pMainWindow = pSC4App->GetMainWindow();
+
+				if (pMainWindow)
+				{
+					cIGZWin* pWinSC4App = pMainWindow->GetChildWindowFromID(kGZWin_WinSC4App);
+
+					if (pWinSC4App)
+					{
+						cRZAutoRefCount<cISC4View3DWin> pView3D;
+
+						if (pWinSC4App->GetChildAs(
+							kGZWin_SC4View3DWin,
+							kGZIID_cISC4View3DWin,
+							pView3D.AsPPVoid()))
+						{
+							cRZAutoRefCount<cSC4ViewInputControlPlaceLot> pPlaceLot;
+
+							if (CreateViewInputControlPlaceLot(lotExemplarID, pPlaceLot))
+							{
+								pView3D->SetCurrentViewInputControl(
+									pPlaceLot,
+									cISC4View3DWin::ViewInputControlStackOperation::RemoveAllControls);
+
+								int32_t cursorX = 0;
+								int32_t cursorZ = 0;
+
+								pWM->GetCursorScreenPosition(cursorX, cursorZ);
+
+								cIGZWin* pView3DAsIGZWin = pView3D->AsIGZWin();
+
+								cIGZWin* pCursorWin = GetChildWindowForCursorPosRecursive(
+									pView3DAsIGZWin->GetParentWin(),
+									cursorX,
+									cursorZ);
+
+								if (pCursorWin == pView3DAsIGZWin)
+								{
+									pPlaceLot->OnMouseMove(cursorX, cursorZ, 0);
+								}
+
+								result = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
+	bool OccupantIsBuilding(cISC4Occupant* pOccupant)
+	{
+		constexpr uint32_t kOccupantType_Building = 0x278128A0;
+
+		return pOccupant && pOccupant->GetType() == kOccupantType_Building;
+	}
+
 	typedef bool(__cdecl* pfnDoQueryDialog)(cISC4Occupant* occupant);
 
 	static const pfnDoQueryDialog RealDoQueryDialog = reinterpret_cast<pfnDoQueryDialog>(0x4D3C30);
@@ -39,16 +211,31 @@ namespace
 		DebugUtil::PrintOccupantNameToDebugOutput(pOccupant);
 #endif // _DEBUG
 
-		if (spBuildingQueryHookServer)
+		bool result = false;
+
+		if (IsKeyDownNow(VK_SHIFT)
+			&& !IsKeyDownNow(VK_CONTROL)
+			&& !IsKeyDownNow(VK_MENU)
+			&& OccupantIsBuilding(pOccupant))
 		{
-			spBuildingQueryHookServer->SendBeforeQueryDialogNotifications(pOccupant);
+			// If shift is the only modifier key being pressed, clicking on a building
+			// will allow the user to plop a duplicate lot.
+
+			result = PickOccupantLot(pOccupant);
 		}
-
-		bool result = RealDoQueryDialog(pOccupant);
-
-		if (spBuildingQueryHookServer)
+		else
 		{
-			spBuildingQueryHookServer->SendAfterQueryDialogNotifications(pOccupant);
+			if (spBuildingQueryHookServer)
+			{
+				spBuildingQueryHookServer->SendBeforeQueryDialogNotifications(pOccupant);
+			}
+
+			result = RealDoQueryDialog(pOccupant);
+
+			if (spBuildingQueryHookServer)
+			{
+				spBuildingQueryHookServer->SendAfterQueryDialogNotifications(pOccupant);
+			}
 		}
 
 		return result;

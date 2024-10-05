@@ -56,6 +56,11 @@ This tool tip is accessed by holding `Control + Alt + Shift` when hovering over 
 
 ![Network Query Tool Tip](images/CustomNetworkTooltip.jpg)
 
+### Shift + Click Building Copying
+
+Holding down the Shift key when clicking a building will activate the Place Lot tool with the building's lot selected.
+Note that the exact building may be different if the lot uses Building Families.
+
 ## Using the Code
 
 1. Copy the headers from `src/public/include` folder into your GZCOM DLL project.
