@@ -1,6 +1,6 @@
 # sc4-query-ui-hooks
 
-A DLL Plugin for SimCity 4 that provides more data for the query UI.   
+A DLL Plugin for SimCity 4 that extends the query UI.   
 
 The plugin can be downloaded from the Releases tab: https://github.com/0xC0000054/sc4-query-ui-hooks/releases
 
