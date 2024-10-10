@@ -12,8 +12,10 @@
 
 #include "BuildingQueryVariablesDllDirector.h"
 #include "cIBuildingStyleInfo.h"
+#include "cIBuildingStyleWallToWall.h"
 #include "cIBuildingQueryHookServer.h"
 #include "DebugUtil.h"
+#include "GZStringUtil.h"
 #include "Logger.h"
 #include "cIGZApp.h"
 #include "cIGZCOM.h"
@@ -286,6 +288,36 @@ namespace
 		return result;
 	}
 
+	bool GetBuildingWallToWallToken(const UnknownTokenContext* context, cIGZString& outReplacement)
+	{
+		bool result = false;
+
+		if (context && context->pCOM && context->pOccupant)
+		{
+			cRZAutoRefCount<cIBuildingStyleWallToWall> pBuildingStyleWallToWall;
+
+			if (context->pCOM->GetClassObject(
+				GZCLSID_cIBuildingStyleWallToWall,
+				GZIID_cIBuildingStyleWallToWall,
+				pBuildingStyleWallToWall.AsPPVoid()))
+			{
+				// If the More Building Styles DLL is installed we check the building's OccupantGroups
+				// for any wall to wall values.
+				// The output string will be a localized version of Yes or No.
+				if (pBuildingStyleWallToWall->HasWallToWallOccupantGroup(context->pOccupant))
+				{
+					result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0xCA5D4F33, outReplacement);
+				}
+				else
+				{
+					result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x6A5D4F37, outReplacement);
+				}
+			}
+		}
+
+		return result;
+	}
+
 	bool GetCapacityToken(
 		const UnknownTokenContext* context,
 		cIGZString& outReplacement,
@@ -384,6 +416,7 @@ static const std::unordered_map<std::string_view, TokenDataCallback> tokenDataCa
 {
 	{ "building_full_funding_capacity", std::bind(GetBuildingFullFundingToken, _1, _2, BuildingFundingType::Capacity) },
 	{ "building_full_funding_coverage", std::bind(GetBuildingFullFundingToken, _1, _2, BuildingFundingType::Coverage) },
+	{ "building_is_w2w", GetBuildingWallToWallToken },
 	{ "building_styles", GetBuildingStylesToken },
 	{ "growth_stage", GetGrowthStageToken },
 	{ "mysim_name", GetMySimResidentName },

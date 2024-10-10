@@ -72,6 +72,7 @@
     <ClInclude Include="GZStringUtil.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="more-building-styles\cIBuildingStyleInfo.h" />
+    <ClInclude Include="more-building-styles\cIBuildingStyleWallToWall.h" />
     <ClInclude Include="NetworkQueryHooks.h" />
     <ClInclude Include="NetworkQueryToolTipHookServer.h" />
     <ClInclude Include="Patcher.h" />

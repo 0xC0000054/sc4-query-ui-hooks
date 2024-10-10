@@ -17,6 +17,7 @@ of a building query dialog in the form of `#variable_name#`.
 |------|-------------|
 | building_full_funding_capacity | The cost for Education, Fire, Health, Police and Power buildings at the full (100%) capacity. For Fire and Police stations this is the coverage radius. |
 | building_full_funding_coverage | The cost for Education, and Health buildings at the full (100%) coverage radius (School Bus/Ambulance). |
+| building_is_w2w | Shows a 'Yes' or 'No' value based on whether the building has a W2W occupant group. |
 | building_styles | Shows a list of the building's styles. |
 | growth_stage | The growth stage of the building's lot. |
 | mysim_name | The name of the MySim that lives in the selected residence. |
