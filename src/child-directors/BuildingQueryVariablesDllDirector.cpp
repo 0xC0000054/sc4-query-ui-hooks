@@ -461,7 +461,14 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 		// The string may have been set to an error message by some other token callback method.
 		outReplacement.Erase(0, outReplacement.Strlen());
 
-		result = entry->second(context, outReplacement);
+		if (!entry->second(context, outReplacement))
+		{
+			// Return an empty string if the handler method failed.
+			outReplacement.Erase(0, outReplacement.Strlen());
+		}
+
+		// Let the game know that the token was handled.
+		result = true;
 	}
 
 	return result;
