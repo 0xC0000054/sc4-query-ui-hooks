@@ -12,6 +12,13 @@ public:
 
 	virtual void SetTokenReplacementValue(cIGZString const& token, cIGZString const& replacementValue) = 0;
 
+	/**
+	 * @brief The callback method that processes the token.
+	 * @param token The token to process.
+	 * @param outValue The output value for the token's result.
+	 * @param pContext An optional state value that is associated with the callback.
+	 * @returns True if the token was processed by the callback; otherwise, false to forward it to other callbacks.
+	 */
 	typedef bool (*TokenReplacementCallback)(cIGZString const& token, cIGZString& outValue, void* pContext);
 
 	virtual void SetTokenReplacementMethod(cIGZString const& token, TokenReplacementCallback pCallback, void* pContext) = 0;
