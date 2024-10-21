@@ -13,6 +13,7 @@
 #pragma once
 #include "cIBuildingQueryDialogHookTarget.h"
 #include "cRZMessage2COMDirector.h"
+#include "ISettings.h"
 
 class cIGZMessage2Standard;
 class cISC4City;
@@ -24,7 +25,7 @@ class BuildingQueryVariablesDllDirector final
 {
 public:
 
-	BuildingQueryVariablesDllDirector();
+	BuildingQueryVariablesDllDirector(const ISettings& settings);
 
 	bool QueryInterface(uint32_t riid, void** ppvObj) override;
 
@@ -50,6 +51,9 @@ private:
 
 	void DebugLogTokenizerVariables();
 
+	void LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant);
+
+	const ISettings& settings;
 	cISC4City* pCity;;
 	cISCStringDetokenizer* pStringDetokenizer;
 };

@@ -21,6 +21,7 @@
 #include "GlobalHookServerPointers.h"
 #include "Logger.h"
 #include "SC4VersionDetection.h"
+#include "Settings.h"
 #include "cIGZApp.h"
 #include "cIGZCmdLine.h"
 #include "cIGZCOM.h"
@@ -56,7 +57,7 @@ NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer = nullptr;
 
 namespace
 {
-	void InstallQueryUIHooks(const Settings& settings)
+	void InstallQueryUIHooks(const ISettings& settings)
 	{
 		Logger& logger = Logger::GetInstance();
 
@@ -95,6 +96,8 @@ class QueryUIHooksDllDirector final : public cRZCOMDllDirector
 {
 public:
 	QueryUIHooksDllDirector()
+		: settings(),
+		  buildingQueryVariablesDirector(settings)
 	{
 		// A child directors that are used to test the services provided
 		// by this director.
@@ -157,8 +160,8 @@ public:
 
 		return true;
 	}
-private:
 
+private:
 	BuildingQueryHookServer buildingQueryHookServer;
 	BuildingQueryVariablesDllDirector buildingQueryVariablesDirector;
 	NetworkQueryToolTipHookServer networkQueryToolTipHookServer;

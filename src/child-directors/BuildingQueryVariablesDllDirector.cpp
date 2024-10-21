@@ -17,6 +17,8 @@
 #include "DebugUtil.h"
 #include "GZStringUtil.h"
 #include "Logger.h"
+#include "OccupantUtil.h"
+#include "cGZPersistResourceKey.h"
 #include "cIGZApp.h"
 #include "cIGZCOM.h"
 #include "cIGZFrameWork.h"
@@ -24,6 +26,9 @@
 #include "cIGZLanguageUtility.h"
 #include "cIGZMessage2Standard.h"
 #include "cIGZMessageServer2.h"
+#include "cIGZPersistDBSegment.h"
+#include "cIGZPersistDBSegmentMultiPackedFiles.h"
+#include "cIGZPersistResourceManager.h"
 #include "cIGZString.h"
 #include "cIGZVariant.h"
 #include "cISCProperty.h"
@@ -406,6 +411,45 @@ namespace
 
 		return result;
 	}
+
+	bool GetResourceFilePath(const cGZPersistResourceKey& key, cRZBaseString& path)
+	{
+		bool result = false;
+
+		cIGZPersistResourceManagerPtr pResMan;
+
+		if (pResMan)
+		{
+			cRZAutoRefCount<cIGZPersistDBSegment> pSegment;
+
+			if (pResMan->FindDBSegment(key, pSegment.AsPPObj()))
+			{
+				cRZAutoRefCount<cIGZPersistDBSegmentMultiPackedFiles> pMultiPackedFile;
+
+				if (pSegment->QueryInterface(GZIID_cIGZPersistDBSegmentMultiPackedFiles, pMultiPackedFile.AsPPVoid()))
+				{
+					// cIGZPersistDBSegmentMultiPackedFiles is a collection of DAT files in a specific folder
+					// and its sub-folders.
+					// Call its FindDBSegment method to get the actual file.
+
+					cRZAutoRefCount<cIGZPersistDBSegment> pMultiPackedSegment;
+
+					if (pMultiPackedFile->FindDBSegment(key, pMultiPackedSegment.AsPPObj()))
+					{
+						pMultiPackedSegment->GetPath(path);
+						result = true;
+					}
+				}
+				else
+				{
+					pSegment->GetPath(path);
+					result = true;
+				}
+			}
+		}
+
+		return result;
+	}
 }
 
 using TokenDataCallback = std::function<bool(const UnknownTokenContext*, cIGZString&)>;
@@ -474,8 +518,9 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 	return result;
 }
 
-BuildingQueryVariablesDllDirector::BuildingQueryVariablesDllDirector()
-	: pStringDetokenizer(nullptr),
+BuildingQueryVariablesDllDirector::BuildingQueryVariablesDllDirector(const ISettings& settings)
+	: settings(settings),
+	  pStringDetokenizer(nullptr),
 	  pCity(nullptr)
 {
 }
@@ -603,6 +648,11 @@ void BuildingQueryVariablesDllDirector::PreCityShutdown(cIGZMessage2Standard* pS
 
 void BuildingQueryVariablesDllDirector::BeforeDialogShown(cISC4Occupant* pOccupant)
 {
+	if (settings.LogBuildingPluginPath())
+	{
+		LogBuildingOccupantPluginPath(pOccupant);
+	}
+
 	if (pStringDetokenizer)
 	{
 		UnknownTokenContext context(mpCOM, pOccupant, pCity);
@@ -638,6 +688,56 @@ void BuildingQueryVariablesDllDirector::DebugLogTokenizerVariables()
 		if (pStringDetokenizer->Detokenize(token, result))
 		{
 			DebugUtil::PrintLineToDebugOutputFormatted("%s = %s", token.ToChar(), result.ToChar());
+		}
+	}
+}
+
+void BuildingQueryVariablesDllDirector::LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant)
+{
+	if (pOccupant && pCity)
+	{
+		cRZAutoRefCount<cISC4BuildingOccupant> pBuildingOccupant;
+
+		if (pOccupant->QueryInterface(GZIID_cISC4BuildingOccupant, pBuildingOccupant.AsPPVoid()))
+		{
+			cISC4BuildingDevelopmentSimulator* pBuildingDevelpmentSim = pCity->GetBuildingDevelopmentSimulator();
+
+			if (pBuildingDevelpmentSim)
+			{
+				const uint32_t buildingType = pBuildingOccupant->GetBuildingType();
+
+				cGZPersistResourceKey key;
+
+				if (pBuildingDevelpmentSim->GetBuildingKeyFromType(buildingType, key))
+				{
+					cRZBaseString path;
+
+					if (GetResourceFilePath(key, path))
+					{
+						Logger& logger = Logger::GetInstance();
+
+						cRZAutoRefCount<cIGZString> userVisibleName;
+
+						if (OccupantUtil::GetUserVisibleName(pOccupant, userVisibleName))
+						{
+							logger.WriteLineFormatted(
+								LogLevel::Info,
+								"%s (%s): %s",
+								pBuildingOccupant->GetExemplarName()->ToChar(),
+								userVisibleName->ToChar(),
+								path.ToChar());
+						}
+						else
+						{
+							logger.WriteLineFormatted(
+								LogLevel::Info,
+								"%s: %s",
+								pBuildingOccupant->GetExemplarName()->ToChar(),
+								path.ToChar());
+						}
+					}
+				}
+			}
 		}
 	}
 }

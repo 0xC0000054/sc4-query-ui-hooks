@@ -11,25 +11,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "ISettings.h"
+#include "cIGZString.h"
+#include "cRZAutoRefCount.h"
 
-class Settings final : public ISettings
+class cISC4Occupant;
+
+namespace OccupantUtil
 {
-public:
-	Settings();
-
-	void Load();
-
-private:
-
-	// ISettings
-
-	bool EnableOccupantQuerySounds() const override;
-	bool LogBuildingPluginPath() const override;
-
-	// Private members
-
-	bool enableOccupantQuerySounds;
-	bool logBuildingPluginPath;
-};
-
+	bool GetUserVisibleName(cISC4Occupant* pOccupant, cRZAutoRefCount<cIGZString>& name);
+}

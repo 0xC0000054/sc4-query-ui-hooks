@@ -342,7 +342,7 @@ namespace
 	}
 }
 
-void BuildingQueryHooks::Install(const Settings& settings)
+void BuildingQueryHooks::Install(const ISettings& settings)
 {
 	InstallDoQueryDialogHook();
 	InstallGetBuildingOccupantTipInfoHook();

@@ -141,6 +141,9 @@
     <ClCompile Include="Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OccupantUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -262,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="more-building-styles\cIBuildingStyleWallToWall.h">
       <Filter>Header Files\MoreBuildingStyles</Filter>
+    </ClInclude>
+    <ClInclude Include="ISettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OccupantUtil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

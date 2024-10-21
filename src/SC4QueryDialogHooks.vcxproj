@@ -40,6 +40,7 @@
     <ClCompile Include="BuildingQueryHooks.cpp" />
     <ClCompile Include="NetworkQueryHooks.cpp" />
     <ClCompile Include="NetworkQueryToolTipHookServer.cpp" />
+    <ClCompile Include="OccupantUtil.cpp" />
     <ClCompile Include="Patcher.cpp" />
     <ClCompile Include="QueryToolHelpers.cpp" />
     <ClCompile Include="QueryUIHooksDllDirector.cpp" />
@@ -64,12 +65,14 @@
     <ClInclude Include="..\vendor\gzcom-dll\include\SCPropertyUtil.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceKey.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceManager.h" />
+    <ClInclude Include="OccupantUtil.h" />
     <ClInclude Include="child-directors\BuildingQueryVariablesDllDirector.h" />
     <ClInclude Include="child-directors\NetworkQueryToolTipDllDirector.h" />
     <ClInclude Include="DebugUtil.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GlobalHookServerPointers.h" />
     <ClInclude Include="GZStringUtil.h" />
+    <ClInclude Include="ISettings.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="more-building-styles\cIBuildingStyleInfo.h" />
     <ClInclude Include="more-building-styles\cIBuildingStyleWallToWall.h" />

@@ -11,25 +11,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "ISettings.h"
 
-class Settings final : public ISettings
+class ISettings
 {
 public:
-	Settings();
+	virtual bool EnableOccupantQuerySounds() const = 0;
 
-	void Load();
-
-private:
-
-	// ISettings
-
-	bool EnableOccupantQuerySounds() const override;
-	bool LogBuildingPluginPath() const override;
-
-	// Private members
-
-	bool enableOccupantQuerySounds;
-	bool logBuildingPluginPath;
+	virtual bool LogBuildingPluginPath() const = 0;
 };
-

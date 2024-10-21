@@ -18,13 +18,19 @@
 #include <fstream>
 
 Settings::Settings()
-	: enableOccupantQuerySounds(true)
+	: enableOccupantQuerySounds(true),
+	  logBuildingPluginPath(false)
 {
 }
 
 bool Settings::EnableOccupantQuerySounds() const
 {
 	return enableOccupantQuerySounds;
+}
+
+bool Settings::LogBuildingPluginPath() const
+{
+	return logBuildingPluginPath;
 }
 
 void Settings::Load()
@@ -41,6 +47,7 @@ void Settings::Load()
 			boost::property_tree::ini_parser::read_ini(stream, tree);
 
 			enableOccupantQuerySounds = tree.get<bool>("QueryUIHooks.EnableOccupantQuerySounds");
+			logBuildingPluginPath = tree.get<bool>("QueryUIHooks.LogBuildingPluginPath");
 		}
 		else
 		{

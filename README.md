@@ -64,9 +64,18 @@ Note that the exact building may be different if the lot uses Building Families.
 
 ## SC4QueryUIHooks INI File
 
-This file contains one setting that controls whether the query sounds are played when clicking on an item
-to open the query dialog or copy the lot.
+This file contains the following options.
+
+### EnableOccupantQuerySounds
+
+This option controls whether the query sounds are played when clicking on an item to open the query dialog
+or copy the lot, the default is _true_.
 The occupant query sound properties affected by this option are SFX:Query Sound, SFX:Query Sound Abandoned and SFX:Query Sound Decayed.
+
+### LogBuildingPluginPath
+
+This option controls whether the building name and plugin file path will be written to the log file when the
+building is queried, the default is _false_.
 
 ## Using the Code
 

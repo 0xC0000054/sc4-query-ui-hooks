@@ -11,9 +11,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "Settings.h"
+#include "ISettings.h"
 
 namespace BuildingQueryHooks
 {
-	void Install(const Settings& settings);
+	void Install(const ISettings& settings);
 }
