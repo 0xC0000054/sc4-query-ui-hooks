@@ -250,23 +250,26 @@ namespace
 
 		if (context && context->pCOM && context->pOccupant)
 		{
-			cRZAutoRefCount<cIBuildingStyleInfo> pBuildingStyleInfo;
+			const std::string_view separator(" | ");
+
+			cRZAutoRefCount<cIBuildingStyleInfo2> pBuildingStyleInfo;
 
 			if (context->pCOM->GetClassObject(
 				GZCLSID_cIBuildingStyleInfo,
-				GZIID_cIBuildingStyleInfo,
+				GZIID_cIBuildingStyleInfo2,
 				pBuildingStyleInfo.AsPPVoid()))
 			{
 				// If the More Building Styles DLL is installed we check the building's OccupantGroups
 				// for any styles that are present in the Building Style Control.
-				// The names of the styles are placed in the output string as comma-separated values.
-				result = pBuildingStyleInfo->GetBuildingStyleNames(context->pOccupant, outReplacement);
+				result = pBuildingStyleInfo->GetBuildingStyleNamesEx(
+					context->pOccupant,
+					outReplacement,
+					cRZBaseString(separator.data(), separator.size()));
 			}
 			else
 			{
 				// If the More Building Styles DLL is not installed we fall back to checking for
 				// the 4 built-in Maxis styles.
-				const std::string_view separator(", ");
 
 				for (size_t i = 0; i < MaxisBuildingStyles.size(); i++)
 				{
