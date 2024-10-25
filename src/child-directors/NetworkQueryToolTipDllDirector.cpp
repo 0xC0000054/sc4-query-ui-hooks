@@ -494,7 +494,7 @@ bool NetworkQueryToolTipDllDirector::ProcessToolTip(
 			{
 				result = SetNetworkTitle(networkType, title);
 
-				if (debugQuery && result)
+				if (result)
 				{
 					SetDebugQueryText(networkOccupant, networkType, text);
 				}
