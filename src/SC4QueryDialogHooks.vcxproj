@@ -65,6 +65,7 @@
     <ClInclude Include="..\vendor\gzcom-dll\include\SCPropertyUtil.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceKey.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceManager.h" />
+    <ClInclude Include="more-building-styles\cIBuildingStyleInfo2.h" />
     <ClInclude Include="OccupantUtil.h" />
     <ClInclude Include="child-directors\BuildingQueryVariablesDllDirector.h" />
     <ClInclude Include="child-directors\NetworkQueryToolTipDllDirector.h" />
@@ -74,8 +75,6 @@
     <ClInclude Include="GZStringUtil.h" />
     <ClInclude Include="ISettings.h" />
     <ClInclude Include="Logger.h" />
-    <ClInclude Include="more-building-styles\cIBuildingStyleInfo.h" />
-    <ClInclude Include="more-building-styles\cIBuildingStyleWallToWall.h" />
     <ClInclude Include="NetworkQueryHooks.h" />
     <ClInclude Include="NetworkQueryToolTipHookServer.h" />
     <ClInclude Include="Patcher.h" />

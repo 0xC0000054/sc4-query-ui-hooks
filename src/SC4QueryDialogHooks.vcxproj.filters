@@ -257,20 +257,17 @@
     <ClInclude Include="..\vendor\gzcom-dll\include\cSC4EdgeConnectionStore.h">
       <Filter>Header Files\GZCOM</Filter>
     </ClInclude>
-    <ClInclude Include="more-building-styles\cIBuildingStyleInfo.h">
-      <Filter>Header Files\MoreBuildingStyles</Filter>
-    </ClInclude>
     <ClInclude Include="Settings.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="more-building-styles\cIBuildingStyleWallToWall.h">
-      <Filter>Header Files\MoreBuildingStyles</Filter>
     </ClInclude>
     <ClInclude Include="ISettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OccupantUtil.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="more-building-styles\cIBuildingStyleInfo2.h">
+      <Filter>Header Files\MoreBuildingStyles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

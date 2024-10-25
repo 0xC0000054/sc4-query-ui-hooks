@@ -11,8 +11,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "BuildingQueryVariablesDllDirector.h"
-#include "cIBuildingStyleInfo.h"
-#include "cIBuildingStyleWallToWall.h"
+#include "cIBuildingStyleInfo2.h"
 #include "cIBuildingQueryHookServer.h"
 #include "DebugUtil.h"
 #include "GZStringUtil.h"
@@ -299,17 +298,16 @@ namespace
 
 		if (context && context->pCOM && context->pOccupant)
 		{
-			cRZAutoRefCount<cIBuildingStyleWallToWall> pBuildingStyleWallToWall;
+			cRZAutoRefCount<cIBuildingStyleInfo2> pBuildingStyleInfo;
 
 			if (context->pCOM->GetClassObject(
-				GZCLSID_cIBuildingStyleWallToWall,
-				GZIID_cIBuildingStyleWallToWall,
-				pBuildingStyleWallToWall.AsPPVoid()))
+				GZCLSID_cIBuildingStyleInfo,
+				GZIID_cIBuildingStyleInfo2,
+				pBuildingStyleInfo.AsPPVoid()))
 			{
-				// If the More Building Styles DLL is installed we check the building's OccupantGroups
-				// for any wall to wall values.
+				// If the More Building Styles DLL is installed we check the if the building is wall to wall.
 				// The output string will be a localized version of Yes or No.
-				if (pBuildingStyleWallToWall->HasWallToWallOccupantGroup(context->pOccupant))
+				if (pBuildingStyleInfo->IsWallToWall(context->pOccupant))
 				{
 					result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0xCA5D4F33, outReplacement);
 				}
