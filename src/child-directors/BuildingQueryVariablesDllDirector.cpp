@@ -345,6 +345,15 @@ namespace
 					result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x6A5D4F37, outReplacement);
 				}
 			}
+			else
+			{
+				Logger::GetInstance().WriteLine(
+					LogLevel::Error,
+					"Unable to get the building W2W status. Install or update the MoreBuildingStyles DLL."
+					"(https://community.simtropolis.com/files/file/36112-allow-more-building-styles-dll-plugin/).");
+				outReplacement.FromChar("Unknown");
+				result = true;
+			}
 		}
 
 		return result;
