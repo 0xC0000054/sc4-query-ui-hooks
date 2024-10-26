@@ -489,7 +489,7 @@ static const std::unordered_map<std::string_view, TokenDataCallback> tokenDataCa
 	{ "building_full_funding_coverage", std::bind(GetBuildingFullFundingToken, _1, _2, BuildingFundingType::Coverage) },
 	{ "building_is_w2w", GetBuildingWallToWallToken },
 	{ "building_styles", std::bind(GetBuildingStylesToken, _1, _2, BuildingStylesTokenSeparatorType::Pipe) },
-	{ "building_styles_lines", std::bind(GetBuildingStylesToken, _1, _2, BuildingStylesTokenSeparatorType::NewLine) },
+	{ "building_style_lines", std::bind(GetBuildingStylesToken, _1, _2, BuildingStylesTokenSeparatorType::NewLine) },
 	{ "growth_stage", GetGrowthStageToken },
 	{ "mysim_name", GetMySimResidentName },
 	{ "r1_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialLowWealth) },
