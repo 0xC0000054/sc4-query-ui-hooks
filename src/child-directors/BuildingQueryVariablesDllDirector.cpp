@@ -378,6 +378,24 @@ namespace
 		return result;
 	}
 
+	bool GetOccupancyToken(
+		const UnknownTokenContext* context,
+		cIGZString& outReplacement,
+		cISC4BuildingDevelopmentSimulator::DeveloperType developerType)
+	{
+		bool result = false;
+
+		cISC4Lot* pLot = GetOccupantLot(context);
+
+		if (pLot)
+		{
+			uint16_t occupancy = pLot->GetPopulation(developerType);
+			result = MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
+		}
+
+		return result;
+	}
+
 	bool GetGrowthStageToken(const UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
@@ -425,25 +443,6 @@ namespace
 					}
 				}
 			}
-		}
-
-		return result;
-	}
-
-
-	bool GetOccupancyToken(
-		const UnknownTokenContext* context,
-		cIGZString& outReplacement,
-		cISC4BuildingDevelopmentSimulator::DeveloperType developerType)
-	{
-		bool result = false;
-
-		cISC4Lot* pLot = GetOccupantLot(context);
-
-		if (pLot)
-		{
-			uint16_t occupancy = pLot->GetPopulation(developerType);
-			result = MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
 		}
 
 		return result;
