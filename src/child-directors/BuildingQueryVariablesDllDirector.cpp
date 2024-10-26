@@ -14,6 +14,8 @@
 #include "cIBuildingStyleInfo2.h"
 #include "cIBuildingQueryHookServer.h"
 #include "DebugUtil.h"
+#include "frozen/string.h"
+#include "frozen/unordered_map.h"
 #include "GZStringUtil.h"
 #include "Logger.h"
 #include "OccupantUtil.h"
@@ -59,7 +61,6 @@
 #include <memory>
 #include <set>
 #include <string>
-#include <unordered_map>
 
 static constexpr uint32_t kSC4MessagePostCityInit = 0x26D31EC1;
 static constexpr uint32_t kSC4MessagePreCityShutdown = 0x26D31EC2;
@@ -488,11 +489,11 @@ namespace
 	}
 }
 
-using TokenDataCallback = std::function<bool(const UnknownTokenContext*, cIGZString&)>;
+typedef bool (*TokenDataCallback)(const UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static const std::unordered_map<std::string_view, TokenDataCallback> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 30> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
@@ -531,9 +532,7 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 {
 	bool result = false;
 
-	const std::string_view tokenAsStringView(token.Data(), token.Strlen());
-
-	const auto& entry = tokenDataCallbacks.find(tokenAsStringView);
+	const auto& entry = tokenDataCallbacks.find(frozen::string(token.Data(), token.Strlen()));
 
 	if (entry != tokenDataCallbacks.end())
 	{

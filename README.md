@@ -148,6 +148,7 @@ See [LICENSE.txt](LICENSE.txt) for more information.
 [EASTL](https://github.com/electronicarts/EASTL) Located in the vendor folder, BSD 3-Clause License.    
 [Windows Implementation Library](https://github.com/microsoft/wil) - MIT License    
 [SC4Fix](https://github.com/nsgomez/sc4fix) - MIT License    
+[Frozen](https://github.com/serge-sans-paille/frozen) - Apache 2.0 License.    
 [Boost.Algorithm](https://www.boost.org/doc/libs/1_84_0/libs/algorithm/doc/html/index.html) - Boost Software License, Version 1.0.    
 [Boost.PropertyTree](https://www.boost.org/doc/libs/1_84_0/doc/html/property_tree.html) - Boost Software License, Version 1.0.    
 [sc4-more-building-styles](https://github.com/0xC0000054/sc4-more-building-styles) - MIT License
