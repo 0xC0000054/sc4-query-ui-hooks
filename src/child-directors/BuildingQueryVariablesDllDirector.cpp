@@ -244,13 +244,39 @@ namespace
 		return result;
 	}
 
-	bool GetBuildingStylesToken(const UnknownTokenContext* context, cIGZString& outReplacement)
+	enum class BuildingStylesTokenSeparatorType
+	{
+		// A pipe character, e.g. Chicago 1890 | New York 1940.
+		Pipe,
+		// A new line character, each style after the first will be on its own line.
+		// E.g:
+		// Chicago 1890
+		// New York 1940
+		NewLine
+	};
+
+	std::string_view GetBuildingStylesTokenSeparator(BuildingStylesTokenSeparatorType type)
+	{
+		switch (type)
+		{
+		case BuildingStylesTokenSeparatorType::NewLine:
+			return "\n"sv;
+		case BuildingStylesTokenSeparatorType::Pipe:
+		default:
+			return " | "sv;
+		}
+	}
+
+	bool GetBuildingStylesToken(
+		const UnknownTokenContext* context,
+		cIGZString& outReplacement,
+		BuildingStylesTokenSeparatorType type)
 	{
 		bool result = false;
 
 		if (context && context->pCOM && context->pOccupant)
 		{
-			const std::string_view separator(" | ");
+			const std::string_view separator = GetBuildingStylesTokenSeparator(type);
 
 			cRZAutoRefCount<cIBuildingStyleInfo2> pBuildingStyleInfo;
 
@@ -462,7 +488,8 @@ static const std::unordered_map<std::string_view, TokenDataCallback> tokenDataCa
 	{ "building_full_funding_capacity", std::bind(GetBuildingFullFundingToken, _1, _2, BuildingFundingType::Capacity) },
 	{ "building_full_funding_coverage", std::bind(GetBuildingFullFundingToken, _1, _2, BuildingFundingType::Coverage) },
 	{ "building_is_w2w", GetBuildingWallToWallToken },
-	{ "building_styles", GetBuildingStylesToken },
+	{ "building_styles", std::bind(GetBuildingStylesToken, _1, _2, BuildingStylesTokenSeparatorType::Pipe) },
+	{ "building_styles_lines", std::bind(GetBuildingStylesToken, _1, _2, BuildingStylesTokenSeparatorType::NewLine) },
 	{ "growth_stage", GetGrowthStageToken },
 	{ "mysim_name", GetMySimResidentName },
 	{ "r1_occupancy", std::bind(GetOccupancyToken, _1, _2, cISC4BuildingDevelopmentSimulator::DeveloperType::ResidentialLowWealth) },
