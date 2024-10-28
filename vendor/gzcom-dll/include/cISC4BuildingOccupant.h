@@ -35,6 +35,7 @@ class cISC4BuildingOccupant : public cIGZUnknown
 
 		class BuildingProfile
 		{
+		public:
 			// These flags are probably intended as a quick way for the game to
 			// identify buildings that are part of the specified occupant groups.
 			enum BuildingCategoryFlags : uint32_t

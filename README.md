@@ -20,6 +20,7 @@ of a building query dialog in the form of `#variable_name#`.
 | building_is_w2w | Shows a 'Yes' or 'No' value based on whether the building has a W2W occupant group. |
 | building_styles | Shows a building's styles in a pipe-separated list. |
 | building_style_lines | Shows a list of the building's styles, with each style after the first one on its own line.<br>E.g:`Chicago 1890`<br>`New York 1940` |
+| building_summary | The building summary the game shows in its hover tool tips. E.g: `Low-Wealth Residential` |
 | growth_stage | The growth stage of the building's lot. |
 | mysim_name | The name of the MySim that lives in the selected residence. |
 | r1_occupancy | The current number of R§ occupants. |

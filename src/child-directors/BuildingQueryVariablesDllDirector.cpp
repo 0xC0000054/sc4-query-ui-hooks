@@ -322,6 +322,88 @@ namespace
 		return result;
 	}
 
+	bool GetBuildingSummaryToken(const UnknownTokenContext* context, cIGZString& outReplacement)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant)
+		{
+			cRZAutoRefCount<cISC4BuildingOccupant> pBuildingOccupant;
+
+			if (context->pOccupant->QueryInterface(GZIID_cISC4BuildingOccupant, pBuildingOccupant.AsPPVoid()))
+			{
+				const cISC4BuildingOccupant::BuildingProfile& profile = pBuildingOccupant->GetBuildingProfile();
+				const cISC4BuildingOccupant::PurposeType purpose = profile.purpose;
+
+				if (purpose != cISC4BuildingOccupant::PurposeType::None)
+				{
+					if (purpose == cISC4BuildingOccupant::PurposeType::Residence)
+					{
+						switch (profile.wealth)
+						{
+						case cISC4BuildingOccupant::WealthType::Low:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0xCA95F27E, outReplacement);
+							break;
+						case cISC4BuildingOccupant::WealthType::Medium:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x6A95F2B0, outReplacement);
+							break;
+						case cISC4BuildingOccupant::WealthType::High:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0xCA95F2B8, outReplacement);
+							break;
+						}
+					}
+					else if (purpose == cISC4BuildingOccupant::PurposeType::Services)
+					{
+						switch (profile.wealth)
+						{
+						case cISC4BuildingOccupant::WealthType::Low:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x8A95F2BF, outReplacement);
+							break;
+						case cISC4BuildingOccupant::WealthType::Medium:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0xAA95F2DC, outReplacement);
+							break;
+						case cISC4BuildingOccupant::WealthType::High:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x8A95F2E4, outReplacement);
+							break;
+						}
+					}
+					else if (purpose == cISC4BuildingOccupant::PurposeType::Office)
+					{
+						switch (profile.wealth)
+						{
+						case cISC4BuildingOccupant::WealthType::Medium:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x0A95F39A, outReplacement);
+							break;
+						case cISC4BuildingOccupant::WealthType::High:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x6A95F3B3, outReplacement);
+							break;
+						}
+					}
+					else
+					{
+						switch (purpose)
+						{
+						case cISC4BuildingOccupant::PurposeType::Agriculture:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x4A95F2EB, outReplacement);
+							break;
+						case cISC4BuildingOccupant::PurposeType::Processing:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x2A95F324, outReplacement);
+							break;
+						case cISC4BuildingOccupant::PurposeType::Manufacturing:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0x6A95F313, outReplacement);
+							break;
+						case cISC4BuildingOccupant::PurposeType::HighTech:
+							result = GZStringUtil::SetLocalizedStringValue(0xEA5524EB, 0xCA95F31C, outReplacement);
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
 	bool GetBuildingWallToWallToken(const UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
@@ -492,13 +574,14 @@ typedef bool (*TokenDataCallback)(const UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 30> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 31> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
 	{ "building_is_w2w", GetBuildingWallToWallToken },
 	{ "building_styles", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, BuildingStylesTokenSeparatorType::Pipe); } },
 	{ "building_style_lines", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, BuildingStylesTokenSeparatorType::NewLine); } },
+	{ "building_summary", GetBuildingSummaryToken },
 	{ "growth_stage", GetGrowthStageToken },
 	{ "mysim_name", GetMySimResidentName },
 	{ "r1_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
