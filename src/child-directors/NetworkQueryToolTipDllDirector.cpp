@@ -412,11 +412,9 @@ void NetworkQueryToolTipDllDirector::PostCityInit(cIGZMessage2Standard* pStandar
 
 	pPlumbingSim = pCity->GetPlumbingSimulator();
 
-	cIGZCOM* const pCOM = GZCOM();
-
 	cRZAutoRefCount<cINetworkQueryToolTipHookServer> hookServer;
 
-	if (pCOM->GetClassObject(
+	if (mpCOM->GetClassObject(
 		GZCLSID_cINetworkQueryToolTipHookServer,
 		GZIID_cINetworkQueryToolTipHookServer,
 		hookServer.AsPPVoid()))
@@ -429,11 +427,9 @@ void NetworkQueryToolTipDllDirector::PreCityShutdown(cIGZMessage2Standard* pStan
 {
 	pPlumbingSim = nullptr;
 
-	cIGZCOM* const pCOM = GZCOM();
-
 	cRZAutoRefCount<cINetworkQueryToolTipHookServer> hookServer;
 
-	if (pCOM->GetClassObject(
+	if (mpCOM->GetClassObject(
 		GZCLSID_cINetworkQueryToolTipHookServer,
 		GZIID_cINetworkQueryToolTipHookServer,
 		hookServer.AsPPVoid()))

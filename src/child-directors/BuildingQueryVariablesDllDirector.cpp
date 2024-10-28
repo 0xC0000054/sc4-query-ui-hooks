@@ -735,11 +735,9 @@ void BuildingQueryVariablesDllDirector::PostCityInit(cIGZMessage2Standard* pStan
 {
 	pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
 
-	cIGZCOM* const pCOM = GZCOM();
-
 	cRZAutoRefCount<cIBuildingQueryHookServer> hookServer;
 
-	if (pCOM->GetClassObject(
+	if (mpCOM->GetClassObject(
 		GZCLSID_cIBuildingQueryHookServer,
 		GZIID_cIBuildingQueryHookServer,
 		hookServer.AsPPVoid()))
@@ -752,11 +750,9 @@ void BuildingQueryVariablesDllDirector::PreCityShutdown(cIGZMessage2Standard* pS
 {
 	pCity = nullptr;
 
-	cIGZCOM* const pCOM = GZCOM();
-
 	cRZAutoRefCount<cIBuildingQueryHookServer> hookServer;
 
-	if (pCOM->GetClassObject(
+	if (mpCOM->GetClassObject(
 		GZCLSID_cIBuildingQueryHookServer,
 		GZIID_cIBuildingQueryHookServer,
 		hookServer.AsPPVoid()))
