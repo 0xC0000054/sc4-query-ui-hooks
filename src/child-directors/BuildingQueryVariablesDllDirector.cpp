@@ -77,13 +77,10 @@ namespace
 		cISC4Occupant* pOccupant;
 		cISC4City* pCity;
 
-		UnknownTokenContext(
-			cIGZCOM* GZCOM,
-			cISC4Occupant* occupant,
-			cISC4City* city)
-			: pCOM(GZCOM),
-			  pOccupant(occupant),
-			  pCity(city)
+		UnknownTokenContext()
+			: pCOM(nullptr),
+			  pOccupant(nullptr),
+			  pCity(nullptr)
 		{
 		}
 	};
@@ -636,6 +633,10 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 	return result;
 }
 
+// The current token context is stored in a static variable to ensure that the
+// memory remains valid between calls to BeforeDialogShown and AfterDialogShown.
+static UnknownTokenContext sCurrentTokenContext;
+
 BuildingQueryVariablesDllDirector::BuildingQueryVariablesDllDirector(const ISettings& settings)
 	: settings(settings),
 	  pStringDetokenizer(nullptr),
@@ -773,9 +774,11 @@ void BuildingQueryVariablesDllDirector::BeforeDialogShown(cISC4Occupant* pOccupa
 
 	if (pStringDetokenizer)
 	{
-		UnknownTokenContext context(mpCOM, pOccupant, pCity);
+		sCurrentTokenContext.pCOM = mpCOM;
+		sCurrentTokenContext.pOccupant = pOccupant;
+		sCurrentTokenContext.pCity = pCity;
 
-		pStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &context, true);
+		pStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &sCurrentTokenContext, true);
 
 #ifdef _DEBUG
 		DebugLogTokenizerVariables();
@@ -787,9 +790,7 @@ void BuildingQueryVariablesDllDirector::AfterDialogShown(cISC4Occupant* pOccupan
 {
 	if (pStringDetokenizer)
 	{
-		UnknownTokenContext context(mpCOM, pOccupant, pCity);
-
-		pStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &context, false);
+		pStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &sCurrentTokenContext, false);
 	}
 }
 
