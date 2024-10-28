@@ -571,7 +571,7 @@ typedef bool (*TokenDataCallback)(const UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 31> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 32> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
