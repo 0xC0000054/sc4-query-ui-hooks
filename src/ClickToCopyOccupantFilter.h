@@ -11,17 +11,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <cstdint>
+#include "cSC4BaseOccupantFilter.h"
 
-#ifdef __clang__
-#define NAKED_FUN __attribute__((naked))
-#else
-#define NAKED_FUN __declspec(naked)
-#endif
-
-namespace Patcher
+class ClickToCopyOccupantFilter final : public cSC4BaseOccupantFilter
 {
-	void InstallJump(uintptr_t address, uintptr_t destination);
+public:
+	ClickToCopyOccupantFilter();
 
-	void InstallCallHook(uintptr_t address, void* pfnFunc);
-}
+	// cISC4OccupantFilter
+
+	bool IsOccupantTypeIncluded(uint32_t type) override;
+	bool IsPropertyHolderIncluded(cISCPropertyHolder* pProperties) override;
+};
+

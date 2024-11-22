@@ -144,6 +144,15 @@
     <ClCompile Include="OccupantUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ClickToCopyOccupantFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cSC4BaseOccupantFilter.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cRZBaseUnknown.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -269,6 +278,18 @@
     <ClInclude Include="more-building-styles\cIBuildingStyleInfo2.h">
       <Filter>Header Files\MoreBuildingStyles</Filter>
     </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cIS3DModelInstance.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cSC4BaseOccupantFilter.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cRZBaseUnknown.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickToCopyOccupantFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -278,8 +299,5 @@
     <ResourceCompile Include="version.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
 </Project>

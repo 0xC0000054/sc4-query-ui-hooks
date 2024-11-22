@@ -11,20 +11,25 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "Patcher.h"
+
 #include <Windows.h>
-#include "wil/result.h"
+#include "wil/resource.h"
+#include "wil/win32_helpers.h"
 
-void Patcher::InstallCallHook(uintptr_t targetAddress, void* pfnFunc)
+void Patcher::InstallJump(uintptr_t address, uintptr_t destination)
 {
-	// Allow the executable memory to be written to.
-	DWORD oldProtect = 0;
-	THROW_IF_WIN32_BOOL_FALSE(VirtualProtect(
-		reinterpret_cast<LPVOID>(targetAddress),
-		5,
-		PAGE_EXECUTE_READWRITE,
-		&oldProtect));
+	DWORD oldProtect;
+	THROW_IF_WIN32_BOOL_FALSE(VirtualProtect(reinterpret_cast<void*>(address), 5, PAGE_EXECUTE_READWRITE, &oldProtect));
 
-	// Patch the memory at the specified address.
-	*((uint8_t*)targetAddress) = 0xE8;
-	*((uintptr_t*)(targetAddress + 1)) = ((uintptr_t)pfnFunc) - targetAddress - 5;
+	*((uint8_t*)address) = 0xE9;
+	*((uintptr_t*)(address + 1)) = destination - address - 5;
+}
+
+void Patcher::InstallCallHook(uintptr_t address, void* pfnFunc)
+{
+	DWORD oldProtect;
+	THROW_IF_WIN32_BOOL_FALSE(VirtualProtect(reinterpret_cast<void*>(address), 5, PAGE_EXECUTE_READWRITE, &oldProtect));
+
+	*((uint8_t*)address) = 0xE8;
+	*((uintptr_t*)(address + 1)) = reinterpret_cast<uintptr_t>(pfnFunc) - address - 5;
 }

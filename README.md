@@ -6,6 +6,20 @@ The plugin can be downloaded from the Releases tab: https://github.com/0xC000005
 
 ## Features
 
+### Shift + Click Object Copying
+
+Some objects can be copied by holding down the shift key and clicking on them with the query tool.
+
+#### Buildings
+
+Clicking a building will activate the Place Lot tool with the building's lot selected.
+Note that the exact building may be different if the lot uses Building Families.
+
+#### Flora
+
+Clicking certain flora types will activate the Place Flora tool with that flora type selected.
+Note that this only works with the flora objects that have a hover query tool tip.
+
 ### Additional Building Query Dialog Variables
 
 The DLL provides a number of new variables that can be used in the LTEXT files
@@ -58,11 +72,6 @@ A custom advanced/debug query tool tip is provided for the transportation networ
 This tool tip is accessed by holding `Control + Alt + Shift` when hovering over a network piece.
 
 ![Network Query Tool Tip](images/CustomNetworkTooltip.jpg)
-
-### Shift + Click Building Copying
-
-Holding down the Shift key when clicking a building will activate the Place Lot tool with the building's lot selected.
-Note that the exact building may be different if the lot uses Building Families.
 
 ## SC4QueryUIHooks INI File
 

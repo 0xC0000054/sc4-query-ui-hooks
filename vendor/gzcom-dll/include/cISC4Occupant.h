@@ -7,6 +7,8 @@ class cISCPropertyHolder;
 class cISC43DPlaceableObject;
 class cS3DVector3;
 
+static const uint32_t GZIID_cISC4Occupant = 0x26BB767E;
+
 class cISC4Occupant : public cIGZUnknown
 {
 	public:

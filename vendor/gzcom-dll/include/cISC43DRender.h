@@ -29,7 +29,7 @@ class cISC43DRender : public cIGZUnknown
 		virtual intptr_t GetViewUtilities(void) = 0;
 		virtual intptr_t GetLightingManager(void) = 0;
 		virtual intptr_t GetDrawContext(void) = 0;
-		
+
 		virtual bool GetViewportSize(uint32_t& nX, uint32_t& nZ) = 0;
 		virtual bool SetViewportSize(uint32_t nX, uint32_t nZ) = 0;
 		virtual bool SetSubpixelImageBias(float, float) = 0;
@@ -102,13 +102,13 @@ class cISC43DRender : public cIGZUnknown
 		virtual bool PickTerrainAlways(float const*, float const*, float*, bool) = 0;
 		virtual bool PickTerrainAlways(int32_t, int32_t, float*, bool) = 0;
 
-		virtual bool Pick(int32_t, int32_t, cISC4OccupantFilter*, cIS3DModelInstance*&) = 0;
-		virtual bool Pick(int32_t, int32_t, float const*, float const*, cISC4OccupantFilter*, cIS3DModelInstance*&) = 0;
+		virtual bool Pick(int32_t, int32_t, cISC4OccupantFilter*, cIS3DModelInstance**) = 0;
+		virtual bool Pick(int32_t, int32_t, float const*, float const*, cISC4OccupantFilter*, cIS3DModelInstance**) = 0;
 
 		virtual bool GetModelsInVolume(cS3DBoundingBox const&, cIS3DModelInstance**, uint32_t&) = 0;
 		virtual bool IsModelVisible(cIS3DModelInstance*, int32_t nFrustumType) = 0;
 		virtual bool IsModelVisible(SC43DGridElement*, int32_t nFrustumType) = 0;
-		
+
 		virtual bool GetViewFogEnabled(void) = 0;
 		virtual bool SetViewFogEnabled(bool bEnabled) = 0;
 
