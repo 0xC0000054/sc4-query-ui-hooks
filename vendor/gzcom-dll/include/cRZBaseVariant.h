@@ -27,7 +27,7 @@ public:
 	uint32_t AddRef();
 
 	uint32_t Release();
-	
+
 	uint16_t GetType() const;
 	uint32_t GetCount() const;
 	bool Erase();
@@ -96,8 +96,8 @@ public:
 	void SetValVoidPtr(void* value);
 
 	bool CreateValString(cIGZString** value) const;
-	void GetValString(cIGZString* value) const;
-	void SetValString(cIGZString* value);
+	void GetValString(cIGZString& value) const;
+	void SetValString(cIGZString const& value);
 
 	bool GetValVoid(void* value, uint32_t& length) const;
 	void SetValVoid(void* value, uint32_t length);
