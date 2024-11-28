@@ -11,14 +11,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "cIGZString.h"
-#include "cRZAutoRefCount.h"
 
-class cISC4Occupant;
-
-namespace OccupantUtil
+namespace FloraQueryHooks
 {
-	bool GetDisplayName(cISC4Occupant* pOccupant, cIGZString& name);
-	bool GetExemplarName(cISC4Occupant* pOccupant, cIGZString& name);
-	bool GetUserVisibleName(cISC4Occupant* pOccupant, cRZAutoRefCount<cIGZString>& name);
+	void Install();
 }

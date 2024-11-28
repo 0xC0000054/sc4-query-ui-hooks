@@ -84,6 +84,15 @@ bool QueryToolTipDllDirector::PostAppInit()
 		}
 	}
 
+	floraToolTipHandler.PostAppInit(mpCOM);
+	networkToolTipHandler.PostAppInit(mpCOM);
+	return true;
+}
+
+bool QueryToolTipDllDirector::PreAppShutdown()
+{
+	floraToolTipHandler.PreAppShutdown(mpCOM);
+	networkToolTipHandler.PreAppShutdown(mpCOM);
 	return true;
 }
 
@@ -106,10 +115,12 @@ bool QueryToolTipDllDirector::DoMessage(cIGZMessage2* pMsg)
 
 void QueryToolTipDllDirector::PostCityInit(cIGZMessage2Standard* pStandardMsg)
 {
+	floraToolTipHandler.PostCityInit(pStandardMsg, mpCOM);
 	networkToolTipHandler.PostCityInit(pStandardMsg, mpCOM);
 }
 
 void QueryToolTipDllDirector::PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
 {
+	floraToolTipHandler.PreCityShutdown(pStandardMsg, mpCOM);
 	networkToolTipHandler.PreCityShutdown(pStandardMsg, mpCOM);
 }

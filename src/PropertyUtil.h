@@ -12,13 +12,20 @@
 
 #pragma once
 #include "cIGZString.h"
+#include "cISCPropertyHolder.h"
 #include "cRZAutoRefCount.h"
 
-class cISC4Occupant;
-
-namespace OccupantUtil
+namespace PropertyUtil
 {
-	bool GetDisplayName(cISC4Occupant* pOccupant, cIGZString& name);
-	bool GetExemplarName(cISC4Occupant* pOccupant, cIGZString& name);
-	bool GetUserVisibleName(cISC4Occupant* pOccupant, cRZAutoRefCount<cIGZString>& name);
-}
+	bool GetExemplarName(
+		const cISCPropertyHolder* pPropertyHolder,
+		cIGZString& name);
+
+	bool GetDisplayName(
+		const cISCPropertyHolder* pPropertyHolder,
+		cIGZString& name);
+
+	bool GetUserVisibleName(
+		const cISCPropertyHolder* pPropertyHolder,
+		cRZAutoRefCount<cIGZString>& name);
+};

@@ -16,7 +16,7 @@ public:
 	virtual bool GetAbbrMonthName(uint8_t month, cIGZString& outString) = 0;
 
 	virtual bool MakeTimeString(int32_t hour, int32_t minute, int32_t second, cIGZString& outString) = 0;
-	virtual bool MakeDateString(int32_t unknown1, int32_t unknown2, uint32_t unknown3, cIGZString& outString, uint32_t dateFormat) = 0;
+	virtual bool MakeDateString(uint32_t month, uint32_t day, uint32_t year, cIGZString& outString, uint32_t dateFormat) = 0;
 
 	virtual bool GetCurrencySymbol(cIGZString& outString) = 0;
 	virtual bool DoesCurrencySymbolPrecedeAmount() = 0;

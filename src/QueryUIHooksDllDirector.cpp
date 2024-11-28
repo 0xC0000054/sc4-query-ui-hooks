@@ -14,6 +14,8 @@
 #include "BuildingQueryHooks.h"
 #include "BuildingQueryHookServer.h"
 #include "BuildingQueryVariablesDllDirector.h"
+#include "FloraQueryHooks.h"
+#include "FloraQueryToolTipHookServer.h"
 #include "NetworkQueryHooks.h"
 #include "NetworkQueryToolTipHookServer.h"
 #include "QueryToolTipDllDirector.h"
@@ -53,6 +55,7 @@
 static constexpr uint32_t kQueryDialogHooksDirectorID = 0x5EBF9B1E;
 
 BuildingQueryHookServer* spBuildingQueryHookServer = nullptr;
+FloraQueryToolTipHookServer* spFloraQueryToolTipHookServer = nullptr;
 NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer = nullptr;
 
 namespace
@@ -69,6 +72,7 @@ namespace
 			{
 				BuildingQueryHooks::Install(settings);
 				NetworkQueryHooks::Install();
+				FloraQueryHooks::Install();
 
 				logger.WriteLine(LogLevel::Info, "Installed the query UI hooks.");
 			}
@@ -102,9 +106,10 @@ public:
 		// A child directors that are used to test the services provided
 		// by this director.
 		AddDirector(&buildingQueryVariablesDirector);
-		AddDirector(&networkQueryDirector);
+		AddDirector(&queryToolTipDirector);
 
 		spBuildingQueryHookServer = &buildingQueryHookServer;
+		spFloraQueryToolTipHookServer = &floraQueryToolTipHookServer;
 		spNetworkQueryToolTipHookServer = &networkQueryToolTipHookServer;
 
 		Logger& logger = Logger::GetInstance();
@@ -124,6 +129,10 @@ public:
 		{
 			result = networkQueryToolTipHookServer.QueryInterface(riid, ppvObj);
 		}
+		else if (rclsid == GZCLSID_cIFloraQueryToolTipHookServer)
+		{
+			result = floraQueryToolTipHookServer.QueryInterface(riid, ppvObj);
+		}
 
 		return result;
 	}
@@ -141,6 +150,7 @@ public:
 		{
 			pCallback(GZCLSID_cIBuildingQueryHookServer, 0, pContext);
 			pCallback(GZCLSID_cINetworkQueryToolTipHookServer, 0, pContext);
+			pCallback(GZCLSID_cIFloraQueryToolTipHookServer, 0, pContext);
 		}
 	}
 
@@ -156,7 +166,7 @@ public:
 		InstallQueryUIHooks(settings);
 
 		buildingQueryVariablesDirector.OnStart(pCOM);
-		networkQueryDirector.OnStart(pCOM);
+		queryToolTipDirector.OnStart(pCOM);
 
 		return true;
 	}
@@ -164,8 +174,9 @@ public:
 private:
 	BuildingQueryHookServer buildingQueryHookServer;
 	BuildingQueryVariablesDllDirector buildingQueryVariablesDirector;
+	FloraQueryToolTipHookServer floraQueryToolTipHookServer;
 	NetworkQueryToolTipHookServer networkQueryToolTipHookServer;
-	QueryToolTipDllDirector networkQueryDirector;
+	QueryToolTipDllDirector queryToolTipDirector;
 	Settings settings;
 };
 

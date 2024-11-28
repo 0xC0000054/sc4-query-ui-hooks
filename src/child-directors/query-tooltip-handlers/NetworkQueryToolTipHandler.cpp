@@ -365,30 +365,18 @@ bool NetworkQueryToolTipHandler::QueryInterface(uint32_t riid, void** ppvObj)
 
 		return true;
 	}
-	else if (riid == GZIID_cIGZUnknown)
-	{
-		*ppvObj = static_cast<cIGZUnknown*>(this);
-		AddRef();
 
-		return true;
-	}
-
-	return false;
+	return QueryToolTipHandlerBase::QueryInterface(riid, ppvObj);
 }
 
 uint32_t NetworkQueryToolTipHandler::AddRef()
 {
-	return ++refCount;
+	return QueryToolTipHandlerBase::AddRef();
 }
 
 uint32_t NetworkQueryToolTipHandler::Release()
 {
-	if (refCount > 0)
-	{
-		--refCount;
-	}
-
-	return refCount;
+	return QueryToolTipHandlerBase::Release();
 }
 
 bool NetworkQueryToolTipHandler::ProcessToolTip(cISC4Occupant* const occupant, bool debugQuery, cIGZString& title, cIGZString& text)

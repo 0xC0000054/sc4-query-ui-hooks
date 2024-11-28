@@ -11,60 +11,41 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "OccupantUtil.h"
-#include "cIGZVariant.h"
-#include "cISCProperty.h"
 #include "cISCPropertyHolder.h"
 #include "cISC4Occupant.h"
-#include "cRZAutoRefCount.h"
-#include "StringResourceKey.h"
-#include "StringResourceManager.h"
+#include "PropertyUtil.h"
 
-namespace
+bool OccupantUtil::GetDisplayName(cISC4Occupant* pOccupant, cIGZString& name)
 {
-	bool GetUserVisibleNameKey(cISC4Occupant* pOccupant, StringResourceKey& key)
+	bool result = false;
+
+	if (pOccupant)
 	{
-		bool result = false;
-
-		if (pOccupant)
-		{
-			cISCPropertyHolder* propertyHolder = pOccupant->AsPropertyHolder();
-
-			constexpr uint32_t kUserVisibleName = 0x8A416A99;
-
-			cISCProperty* userVisibleName = propertyHolder->GetProperty(kUserVisibleName);
-
-			if (userVisibleName)
-			{
-				const cIGZVariant* propertyValue = userVisibleName->GetPropertyValue();
-
-				if (propertyValue->GetType() == cIGZVariant::Type::Uint32Array
-					&& propertyValue->GetCount() == 3)
-				{
-					const uint32_t* pTGI = propertyValue->RefUint32();
-
-					uint32_t group = pTGI[1];
-					uint32_t instance = pTGI[2];
-
-					key.groupID = group;
-					key.instanceID = instance;
-					result = true;
-				}
-			}
-		}
-
-		return result;
+		result = PropertyUtil::GetDisplayName(pOccupant->AsPropertyHolder(), name);
 	}
+
+	return result;
+}
+
+bool OccupantUtil::GetExemplarName(cISC4Occupant* pOccupant, cIGZString& name)
+{
+	bool result = false;
+
+	if (pOccupant)
+	{
+		result = PropertyUtil::GetExemplarName(pOccupant->AsPropertyHolder(), name);
+	}
+
+	return result;
 }
 
 bool OccupantUtil::GetUserVisibleName(cISC4Occupant* pOccupant, cRZAutoRefCount<cIGZString>& name)
 {
 	bool result = false;
 
-	StringResourceKey key;
-
-	if (GetUserVisibleNameKey(pOccupant, key))
+	if (pOccupant)
 	{
-		result = StringResourceManager::GetLocalizedString(key, name.AsPPObj());
+		result = PropertyUtil::GetUserVisibleName(pOccupant->AsPropertyHolder(), name);
 	}
 
 	return result;

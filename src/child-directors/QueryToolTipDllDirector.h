@@ -13,6 +13,7 @@
 #pragma once
 #include "cIGZMessage2Standard.h"
 #include "cRZMessage2COMDirector.h"
+#include "FloraQueryToolTipHandler.h"
 #include "NetworkQueryToolTipHandler.h"
 
 class cIGZString;
@@ -29,15 +30,18 @@ public:
 
 	bool OnStart(cIGZCOM* pCOM) override;
 
+private:
+
 	bool PostAppInit() override;
+	bool PreAppShutdown() override;
 
 	bool DoMessage(cIGZMessage2* pMsg) override;
 
-private:
 
 	void PostCityInit(cIGZMessage2Standard* pStandardMsg);
 	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg);
 
+	FloraQueryToolTipHandler floraToolTipHandler;
 	NetworkQueryToolTipHandler networkToolTipHandler;
 };
 

@@ -132,9 +132,6 @@
     <ClCompile Include="child-directors\BuildingQueryVariablesDllDirector.cpp">
       <Filter>Source Files\Child Directors</Filter>
     </ClCompile>
-    <ClCompile Include="child-directors\NetworkQueryToolTipDllDirector.cpp">
-      <Filter>Source Files\Child Directors</Filter>
-    </ClCompile>
     <ClCompile Include="GZStringUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -152,6 +149,12 @@
     </ClCompile>
     <ClCompile Include="..\vendor\gzcom-dll\src\cRZBaseUnknown.cpp">
       <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="child-directors\QueryToolTipDllDirector.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,9 +242,6 @@
     <ClInclude Include="QueryToolHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="child-directors\NetworkQueryToolTipDllDirector.h">
-      <Filter>Header Files\Child Directors</Filter>
-    </ClInclude>
     <ClInclude Include="child-directors\BuildingQueryVariablesDllDirector.h">
       <Filter>Header Files\Child Directors</Filter>
     </ClInclude>
@@ -288,6 +288,12 @@
       <Filter>Header Files\GZCOM</Filter>
     </ClInclude>
     <ClInclude Include="ClickToCopyOccupantFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="child-directors\QueryToolTipDllDirector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

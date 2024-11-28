@@ -13,7 +13,9 @@
 #pragma once
 
 class BuildingQueryHookServer;
+class FloraQueryToolTipHookServer;
 class NetworkQueryToolTipHookServer;
 
 extern BuildingQueryHookServer* spBuildingQueryHookServer;
+extern FloraQueryToolTipHookServer* spFloraQueryToolTipHookServer;
 extern NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer;
