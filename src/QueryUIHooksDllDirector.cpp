@@ -16,7 +16,7 @@
 #include "BuildingQueryVariablesDllDirector.h"
 #include "NetworkQueryHooks.h"
 #include "NetworkQueryToolTipHookServer.h"
-#include "NetworkQueryToolTipDllDirector.h"
+#include "QueryToolTipDllDirector.h"
 #include "FileSystem.h"
 #include "GlobalHookServerPointers.h"
 #include "Logger.h"
@@ -165,7 +165,7 @@ private:
 	BuildingQueryHookServer buildingQueryHookServer;
 	BuildingQueryVariablesDllDirector buildingQueryVariablesDirector;
 	NetworkQueryToolTipHookServer networkQueryToolTipHookServer;
-	NetworkQueryToolTipDllDirector networkQueryDirector;
+	QueryToolTipDllDirector networkQueryDirector;
 	Settings settings;
 };
 

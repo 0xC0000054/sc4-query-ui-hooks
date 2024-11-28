@@ -10,7 +10,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "NetworkQueryToolTipDllDirector.h"
+#include "NetworkQueryToolTipHandler.h"
 #include "cINetworkQueryToolTipHookServer.h"
 #include "GZStringUtil.h"
 #include "Logger.h"
@@ -18,9 +18,7 @@
 #include "cIGZCOM.h"
 #include "cIGZFrameWork.h"
 #include "cIGZMessage2Standard.h"
-#include "cIGZMessageServer2.h"
 #include "cIGZString.h"
-#include "cISC4App.h"
 #include "cISC4City.h"
 #include "cISC4NetworkOccupant.h"
 #include "cISC4Occupant.h"
@@ -321,92 +319,12 @@ namespace
 	}
 }
 
-NetworkQueryToolTipDllDirector::NetworkQueryToolTipDllDirector()
-	: pPlumbingSim(nullptr)
+NetworkQueryToolTipHandler::NetworkQueryToolTipHandler()
+	: pPlumbingSim(nullptr), refCount(0)
 {
 }
 
-bool NetworkQueryToolTipDllDirector::QueryInterface(uint32_t riid, void** ppvObj)
-{
-	if (riid == GZIID_cINetworkQueryToolTipHookTarget)
-	{
-		*ppvObj = static_cast<cINetworkQueryCustomToolTipHookTarget*>(this);
-		AddRef();
-
-		return true;
-	}
-
-	return cRZMessage2COMDirector::QueryInterface(riid, ppvObj);
-}
-
-uint32_t NetworkQueryToolTipDllDirector::AddRef()
-{
-	return cRZMessage2COMDirector::AddRef();
-}
-
-uint32_t NetworkQueryToolTipDllDirector::Release()
-{
-	return cRZMessage2COMDirector::Release();
-}
-
-uint32_t NetworkQueryToolTipDllDirector::GetDirectorID() const
-{
-	return kNetworkQueryDllDirectorID;
-}
-
-bool NetworkQueryToolTipDllDirector::OnStart(cIGZCOM* pCOM)
-{
-	cIGZFrameWork* const pFramework = pCOM->FrameWork();
-
-	if (pFramework->GetState() < cIGZFrameWork::kStatePreAppInit)
-	{
-		pFramework->AddHook(this);
-	}
-	else
-	{
-		PreAppInit();
-	}
-
-	return true;
-}
-
-bool NetworkQueryToolTipDllDirector::PostAppInit()
-{
-	cIGZMessageServer2Ptr pMsgServ;
-
-	if (pMsgServ)
-	{
-		std::vector<uint32_t> requiredNotifications;
-		requiredNotifications.push_back(kSC4MessagePostCityInit);
-		requiredNotifications.push_back(kSC4MessagePreCityShutdown);
-
-		for (uint32_t messageID : requiredNotifications)
-		{
-			pMsgServ->AddNotification(this, messageID);
-		}
-	}
-
-	return true;
-}
-
-bool NetworkQueryToolTipDllDirector::DoMessage(cIGZMessage2* pMsg)
-{
-	cIGZMessage2Standard* pStandardMsg = static_cast<cIGZMessage2Standard*>(pMsg);
-
-	switch (pMsg->GetType())
-	{
-	case kSC4MessagePostCityInit:
-		PostCityInit(pStandardMsg);
-		break;
-	case kSC4MessagePreCityShutdown:
-		PreCityShutdown(pStandardMsg);
-		break;
-	}
-
-	return true;
-}
-
-void NetworkQueryToolTipDllDirector::PostCityInit(cIGZMessage2Standard* pStandardMsg)
+void NetworkQueryToolTipHandler::PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM)
 {
 	cISC4City* pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
 
@@ -414,7 +332,7 @@ void NetworkQueryToolTipDllDirector::PostCityInit(cIGZMessage2Standard* pStandar
 
 	cRZAutoRefCount<cINetworkQueryToolTipHookServer> hookServer;
 
-	if (mpCOM->GetClassObject(
+	if (pCOM->GetClassObject(
 		GZCLSID_cINetworkQueryToolTipHookServer,
 		GZIID_cINetworkQueryToolTipHookServer,
 		hookServer.AsPPVoid()))
@@ -423,13 +341,13 @@ void NetworkQueryToolTipDllDirector::PostCityInit(cIGZMessage2Standard* pStandar
 	}
 }
 
-void NetworkQueryToolTipDllDirector::PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
+void NetworkQueryToolTipHandler::PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM)
 {
 	pPlumbingSim = nullptr;
 
 	cRZAutoRefCount<cINetworkQueryToolTipHookServer> hookServer;
 
-	if (mpCOM->GetClassObject(
+	if (pCOM->GetClassObject(
 		GZCLSID_cINetworkQueryToolTipHookServer,
 		GZIID_cINetworkQueryToolTipHookServer,
 		hookServer.AsPPVoid()))
@@ -438,43 +356,42 @@ void NetworkQueryToolTipDllDirector::PreCityShutdown(cIGZMessage2Standard* pStan
 	}
 }
 
-void NetworkQueryToolTipDllDirector::SetDebugQueryText(
-	cISC4NetworkOccupant* const networkOccupant,
-	cISC4NetworkOccupant::eNetworkType networkType,
-	cIGZString& text)
+bool NetworkQueryToolTipHandler::QueryInterface(uint32_t riid, void** ppvObj)
 {
-	if (networkType == cISC4NetworkOccupant::WaterPipe)
+	if (riid == GZIID_cINetworkQueryCustomToolTipHookTarget)
 	{
-		if (pPlumbingSim)
-		{
-			uint32_t numPipes = pPlumbingSim->GetNumPipes();
-			uint32_t numDistressedPipes = pPlumbingSim->GetNumDistressedPipes();
+		*ppvObj = static_cast<cINetworkQueryCustomToolTipHookTarget*>(this);
+		AddRef();
 
-			text.Sprintf("Distressed Pipes: %d / %d\n", numDistressedPipes, numPipes);
-		}
+		return true;
 	}
-	else if (networkType != cISC4NetworkOccupant::PowerPole)
+	else if (riid == GZIID_cIGZUnknown)
 	{
-		GZStringUtil::AppendLine(GetNetworkTypesString(networkOccupant), text);
-		GZStringUtil::AppendLineFormatted(text, "Network Piece ID: 0x%08x\n", networkOccupant->PieceId());
-		GZStringUtil::AppendLineFormatted(text, "Network Piece Wealth: %d\n", networkOccupant->GetVariation());
-		GZStringUtil::AppendLine(GetNetworkOrientation(networkOccupant), text);
+		*ppvObj = static_cast<cIGZUnknown*>(this);
+		AddRef();
 
-		uint32_t x = 0;
-		uint32_t z = 0;
-
-		networkOccupant->GetOccupiedCell(x, z);
-
-		GZStringUtil::AppendLineFormatted(text, "Cell: x = %d, z = %d", x, z);
-		AppendEdgeConnections(networkOccupant, text);
+		return true;
 	}
+
+	return false;
 }
 
-bool NetworkQueryToolTipDllDirector::ProcessToolTip(
-	cISC4Occupant* const occupant,
-	bool debugQuery,
-	cIGZString& title,
-	cIGZString& text)
+uint32_t NetworkQueryToolTipHandler::AddRef()
+{
+	return ++refCount;
+}
+
+uint32_t NetworkQueryToolTipHandler::Release()
+{
+	if (refCount > 0)
+	{
+		--refCount;
+	}
+
+	return refCount;
+}
+
+bool NetworkQueryToolTipHandler::ProcessToolTip(cISC4Occupant* const occupant, bool debugQuery, cIGZString& title, cIGZString& text)
 {
 	bool result = false;
 
@@ -499,4 +416,36 @@ bool NetworkQueryToolTipDllDirector::ProcessToolTip(
 	}
 
 	return result;
+}
+
+void NetworkQueryToolTipHandler::SetDebugQueryText(
+	cISC4NetworkOccupant* pNetworkOccupant,
+	cISC4NetworkOccupant::eNetworkType networkType,
+	cIGZString& text)
+{
+	if (networkType == cISC4NetworkOccupant::WaterPipe)
+	{
+		if (pPlumbingSim)
+		{
+			uint32_t numPipes = pPlumbingSim->GetNumPipes();
+			uint32_t numDistressedPipes = pPlumbingSim->GetNumDistressedPipes();
+
+			text.Sprintf("Distressed Pipes: %d / %d\n", numDistressedPipes, numPipes);
+		}
+	}
+	else if (networkType != cISC4NetworkOccupant::PowerPole)
+	{
+		GZStringUtil::AppendLine(GetNetworkTypesString(pNetworkOccupant), text);
+		GZStringUtil::AppendLineFormatted(text, "Network Piece ID: 0x%08x\n", pNetworkOccupant->PieceId());
+		GZStringUtil::AppendLineFormatted(text, "Network Piece Wealth: %d\n", pNetworkOccupant->GetVariation());
+		GZStringUtil::AppendLine(GetNetworkOrientation(pNetworkOccupant), text);
+
+		uint32_t x = 0;
+		uint32_t z = 0;
+
+		pNetworkOccupant->GetOccupiedCell(x, z);
+
+		GZStringUtil::AppendLineFormatted(text, "Cell: x = %d, z = %d", x, z);
+		AppendEdgeConnections(pNetworkOccupant, text);
+	}
 }

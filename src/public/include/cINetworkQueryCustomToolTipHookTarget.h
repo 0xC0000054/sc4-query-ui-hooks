@@ -16,7 +16,7 @@
 class cIGZString;
 class cISC4Occupant;
 
-static const uint32_t GZIID_cINetworkQueryToolTipHookTarget = 0x82A5EDA1;
+static const uint32_t GZIID_cINetworkQueryCustomToolTipHookTarget = 0x82A5EDA1;
 
 class cINetworkQueryCustomToolTipHookTarget : public cIGZUnknown
 {

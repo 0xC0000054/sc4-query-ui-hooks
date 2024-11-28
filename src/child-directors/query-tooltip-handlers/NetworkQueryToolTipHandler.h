@@ -12,44 +12,27 @@
 
 #pragma once
 #include "cINetworkQueryCustomToolTipHookTarget.h"
+#include "cIGZCOM.h"
 #include "cIGZMessage2Standard.h"
 #include "cISC4NetworkOccupant.h"
-#include "cRZMessage2COMDirector.h"
+#include "cISC4PlumbingSimulator.h"
 
-class cIGZString;
-class cISC4PlumbingSimulator;
-
-class NetworkQueryToolTipDllDirector final
-	: public cRZMessage2COMDirector,
-	  private cINetworkQueryCustomToolTipHookTarget
+class NetworkQueryToolTipHandler : public cINetworkQueryCustomToolTipHookTarget
 {
 public:
+	NetworkQueryToolTipHandler();
 
-	NetworkQueryToolTipDllDirector();
+	void PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM);
+	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM);
+
+	// cIGZUnknown
 
 	bool QueryInterface(uint32_t riid, void** ppvObj) override;
-
 	uint32_t AddRef() override;
-
 	uint32_t Release() override;
 
-	uint32_t GetDirectorID() const override;
-
-	bool OnStart(cIGZCOM* pCOM) override;
-
-	bool PostAppInit() override;
-
-	bool DoMessage(cIGZMessage2* pMsg) override;
-
 private:
-
-	void PostCityInit(cIGZMessage2Standard* pStandardMsg);
-	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg);
-
-	void SetDebugQueryText(
-		cISC4NetworkOccupant* pNetworkOccupant,
-		cISC4NetworkOccupant::eNetworkType networkType,
-		cIGZString& text);
+	// cINetworkQueryCustomToolTipHookTarget
 
 	bool ProcessToolTip(
 		cISC4Occupant* const occupant,
@@ -57,6 +40,14 @@ private:
 		cIGZString& title,
 		cIGZString& text) override;
 
+	// Private members
+
+	void SetDebugQueryText(
+		cISC4NetworkOccupant* pNetworkOccupant,
+		cISC4NetworkOccupant::eNetworkType networkType,
+		cIGZString& text);
+
 	cISC4PlumbingSimulator* pPlumbingSim;
+	uint32_t refCount;
 };
 

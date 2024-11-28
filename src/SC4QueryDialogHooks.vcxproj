@@ -33,8 +33,9 @@
     <ClCompile Include="..\vendor\gzcom-dll\src\SC4UI.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\SCPropertyUtil.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\StringResourceManager.cpp" />
+    <ClCompile Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.cpp" />
     <ClCompile Include="child-directors\BuildingQueryVariablesDllDirector.cpp" />
-    <ClCompile Include="child-directors\NetworkQueryToolTipDllDirector.cpp" />
+    <ClCompile Include="child-directors\QueryToolTipDllDirector.cpp" />
     <ClCompile Include="ClickToCopyOccupantFilter.cpp" />
     <ClCompile Include="DebugUtil.cpp" />
     <ClCompile Include="FileSystem.cpp" />
@@ -74,8 +75,9 @@
     <ClInclude Include="ClickToCopyOccupantFilter.h" />
     <ClInclude Include="more-building-styles\cIBuildingStyleInfo2.h" />
     <ClInclude Include="OccupantUtil.h" />
+    <ClInclude Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.h" />
     <ClInclude Include="child-directors\BuildingQueryVariablesDllDirector.h" />
-    <ClInclude Include="child-directors\NetworkQueryToolTipDllDirector.h" />
+    <ClInclude Include="child-directors\QueryToolTipDllDirector.h" />
     <ClInclude Include="DebugUtil.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GlobalHookServerPointers.h" />
@@ -151,7 +153,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\include;..\vendor\EASTL\include;..\vendor\EABase\include\Common;.\;.\public\include;.\child-directors;.\more-building-styles</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\include;..\vendor\EASTL\include;..\vendor\EABase\include\Common;.\;.\public\include;.\child-directors;.\more-building-styles;.\child-directors\query-tooltip-handlers</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <UseFullPaths>false</UseFullPaths>
@@ -177,7 +179,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\include;..\vendor\EASTL\include;..\vendor\EABase\include\Common;.\;.\public\include;.\child-directors;.\more-building-styles</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\include;..\vendor\EASTL\include;..\vendor\EABase\include\Common;.\;.\public\include;.\child-directors;.\more-building-styles;.\child-directors\query-tooltip-handlers</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
