@@ -34,6 +34,12 @@
     <Filter Include="Header Files\MoreBuildingStyles">
       <UniqueIdentifier>{391f3b64-90cc-432c-b732-2822fed6a4e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Child Directors\Query Handlers">
+      <UniqueIdentifier>{574fb522-397f-48a5-be67-6e2623c3938d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Child Directors\Query Handlers">
+      <UniqueIdentifier>{b21bb0e7-b792-4fb3-ac30-2a07a8bc3a47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -99,9 +105,6 @@
     <ClCompile Include="..\vendor\gzcom-dll\src\SCPropertyUtil.cpp">
       <Filter>Source Files\GZCOM</Filter>
     </ClCompile>
-    <ClCompile Include="QueryUIHooksDllDirector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FileSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -150,11 +153,38 @@
     <ClCompile Include="..\vendor\gzcom-dll\src\cRZBaseUnknown.cpp">
       <Filter>Source Files\GZCOM</Filter>
     </ClCompile>
+    <ClCompile Include="FloraQueryHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FloraQueryToolTipHookServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertyUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropQueryHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropQueryToolTipHookServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="child-directors\query-tooltip-handlers\FloraQueryToolTipHandler.cpp">
+      <Filter>Source Files\Child Directors\Query Handlers</Filter>
+    </ClCompile>
     <ClCompile Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.cpp">
+      <Filter>Source Files\Child Directors\Query Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="child-directors\query-tooltip-handlers\QueryToolTipHandlerBase.cpp">
+      <Filter>Source Files\Child Directors\Query Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="child-directors\query-tooltip-handlers\PropQueryToolTipHandler.cpp">
+      <Filter>Source Files\Child Directors\Query Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryUIHooksDllDirector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="child-directors\QueryToolTipDllDirector.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Child Directors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,10 +320,46 @@
     <ClInclude Include="ClickToCopyOccupantFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.h">
+    <ClInclude Include="FloraQueryHooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FloraQueryToolTipHookServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cIPropQueryCustomToolTipHookTarget.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cIPropQueryToolTipHookServer.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
     <ClInclude Include="child-directors\QueryToolTipDllDirector.h">
+      <Filter>Header Files\Child Directors</Filter>
+    </ClInclude>
+    <ClInclude Include="child-directors\query-tooltip-handlers\FloraQueryToolTipHandler.h">
+      <Filter>Header Files\Child Directors\Query Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cIFloraQueryCustomToolTipHookTarget.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="public\include\cIFloraQueryToolTipHookServer.h">
+      <Filter>Header Files\Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.h">
+      <Filter>Header Files\Child Directors\Query Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="child-directors\query-tooltip-handlers\QueryToolTipHandlerBase.h">
+      <Filter>Header Files\Child Directors\Query Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="child-directors\query-tooltip-handlers\PropQueryToolTipHandler.h">
+      <Filter>Header Files\Child Directors\Query Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="PropQueryHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropQueryToolTipHookServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

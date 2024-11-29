@@ -18,6 +18,8 @@
 #include "FloraQueryToolTipHookServer.h"
 #include "NetworkQueryHooks.h"
 #include "NetworkQueryToolTipHookServer.h"
+#include "PropQueryHooks.h"
+#include "PropQueryToolTipHookServer.h"
 #include "QueryToolTipDllDirector.h"
 #include "FileSystem.h"
 #include "GlobalHookServerPointers.h"
@@ -57,6 +59,7 @@ static constexpr uint32_t kQueryDialogHooksDirectorID = 0x5EBF9B1E;
 BuildingQueryHookServer* spBuildingQueryHookServer = nullptr;
 FloraQueryToolTipHookServer* spFloraQueryToolTipHookServer = nullptr;
 NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer = nullptr;
+PropQueryToolTipHookServer* spPropQueryToolTipHookServer = nullptr;
 
 namespace
 {
@@ -73,6 +76,7 @@ namespace
 				BuildingQueryHooks::Install(settings);
 				NetworkQueryHooks::Install();
 				FloraQueryHooks::Install();
+				PropQueryHooks::Install();
 
 				logger.WriteLine(LogLevel::Info, "Installed the query UI hooks.");
 			}
@@ -111,6 +115,7 @@ public:
 		spBuildingQueryHookServer = &buildingQueryHookServer;
 		spFloraQueryToolTipHookServer = &floraQueryToolTipHookServer;
 		spNetworkQueryToolTipHookServer = &networkQueryToolTipHookServer;
+		spPropQueryToolTipHookServer = &propQueryToolTipHookServer;
 
 		Logger& logger = Logger::GetInstance();
 		logger.Init(FileSystem::GetLogFilePath(), LogLevel::Info, false);
@@ -133,6 +138,10 @@ public:
 		{
 			result = floraQueryToolTipHookServer.QueryInterface(riid, ppvObj);
 		}
+		else if (rclsid == GZCLSID_cIPropQueryToolTipHookServer)
+		{
+			result = propQueryToolTipHookServer.QueryInterface(riid, ppvObj);
+		}
 
 		return result;
 	}
@@ -151,6 +160,7 @@ public:
 			pCallback(GZCLSID_cIBuildingQueryHookServer, 0, pContext);
 			pCallback(GZCLSID_cINetworkQueryToolTipHookServer, 0, pContext);
 			pCallback(GZCLSID_cIFloraQueryToolTipHookServer, 0, pContext);
+			pCallback(GZCLSID_cIPropQueryToolTipHookServer, 0, pContext);
 		}
 	}
 
@@ -176,6 +186,7 @@ private:
 	BuildingQueryVariablesDllDirector buildingQueryVariablesDirector;
 	FloraQueryToolTipHookServer floraQueryToolTipHookServer;
 	NetworkQueryToolTipHookServer networkQueryToolTipHookServer;
+	PropQueryToolTipHookServer propQueryToolTipHookServer;
 	QueryToolTipDllDirector queryToolTipDirector;
 	Settings settings;
 };

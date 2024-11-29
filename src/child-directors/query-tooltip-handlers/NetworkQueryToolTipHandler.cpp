@@ -36,8 +36,6 @@ using namespace std::string_view_literals;
 static constexpr uint32_t kSC4MessagePostCityInit = 0x26D31EC1;
 static constexpr uint32_t kSC4MessagePreCityShutdown = 0x26D31EC2;
 
-static constexpr uint32_t kNetworkQueryDllDirectorID = 0x551FA427;
-
 static constexpr std::pair<cISC4NetworkOccupant::eNetworkType, uint32_t> MakeListEntry(cISC4NetworkOccupant::eNetworkType type)
 {
 	// The lower 12 bits of the network flags identify the network type,

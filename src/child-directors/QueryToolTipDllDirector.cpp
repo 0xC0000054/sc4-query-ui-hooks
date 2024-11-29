@@ -35,7 +35,7 @@ static constexpr std::array<uint32_t, 2> RequiredNotifications =
 	kSC4MessagePreCityShutdown
 };
 
-static constexpr uint32_t kNetworkQueryDllDirectorID = 0x551FA427;
+static constexpr uint32_t kQueryDllDirectorID = 0x551FA427;
 
 QueryToolTipDllDirector::QueryToolTipDllDirector()
 {
@@ -47,13 +47,21 @@ bool QueryToolTipDllDirector::QueryInterface(uint32_t riid, void** ppvObj)
 	{
 		return networkToolTipHandler.QueryInterface(riid, ppvObj);
 	}
+	else if (riid == GZIID_cIFloraQueryCustomToolTipHookTarget)
+	{
+		return floraToolTipHandler.QueryInterface(riid, ppvObj);
+	}
+	else if (riid == GZIID_cIPropQueryCustomToolTipHookTarget)
+	{
+		return propToolTipHandler.QueryInterface(riid, ppvObj);
+	}
 
 	return cRZMessage2COMDirector::QueryInterface(riid, ppvObj);
 }
 
 uint32_t QueryToolTipDllDirector::GetDirectorID() const
 {
-	return kNetworkQueryDllDirectorID;
+	return kQueryDllDirectorID;
 }
 
 bool QueryToolTipDllDirector::OnStart(cIGZCOM* pCOM)
@@ -86,6 +94,7 @@ bool QueryToolTipDllDirector::PostAppInit()
 
 	floraToolTipHandler.PostAppInit(mpCOM);
 	networkToolTipHandler.PostAppInit(mpCOM);
+	propToolTipHandler.PostAppInit(mpCOM);
 	return true;
 }
 
@@ -93,6 +102,7 @@ bool QueryToolTipDllDirector::PreAppShutdown()
 {
 	floraToolTipHandler.PreAppShutdown(mpCOM);
 	networkToolTipHandler.PreAppShutdown(mpCOM);
+	propToolTipHandler.PreAppShutdown(mpCOM);
 	return true;
 }
 
@@ -117,10 +127,12 @@ void QueryToolTipDllDirector::PostCityInit(cIGZMessage2Standard* pStandardMsg)
 {
 	floraToolTipHandler.PostCityInit(pStandardMsg, mpCOM);
 	networkToolTipHandler.PostCityInit(pStandardMsg, mpCOM);
+	propToolTipHandler.PostCityInit(pStandardMsg, mpCOM);
 }
 
 void QueryToolTipDllDirector::PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
 {
 	floraToolTipHandler.PreCityShutdown(pStandardMsg, mpCOM);
 	networkToolTipHandler.PreCityShutdown(pStandardMsg, mpCOM);
+	propToolTipHandler.PreCityShutdown(pStandardMsg, mpCOM);
 }

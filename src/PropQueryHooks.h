@@ -12,12 +12,7 @@
 
 #pragma once
 
-class BuildingQueryHookServer;
-class FloraQueryToolTipHookServer;
-class NetworkQueryToolTipHookServer;
-class PropQueryToolTipHookServer;
-
-extern BuildingQueryHookServer* spBuildingQueryHookServer;
-extern FloraQueryToolTipHookServer* spFloraQueryToolTipHookServer;
-extern NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer;
-extern PropQueryToolTipHookServer* spPropQueryToolTipHookServer;
+namespace PropQueryHooks
+{
+	void Install();
+}

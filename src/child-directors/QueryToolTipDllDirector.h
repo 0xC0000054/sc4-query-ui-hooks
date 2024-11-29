@@ -15,6 +15,7 @@
 #include "cRZMessage2COMDirector.h"
 #include "FloraQueryToolTipHandler.h"
 #include "NetworkQueryToolTipHandler.h"
+#include "PropQueryToolTipHandler.h"
 
 class cIGZString;
 
@@ -37,11 +38,11 @@ private:
 
 	bool DoMessage(cIGZMessage2* pMsg) override;
 
-
 	void PostCityInit(cIGZMessage2Standard* pStandardMsg);
 	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg);
 
 	FloraQueryToolTipHandler floraToolTipHandler;
 	NetworkQueryToolTipHandler networkToolTipHandler;
+	PropQueryToolTipHandler propToolTipHandler;
 };
 
