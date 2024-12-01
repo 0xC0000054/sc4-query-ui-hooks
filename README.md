@@ -66,12 +66,22 @@ of a building query dialog in the form of `#variable_name#`.
 Multiple `*_occupancy` and `*_capacity` variables can be combined in a LTEXT query to show the filled/available occupancy.
 e.g. `#cs1_occupancy#/#cs1_capacity#`.
 
-### Advanced Network Query Tool Tip
+### Advanced Query Tool Tips
 
-A custom advanced/debug query tool tip is provided for the transportation networks, excluding power lines and pipes.   
-This tool tip is accessed by holding `Control + Alt + Shift` when hovering over a network piece.
+These tool tips is accessed by holding `Control + Alt + Shift` when hovering over an appropriate item.
 
+#### Flora
+
+This tool tip provides the flora object's exemplar name, birth date, and last seeding date.
+
+#### Network
+
+This tool tip provides technical info about the transportation networks, excluding power lines and pipes.   
 ![Network Query Tool Tip](images/CustomNetworkTooltip.jpg)
+
+#### Props
+
+This tool tip provides the prop object's exemplar name.
 
 ## SC4QueryUIHooks INI File
 
@@ -108,7 +118,7 @@ to register a function to handle occupant-specific string tokens in their `Befor
 The Tool Tip hook callbacks have a `debugQuery` parameter, this parameter is set to `true` if the user activated the
 game's advanced/debug query mode by holding down `Control + Alt + Shift` before hovering over an item.
 
-#### cIBuildingQueryToolTipHookTarget and cINetworkQueryToolTipHookTarget
+#### cIBuildingQueryCustomToolTipHookTarget, cIFloraQueryCustomToolTipHookTarget, cINetworkCustomQueryToolTipHookTarget and cIPropQueryCustomToolTipHookTarget
 
 An implementation of these callback interfaces should try to target a narrow set of activation conditions
 to avoid conflicts between different callback subscribers.    
@@ -126,7 +136,7 @@ tip that exceeds its limits.
 
 ### Sample Implementations
 
-See [BuildingQueryVariablesDllDirector.cpp](src/child-directors/BuildingQueryVariablesDllDirector.cpp) and [NetworkQueryToolTipDllDirector.cpp](src/child-directors/NetworkQueryToolTipDllDirector.cpp).
+See [BuildingQueryVariablesDllDirector.cpp](src/child-directors/BuildingQueryVariablesDllDirector.cpp) and [QueryToolTipDllDirector.cpp](src/child-directors/QueryToolTipDllDirector.cpp).
 
 ## System Requirements
 
