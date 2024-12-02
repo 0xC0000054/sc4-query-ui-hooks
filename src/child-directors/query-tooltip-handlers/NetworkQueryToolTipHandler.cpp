@@ -318,7 +318,7 @@ namespace
 }
 
 NetworkQueryToolTipHandler::NetworkQueryToolTipHandler()
-	: pPlumbingSim(nullptr), refCount(0)
+	: pPlumbingSim(nullptr)
 {
 }
 

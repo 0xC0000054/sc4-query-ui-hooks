@@ -51,6 +51,5 @@ private:
 		cIGZString& text);
 
 	cISC4PlumbingSimulator* pPlumbingSim;
-	uint32_t refCount;
 };
 
