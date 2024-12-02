@@ -72,7 +72,8 @@ These tool tips are accessed by holding `Control + Alt + Shift` when hovering ov
 
 #### Flora
 
-This tool tip provides the flora object's exemplar name, birth date, and last seeding date.
+This tool tip provides the flora object's exemplar name, birth date, and last seeding date.    
+![Flora Query Tool Tip](images/CustomFloraTooltip.jpg)
 
 #### Network
 
@@ -81,7 +82,8 @@ This tool tip provides technical info about the transportation networks, excludi
 
 #### Props
 
-This tool tip provides the prop object's exemplar name.
+This tool tip provides the prop object's exemplar name.    
+![Prop Query Tool Tip](images/CustomPropTooltip.jpg)
 
 ## SC4QueryUIHooks INI File
 
