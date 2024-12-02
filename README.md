@@ -68,7 +68,7 @@ e.g. `#cs1_occupancy#/#cs1_capacity#`.
 
 ### Advanced Query Tool Tips
 
-These tool tips is accessed by holding `Control + Alt + Shift` when hovering over an appropriate item.
+These tool tips are accessed by holding `Control + Alt + Shift` when hovering over an appropriate item.
 
 #### Flora
 
