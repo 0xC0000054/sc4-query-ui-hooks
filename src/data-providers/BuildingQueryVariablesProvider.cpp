@@ -10,7 +10,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "BuildingQueryVariablesDllDirector.h"
+#include "BuildingQueryVariablesProvider.h"
 #include "cIBuildingStyleInfo2.h"
 #include "cIBuildingQueryHookServer.h"
 #include "DebugUtil.h"
@@ -20,13 +20,9 @@
 #include "Logger.h"
 #include "OccupantUtil.h"
 #include "cGZPersistResourceKey.h"
-#include "cIGZApp.h"
-#include "cIGZCOM.h"
-#include "cIGZFrameWork.h"
 #include "cIGZLanguageManager.h"
 #include "cIGZLanguageUtility.h"
 #include "cIGZMessage2Standard.h"
-#include "cIGZMessageServer2.h"
 #include "cIGZPersistDBSegment.h"
 #include "cIGZPersistDBSegmentMultiPackedFiles.h"
 #include "cIGZPersistResourceManager.h"
@@ -62,24 +58,17 @@
 #include <set>
 #include <string>
 
-static constexpr uint32_t kSC4MessagePostCityInit = 0x26D31EC1;
-static constexpr uint32_t kSC4MessagePreCityShutdown = 0x26D31EC2;
-
-static constexpr uint32_t kBuildingQueryVariablesDirectorID = 0x1317A7E6;
-
 using namespace std::string_view_literals;
 
 namespace
 {
 	struct UnknownTokenContext
 	{
-		cIGZCOM* pCOM;
 		cISC4Occupant* pOccupant;
 		cISC4City* pCity;
 
 		UnknownTokenContext()
-			: pCOM(nullptr),
-			  pOccupant(nullptr),
+			: pOccupant(nullptr),
 			  pCity(nullptr)
 		{
 		}
@@ -272,13 +261,13 @@ namespace
 	{
 		bool result = false;
 
-		if (context && context->pCOM && context->pOccupant)
+		if (context && context->pOccupant)
 		{
 			const std::string_view separator = GetBuildingStylesTokenSeparator(type);
 
 			cRZAutoRefCount<cIBuildingStyleInfo2> pBuildingStyleInfo;
 
-			if (context->pCOM->GetClassObject(
+			if (RZGetFramework()->GetCOMObject()->GetClassObject(
 				GZCLSID_cIBuildingStyleInfo,
 				GZIID_cIBuildingStyleInfo2,
 				pBuildingStyleInfo.AsPPVoid()))
@@ -405,11 +394,11 @@ namespace
 	{
 		bool result = false;
 
-		if (context && context->pCOM && context->pOccupant)
+		if (context && context->pOccupant)
 		{
 			cRZAutoRefCount<cIBuildingStyleInfo2> pBuildingStyleInfo;
 
-			if (context->pCOM->GetClassObject(
+			if (RZGetFramework()->GetCOMObject()->GetClassObject(
 				GZCLSID_cIBuildingStyleInfo,
 				GZIID_cIBuildingStyleInfo2,
 				pBuildingStyleInfo.AsPPVoid()))
@@ -637,14 +626,14 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 // memory remains valid between calls to BeforeDialogShown and AfterDialogShown.
 static UnknownTokenContext sCurrentTokenContext;
 
-BuildingQueryVariablesDllDirector::BuildingQueryVariablesDllDirector(const ISettings& settings)
+BuildingQueryVariablesProvider::BuildingQueryVariablesProvider(const ISettings& settings)
 	: settings(settings),
 	  pStringDetokenizer(nullptr),
 	  pCity(nullptr)
 {
 }
 
-bool BuildingQueryVariablesDllDirector::QueryInterface(uint32_t riid, void** ppvObj)
+bool BuildingQueryVariablesProvider::QueryInterface(uint32_t riid, void** ppvObj)
 {
 	if (riid == GZIID_cIBuildingQueryHookTarget)
 	{
@@ -654,41 +643,20 @@ bool BuildingQueryVariablesDllDirector::QueryInterface(uint32_t riid, void** ppv
 		return true;
 	}
 
-	return cRZMessage2COMDirector::QueryInterface(riid, ppvObj);
+	return DataProviderBase::QueryInterface(riid, ppvObj);
 }
 
-uint32_t BuildingQueryVariablesDllDirector::AddRef()
+uint32_t BuildingQueryVariablesProvider::AddRef()
 {
-	return cRZMessage2COMDirector::AddRef();
+	return DataProviderBase::AddRef();
 }
 
-uint32_t BuildingQueryVariablesDllDirector::Release()
+uint32_t BuildingQueryVariablesProvider::Release()
 {
-	return cRZMessage2COMDirector::Release();
+	return DataProviderBase::Release();
 }
 
-uint32_t BuildingQueryVariablesDllDirector::GetDirectorID() const
-{
-	return kBuildingQueryVariablesDirectorID;
-}
-
-bool BuildingQueryVariablesDllDirector::OnStart(cIGZCOM* pCOM)
-{
-	cIGZFrameWork* const pFramework = pCOM->FrameWork();
-
-	if (pFramework->GetState() < cIGZFrameWork::kStatePreAppInit)
-	{
-		pFramework->AddHook(this);
-	}
-	else
-	{
-		PreAppInit();
-	}
-
-	return true;
-}
-
-bool BuildingQueryVariablesDllDirector::PostAppInit()
+void BuildingQueryVariablesProvider::PostAppInit(cIGZCOM* pCOM)
 {
 	cISC4AppPtr pSC4App;
 
@@ -696,48 +664,15 @@ bool BuildingQueryVariablesDllDirector::PostAppInit()
 	{
 		pStringDetokenizer = pSC4App->GetStringDetokenizer();
 	}
-
-	cIGZMessageServer2Ptr pMsgServ;
-
-	if (pMsgServ)
-	{
-		std::vector<uint32_t> requiredNotifications;
-		requiredNotifications.push_back(kSC4MessagePostCityInit);
-		requiredNotifications.push_back(kSC4MessagePreCityShutdown);
-
-		for (uint32_t messageID : requiredNotifications)
-		{
-			pMsgServ->AddNotification(this, messageID);
-		}
-	}
-
-	return true;
 }
 
-bool BuildingQueryVariablesDllDirector::DoMessage(cIGZMessage2* pMsg)
-{
-	cIGZMessage2Standard* pStandardMsg = static_cast<cIGZMessage2Standard*>(pMsg);
-
-	switch (pMsg->GetType())
-	{
-	case kSC4MessagePostCityInit:
-		PostCityInit(pStandardMsg);
-		break;
-	case kSC4MessagePreCityShutdown:
-		PreCityShutdown(pStandardMsg);
-		break;
-	}
-
-	return true;
-}
-
-void BuildingQueryVariablesDllDirector::PostCityInit(cIGZMessage2Standard* pStandardMsg)
+void BuildingQueryVariablesProvider::PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM)
 {
 	pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
 
 	cRZAutoRefCount<cIBuildingQueryHookServer> hookServer;
 
-	if (mpCOM->GetClassObject(
+	if (pCOM->GetClassObject(
 		GZCLSID_cIBuildingQueryHookServer,
 		GZIID_cIBuildingQueryHookServer,
 		hookServer.AsPPVoid()))
@@ -746,13 +681,13 @@ void BuildingQueryVariablesDllDirector::PostCityInit(cIGZMessage2Standard* pStan
 	}
 }
 
-void BuildingQueryVariablesDllDirector::PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
+void BuildingQueryVariablesProvider::PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM)
 {
 	pCity = nullptr;
 
 	cRZAutoRefCount<cIBuildingQueryHookServer> hookServer;
 
-	if (mpCOM->GetClassObject(
+	if (pCOM->GetClassObject(
 		GZCLSID_cIBuildingQueryHookServer,
 		GZIID_cIBuildingQueryHookServer,
 		hookServer.AsPPVoid()))
@@ -761,7 +696,7 @@ void BuildingQueryVariablesDllDirector::PreCityShutdown(cIGZMessage2Standard* pS
 	}
 }
 
-void BuildingQueryVariablesDllDirector::BeforeDialogShown(cISC4Occupant* pOccupant)
+void BuildingQueryVariablesProvider::BeforeDialogShown(cISC4Occupant* pOccupant)
 {
 	if (settings.LogBuildingPluginPath())
 	{
@@ -770,7 +705,6 @@ void BuildingQueryVariablesDllDirector::BeforeDialogShown(cISC4Occupant* pOccupa
 
 	if (pStringDetokenizer)
 	{
-		sCurrentTokenContext.pCOM = mpCOM;
 		sCurrentTokenContext.pOccupant = pOccupant;
 		sCurrentTokenContext.pCity = pCity;
 
@@ -782,7 +716,7 @@ void BuildingQueryVariablesDllDirector::BeforeDialogShown(cISC4Occupant* pOccupa
 	}
 }
 
-void BuildingQueryVariablesDllDirector::AfterDialogShown(cISC4Occupant* pOccupant)
+void BuildingQueryVariablesProvider::AfterDialogShown(cISC4Occupant* pOccupant)
 {
 	if (pStringDetokenizer)
 	{
@@ -790,7 +724,7 @@ void BuildingQueryVariablesDllDirector::AfterDialogShown(cISC4Occupant* pOccupan
 	}
 }
 
-void BuildingQueryVariablesDllDirector::DebugLogTokenizerVariables()
+void BuildingQueryVariablesProvider::DebugLogTokenizerVariables()
 {
 	for (const auto& entry : tokenDataCallbacks)
 	{
@@ -807,7 +741,7 @@ void BuildingQueryVariablesDllDirector::DebugLogTokenizerVariables()
 	}
 }
 
-void BuildingQueryVariablesDllDirector::LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant)
+void BuildingQueryVariablesProvider::LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant)
 {
 	if (pOccupant && pCity)
 	{

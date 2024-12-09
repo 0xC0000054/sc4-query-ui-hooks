@@ -25,19 +25,19 @@
     <Filter Include="Header Files\Public Headers">
       <UniqueIdentifier>{13e8318c-dc42-47e8-a043-f82b0dafa3d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Child Directors">
-      <UniqueIdentifier>{1c679b13-9a58-4d2b-8c72-79fd25b2481f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Child Directors">
-      <UniqueIdentifier>{2a6e3443-9bd4-4727-a49e-aece63029b2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\MoreBuildingStyles">
       <UniqueIdentifier>{391f3b64-90cc-432c-b732-2822fed6a4e7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Child Directors\Query Handlers">
+    <Filter Include="Header Files\Data Providers">
+      <UniqueIdentifier>{1c679b13-9a58-4d2b-8c72-79fd25b2481f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Data Providers\Query Handlers">
       <UniqueIdentifier>{574fb522-397f-48a5-be67-6e2623c3938d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Child Directors\Query Handlers">
+    <Filter Include="Source Files\Data Providers">
+      <UniqueIdentifier>{2a6e3443-9bd4-4727-a49e-aece63029b2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data Providers\Query Handlers">
       <UniqueIdentifier>{b21bb0e7-b792-4fb3-ac30-2a07a8bc3a47}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -132,9 +132,6 @@
     <ClCompile Include="QueryToolHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="child-directors\BuildingQueryVariablesDllDirector.cpp">
-      <Filter>Source Files\Child Directors</Filter>
-    </ClCompile>
     <ClCompile Include="GZStringUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -168,29 +165,35 @@
     <ClCompile Include="PropQueryToolTipHookServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="child-directors\query-tooltip-handlers\FloraQueryToolTipHandler.cpp">
-      <Filter>Source Files\Child Directors\Query Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.cpp">
-      <Filter>Source Files\Child Directors\Query Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="child-directors\query-tooltip-handlers\QueryToolTipHandlerBase.cpp">
-      <Filter>Source Files\Child Directors\Query Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="child-directors\query-tooltip-handlers\PropQueryToolTipHandler.cpp">
-      <Filter>Source Files\Child Directors\Query Handlers</Filter>
-    </ClCompile>
     <ClCompile Include="QueryUIHooksDllDirector.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="child-directors\QueryToolTipDllDirector.cpp">
-      <Filter>Source Files\Child Directors</Filter>
     </ClCompile>
     <ClCompile Include="TerrainQueryHooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\vendor\gzcom-dll\src\cS3DVector2.cpp">
       <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="data-providers\query-tooltip-handlers\FloraQueryToolTipHandler.cpp">
+      <Filter>Source Files\Data Providers\Query Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="data-providers\query-tooltip-handlers\NetworkQueryToolTipHandler.cpp">
+      <Filter>Source Files\Data Providers\Query Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="data-providers\query-tooltip-handlers\PropQueryToolTipHandler.cpp">
+      <Filter>Source Files\Data Providers\Query Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="data-providers\query-tooltip-handlers\QueryToolTipHandlerBase.cpp">
+      <Filter>Source Files\Data Providers\Query Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="data-providers\BuildingQueryVariablesProvider.cpp">
+      <Filter>Source Files\Data Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="data-providers\QueryToolTipProvider.cpp">
+      <Filter>Source Files\Data Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="data-providers\DataProviderBase.cpp">
+      <Filter>Source Files\Data Providers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,9 +281,6 @@
     <ClInclude Include="QueryToolHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="child-directors\BuildingQueryVariablesDllDirector.h">
-      <Filter>Header Files\Child Directors</Filter>
-    </ClInclude>
     <ClInclude Include="GZStringUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -341,26 +341,11 @@
     <ClInclude Include="public\include\cIPropQueryToolTipHookServer.h">
       <Filter>Header Files\Public Headers</Filter>
     </ClInclude>
-    <ClInclude Include="child-directors\QueryToolTipDllDirector.h">
-      <Filter>Header Files\Child Directors</Filter>
-    </ClInclude>
-    <ClInclude Include="child-directors\query-tooltip-handlers\FloraQueryToolTipHandler.h">
-      <Filter>Header Files\Child Directors\Query Handlers</Filter>
-    </ClInclude>
     <ClInclude Include="public\include\cIFloraQueryCustomToolTipHookTarget.h">
       <Filter>Header Files\Public Headers</Filter>
     </ClInclude>
     <ClInclude Include="public\include\cIFloraQueryToolTipHookServer.h">
       <Filter>Header Files\Public Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.h">
-      <Filter>Header Files\Child Directors\Query Handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="child-directors\query-tooltip-handlers\QueryToolTipHandlerBase.h">
-      <Filter>Header Files\Child Directors\Query Handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="child-directors\query-tooltip-handlers\PropQueryToolTipHandler.h">
-      <Filter>Header Files\Child Directors\Query Handlers</Filter>
     </ClInclude>
     <ClInclude Include="PropQueryHooks.h">
       <Filter>Header Files</Filter>
@@ -376,6 +361,27 @@
     </ClInclude>
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4WeatherSimulator.h">
       <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\query-tooltip-handlers\FloraQueryToolTipHandler.h">
+      <Filter>Header Files\Data Providers\Query Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\query-tooltip-handlers\NetworkQueryToolTipHandler.h">
+      <Filter>Header Files\Data Providers\Query Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\query-tooltip-handlers\PropQueryToolTipHandler.h">
+      <Filter>Header Files\Data Providers\Query Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\query-tooltip-handlers\QueryToolTipHandlerBase.h">
+      <Filter>Header Files\Data Providers\Query Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\QueryToolTipProvider.h">
+      <Filter>Header Files\Data Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\BuildingQueryVariablesProvider.h">
+      <Filter>Header Files\Data Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\DataProviderBase.h">
+      <Filter>Header Files\Data Providers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

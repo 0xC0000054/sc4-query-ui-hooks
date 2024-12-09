@@ -11,36 +11,28 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include "DataProviderBase.h"
 #include "cIGZMessage2Standard.h"
-#include "cRZMessage2COMDirector.h"
 #include "FloraQueryToolTipHandler.h"
 #include "NetworkQueryToolTipHandler.h"
 #include "PropQueryToolTipHandler.h"
 
 class cIGZString;
 
-class QueryToolTipDllDirector final : public cRZMessage2COMDirector
+class QueryToolTipProvider final : public DataProviderBase
 {
 public:
-
-	QueryToolTipDllDirector();
+	QueryToolTipProvider();
 
 	bool QueryInterface(uint32_t riid, void** ppvObj) override;
 
-	uint32_t GetDirectorID() const override;
+	void PostAppInit(cIGZCOM* pCOM) override;
+	void PreAppShutdown(cIGZCOM* pCOM) override;
 
-	bool OnStart(cIGZCOM* pCOM) override;
+	void PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM);
+	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM);
 
 private:
-
-	bool PostAppInit() override;
-	bool PreAppShutdown() override;
-
-	bool DoMessage(cIGZMessage2* pMsg) override;
-
-	void PostCityInit(cIGZMessage2Standard* pStandardMsg);
-	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg);
-
 	FloraQueryToolTipHandler floraToolTipHandler;
 	NetworkQueryToolTipHandler networkToolTipHandler;
 	PropQueryToolTipHandler propToolTipHandler;

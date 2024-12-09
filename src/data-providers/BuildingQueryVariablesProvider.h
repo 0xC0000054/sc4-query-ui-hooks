@@ -11,41 +11,29 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include "DataProviderBase.h"
 #include "cIBuildingQueryDialogHookTarget.h"
-#include "cRZMessage2COMDirector.h"
 #include "ISettings.h"
 
-class cIGZMessage2Standard;
 class cISC4City;
 class cISCStringDetokenizer;
 
-class BuildingQueryVariablesDllDirector final
-	: public cRZMessage2COMDirector,
+class BuildingQueryVariablesProvider final
+	: public DataProviderBase,
 	  private cIBuildingQueryDialogHookTarget
 {
 public:
-
-	BuildingQueryVariablesDllDirector(const ISettings& settings);
+	BuildingQueryVariablesProvider(const ISettings& settings);
 
 	bool QueryInterface(uint32_t riid, void** ppvObj) override;
-
 	uint32_t AddRef() override;
-
 	uint32_t Release() override;
 
-	uint32_t GetDirectorID() const override;
-
-	bool OnStart(cIGZCOM* pCOM) override;
-
-	bool PostAppInit() override;
-
-	bool DoMessage(cIGZMessage2* pMsg) override;
+	void PostAppInit(cIGZCOM* pCOM);
+	void PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM) override;
+	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM) override;
 
 private:
-
-	void PostCityInit(cIGZMessage2Standard* pStandardMsg);
-	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg);
-
 	void BeforeDialogShown(cISC4Occupant* pOccupant) override;
 	void AfterDialogShown(cISC4Occupant* pOccupant) override;
 
@@ -54,6 +42,6 @@ private:
 	void LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant);
 
 	const ISettings& settings;
-	cISC4City* pCity;;
+	cISC4City* pCity;
 	cISCStringDetokenizer* pStringDetokenizer;
 };

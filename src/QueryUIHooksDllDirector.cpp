@@ -13,14 +13,14 @@
 #include "version.h"
 #include "BuildingQueryHooks.h"
 #include "BuildingQueryHookServer.h"
-#include "BuildingQueryVariablesDllDirector.h"
+#include "BuildingQueryVariablesProvider.h"
 #include "FloraQueryHooks.h"
 #include "FloraQueryToolTipHookServer.h"
 #include "NetworkQueryHooks.h"
 #include "NetworkQueryToolTipHookServer.h"
 #include "PropQueryHooks.h"
 #include "PropQueryToolTipHookServer.h"
-#include "QueryToolTipDllDirector.h"
+#include "QueryToolTipProvider.h"
 #include "TerrainQueryHooks.h"
 #include "FileSystem.h"
 #include "GlobalHookServerPointers.h"
@@ -32,6 +32,7 @@
 #include "cIGZCmdLine.h"
 #include "cIGZCOM.h"
 #include "cIGZFrameWork.h"
+#include "cIGZMessage2Standard.h"
 #include "cIGZMessageServer2.h"
 #include "cIGZVariant.h"
 #include "cIGZWin.h"
@@ -122,13 +123,8 @@ class QueryUIHooksDllDirector final : public cRZMessage2COMDirector
 public:
 	QueryUIHooksDllDirector()
 		: settings(),
-		  buildingQueryVariablesDirector(settings)
+		  buildingQueryVariablesProvider(settings)
 	{
-		// A child directors that are used to test the services provided
-		// by this director.
-		AddDirector(&buildingQueryVariablesDirector);
-		AddDirector(&queryToolTipDirector);
-
 		spBuildingQueryHookServer = &buildingQueryHookServer;
 		spFloraQueryToolTipHookServer = &floraQueryToolTipHookServer;
 		spNetworkQueryToolTipHookServer = &networkQueryToolTipHookServer;
@@ -194,11 +190,16 @@ public:
 		{
 			spWeatherSimulator = pCity->GetWeatherSimulator();
 		}
+
+		buildingQueryVariablesProvider.PostCityInit(pStandardMsg, mpCOM);
+		queryToolTipProvider.PostCityInit(pStandardMsg, mpCOM);
 	}
 
 	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
 	{
 		spWeatherSimulator = nullptr;
+		buildingQueryVariablesProvider.PreCityShutdown(pStandardMsg, mpCOM);
+		queryToolTipProvider.PreCityShutdown(pStandardMsg, mpCOM);
 	}
 
 	bool DoMessage(cIGZMessage2* pMsg)
@@ -226,9 +227,6 @@ public:
 
 		InstallQueryUIHooks(settings);
 
-		buildingQueryVariablesDirector.OnStart(pCOM);
-		queryToolTipDirector.OnStart(pCOM);
-
 		return true;
 	}
 
@@ -244,16 +242,27 @@ public:
 			}
 		}
 
+		buildingQueryVariablesProvider.PostAppInit(mpCOM);
+		queryToolTipProvider.PostAppInit(mpCOM);
+
+		return true;
+	}
+
+	bool PreAppShutdown()
+	{
+		buildingQueryVariablesProvider.PreAppShutdown(mpCOM);
+		queryToolTipProvider.PreAppShutdown(mpCOM);
+
 		return true;
 	}
 
 private:
 	BuildingQueryHookServer buildingQueryHookServer;
-	BuildingQueryVariablesDllDirector buildingQueryVariablesDirector;
+	BuildingQueryVariablesProvider buildingQueryVariablesProvider;
 	FloraQueryToolTipHookServer floraQueryToolTipHookServer;
 	NetworkQueryToolTipHookServer networkQueryToolTipHookServer;
 	PropQueryToolTipHookServer propQueryToolTipHookServer;
-	QueryToolTipDllDirector queryToolTipDirector;
+	QueryToolTipProvider queryToolTipProvider;
 	Settings settings;
 };
 

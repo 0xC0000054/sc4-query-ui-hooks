@@ -138,7 +138,7 @@ tip that exceeds its limits.
 
 ### Sample Implementations
 
-See [BuildingQueryVariablesDllDirector.cpp](src/child-directors/BuildingQueryVariablesDllDirector.cpp) and [QueryToolTipDllDirector.cpp](src/child-directors/QueryToolTipDllDirector.cpp).
+See [BuildingQueryVariablesProvider.cpp](src/data-providers/BuildingQueryVariablesProvider.cpp) and [QueryToolTipProvider.cpp](src/data-providers/QueryToolTipProvider.cpp).
 
 ## System Requirements
 
