@@ -15,16 +15,18 @@
 #include "cS3DVector2.h"
 #include "GlobalSC4InterfacePointers.h"
 #include "Patcher.h"
-#include "QueryToolHelpers.h"
 #include <cstdarg>
-#include <cstdio>
+#include <Windows.h>
 
 namespace
 {
-	typedef void*(__thiscall* RZString_Append_PChar_Length)(void* thisPtr, const char* data, uint32_t length);
+	bool IsKeyDownNow(int vKey)
+	{
+		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
+	}
+
 	typedef int32_t(__cdecl* RZString_Sprintf)(void* thisPtr, const char* format, ...);
 
-	static const RZString_Append_PChar_Length RealRZStringAppend_PChar_Length = reinterpret_cast<RZString_Append_PChar_Length>(0x90F053);
 	static const RZString_Sprintf RealRZStringSprintf = reinterpret_cast<RZString_Sprintf>(0x90F574);
 
 	int32_t HookedTerrainQuerySprintf(void* rzStringThisPtr, const char* format, ...)
@@ -46,19 +48,11 @@ namespace
 
 		if (spWeatherSimulator)
 		{
-			uint8_t cellMoisture = spWeatherSimulator->GetMoistureValue(x, z);
+			// Pressing the Alt key will show the humidity and ambient wind information, this data appears
+			// to be for the entire tile instead of varying per-cell.
+			// It is not shown in the advanced query to reduce the amount of text that is shown in that mode.
 
-			result = RealRZStringSprintf(
-				rzStringThisPtr,
-				"x=%f y=%f z=%f\ncell x=%d cell z=%d\ncell moisture=%d",
-				x,
-				y,
-				z,
-				cellX,
-				cellZ,
-				cellMoisture);
-
-			if (result && QueryToolHelpers::IsDebugQueryEnabled())
+			if (IsKeyDownNow(VK_MENU) && !IsKeyDownNow(VK_SHIFT) && !IsKeyDownNow(VK_CONTROL))
 			{
 				float humidity = spWeatherSimulator->GetHumidity(x, z);
 
@@ -66,21 +60,33 @@ namespace
 
 				float ambientWindSpeed = spWeatherSimulator->GetWindAtCell(cellX, cellZ, ambientWindDirection);
 
-				char buffer[1024]{};
-
-				int length = std::snprintf(
-					buffer,
-					sizeof(buffer),
-					" humidity=%f\nambient wind:\nspeed=%f\ndirection[0]=%f direction[1]=%f",
+				result = RealRZStringSprintf(
+					rzStringThisPtr,
+					"x=%f y=%f z=%f\ncell x=%d cell z=%d cell humidity=%f\n"
+					"ambient wind speed=%f\nambient wind direction[0]=%f\nambient wind direction[1]=%f",
+					x,
+					y,
+					z,
+					cellX,
+					cellZ,
 					humidity,
 					ambientWindSpeed,
 					ambientWindDirection.fX,
 					ambientWindDirection.fY);
+			}
+			else
+			{
+				uint8_t cellMoisture = spWeatherSimulator->GetMoistureValue(x, z);
 
-				if (length > 0)
-				{
-					RealRZStringAppend_PChar_Length(rzStringThisPtr, buffer, static_cast<uint32_t>(length));
-				}
+				result = RealRZStringSprintf(
+					rzStringThisPtr,
+					"x=%f y=%f z=%f\ncell x=%d cell z=%d cell moisture=%d",
+					x,
+					y,
+					z,
+					cellX,
+					cellZ,
+					cellMoisture);
 			}
 		}
 		else
