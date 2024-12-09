@@ -21,8 +21,10 @@
 #include "PropQueryHooks.h"
 #include "PropQueryToolTipHookServer.h"
 #include "QueryToolTipDllDirector.h"
+#include "TerrainQueryHooks.h"
 #include "FileSystem.h"
 #include "GlobalHookServerPointers.h"
+#include "GlobalSC4InterfacePointers.h"
 #include "Logger.h"
 #include "SC4VersionDetection.h"
 #include "Settings.h"
@@ -30,21 +32,24 @@
 #include "cIGZCmdLine.h"
 #include "cIGZCOM.h"
 #include "cIGZFrameWork.h"
+#include "cIGZMessageServer2.h"
 #include "cIGZVariant.h"
 #include "cIGZWin.h"
 #include "cIGZWinMgr.h"
+#include "cISC4App.h"
+#include "cISC4City.h"
+#include "cISC4Occupant.h"
 #include "cRZAutoRefCount.h"
 #include "cRZBaseString.h"
-#include "cRZCOMDllDirector.h"
+#include "cRZMessage2COMDirector.h"
 #include "cISCProperty.h"
 #include "cISCPropertyHolder.h"
-#include "cISC4App.h"
-#include "cISC4Occupant.h"
 #include "GZServPtrs.h"
 #include "StringResourceKey.h"
 #include "StringResourceManager.h"
 
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <filesystem>
 #include <functional>
@@ -54,12 +59,23 @@
 #include <Windows.h>
 #include "wil/result.h"
 
+static constexpr uint32_t kSC4MessagePostCityInit = 0x26D31EC1;
+static constexpr uint32_t kSC4MessagePreCityShutdown = 0x26D31EC2;
+
+static constexpr std::array<uint32_t, 2> RequiredNotifications =
+{
+	kSC4MessagePostCityInit,
+	kSC4MessagePreCityShutdown
+};
+
 static constexpr uint32_t kQueryDialogHooksDirectorID = 0x5EBF9B1E;
 
 BuildingQueryHookServer* spBuildingQueryHookServer = nullptr;
 FloraQueryToolTipHookServer* spFloraQueryToolTipHookServer = nullptr;
 NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer = nullptr;
 PropQueryToolTipHookServer* spPropQueryToolTipHookServer = nullptr;
+
+cISC4WeatherSimulator* spWeatherSimulator = nullptr;
 
 namespace
 {
@@ -77,6 +93,7 @@ namespace
 				NetworkQueryHooks::Install();
 				FloraQueryHooks::Install();
 				PropQueryHooks::Install();
+				TerrainQueryHooks::Install();
 
 				logger.WriteLine(LogLevel::Info, "Installed the query UI hooks.");
 			}
@@ -100,7 +117,7 @@ namespace
 }
 
 
-class QueryUIHooksDllDirector final : public cRZCOMDllDirector
+class QueryUIHooksDllDirector final : public cRZMessage2COMDirector
 {
 public:
 	QueryUIHooksDllDirector()
@@ -169,14 +186,63 @@ public:
 		return kQueryDialogHooksDirectorID;
 	}
 
+	void PostCityInit(cIGZMessage2Standard* pStandardMsg)
+	{
+		cISC4City* pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
+
+		if (pCity)
+		{
+			spWeatherSimulator = pCity->GetWeatherSimulator();
+		}
+	}
+
+	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
+	{
+		spWeatherSimulator = nullptr;
+	}
+
+	bool DoMessage(cIGZMessage2* pMsg)
+	{
+		cIGZMessage2Standard* pStandardMsg = static_cast<cIGZMessage2Standard*>(pMsg);
+
+		switch (pMsg->GetType())
+		{
+		case kSC4MessagePostCityInit:
+			PostCityInit(pStandardMsg);
+			break;
+		case kSC4MessagePreCityShutdown:
+			PreCityShutdown(pStandardMsg);
+			break;
+		}
+
+		return true;
+	}
+
 	bool OnStart(cIGZCOM* pCOM)
 	{
+		mpFrameWork->AddHook(this);
+
 		settings.Load();
 
 		InstallQueryUIHooks(settings);
 
 		buildingQueryVariablesDirector.OnStart(pCOM);
 		queryToolTipDirector.OnStart(pCOM);
+
+		return true;
+	}
+
+	bool PostAppInit()
+	{
+		cIGZMessageServer2Ptr pMsgServ;
+
+		if (pMsgServ)
+		{
+			for (uint32_t messageID : RequiredNotifications)
+			{
+				pMsgServ->AddNotification(this, messageID);
+			}
+		}
 
 		return true;
 	}

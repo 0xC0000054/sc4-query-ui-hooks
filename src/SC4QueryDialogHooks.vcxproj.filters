@@ -186,6 +186,12 @@
     <ClCompile Include="child-directors\QueryToolTipDllDirector.cpp">
       <Filter>Source Files\Child Directors</Filter>
     </ClCompile>
+    <ClCompile Include="TerrainQueryHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\gzcom-dll\src\cS3DVector2.cpp">
+      <Filter>Source Files\GZCOM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -361,6 +367,15 @@
     </ClInclude>
     <ClInclude Include="PropQueryToolTipHookServer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainQueryHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalSC4InterfacePointers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4WeatherSimulator.h">
+      <Filter>Header Files\GZCOM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

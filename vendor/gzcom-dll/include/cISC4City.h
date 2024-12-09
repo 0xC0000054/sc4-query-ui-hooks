@@ -25,6 +25,7 @@ class cISC4ResidentialSimulator;
 class cISC4Simulator;
 class cISC4TractDeveloper;
 class cISC4TutorialSystem;
+class cISC4WeatherSimulator;
 
 class cISC4City : public cIGZUnknown
 {
@@ -112,7 +113,7 @@ class cISC4City : public cIGZUnknown
 		virtual intptr_t GetPowerSimulator(void) = 0;
 		virtual cISC4ResidentialSimulator* GetResidentialSimulator(void) = 0;
 		virtual intptr_t GetTrafficSimulator(void) = 0;
-		virtual intptr_t GetWeatherSimulator(void) = 0;
+		virtual cISC4WeatherSimulator* GetWeatherSimulator(void) = 0;
 		virtual cISC4MySimAgentSimulator* GetMySimAgentSimulator(void) = 0;
 
 		virtual cISC4DisasterLayer* GetDisasterLayer(void) = 0;

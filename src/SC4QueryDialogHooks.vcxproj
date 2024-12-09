@@ -26,6 +26,7 @@
     <ClCompile Include="..\vendor\gzcom-dll\src\cRZCOMDllDirector.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\cRZMessage2.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\cRZMessage2Standard.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\src\cS3DVector2.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\cS3DVector3.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\cSC4BaseOccupantFilter.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\src\cSCBaseProperty.cpp" />
@@ -59,6 +60,7 @@
     <ClCompile Include="BuildingQueryHookServer.cpp" />
     <ClCompile Include="SC4VersionDetection.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="TerrainQueryHooks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\vendor\gzcom-dll\include\cGZPersistResourceKey.h" />
@@ -72,6 +74,7 @@
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4LotManager.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4NetworkOccupant.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4Occupant.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4WeatherSimulator.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cISCStringDetokenizer.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cRZBaseUnknown.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cRZCOMDllDirector.h" />
@@ -86,6 +89,7 @@
     <ClInclude Include="ClickToCopyOccupantFilter.h" />
     <ClInclude Include="FloraQueryHooks.h" />
     <ClInclude Include="FloraQueryToolTipHookServer.h" />
+    <ClInclude Include="GlobalSC4InterfacePointers.h" />
     <ClInclude Include="more-building-styles\cIBuildingStyleInfo2.h" />
     <ClInclude Include="OccupantUtil.h" />
     <ClInclude Include="child-directors\query-tooltip-handlers\NetworkQueryToolTipHandler.h" />
@@ -118,6 +122,7 @@
     <ClInclude Include="QueryToolHelpers.h" />
     <ClInclude Include="SC4VersionDetection.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="TerrainQueryHooks.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
