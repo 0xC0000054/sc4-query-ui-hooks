@@ -69,13 +69,13 @@ e.g. `#cs1_occupancy#/#cs1_capacity#`.
 ### Extended Terrain Query
 
 The _TerrainQuery_ command now shows the _x_, _y_, and _z_ variables without truncating to the first decimal place, and the
-cell moisture value is now provided as part of the standard query info.
+cell moisture value is now provided as part of the standard query info.    
 ![Extended Terrain Query Tool Tip](images/ExtendedTerrainQuery.jpg)
 
 #### Alternate Terrain Query
 
 This mode is accessed by holding the `Alt` key. It shows the humidity and ambient wind information, this data appears
-to be for the entire tile instead of varying per-cell.
+to be for the entire tile instead of varying per-cell.    
 ![Alternate Terrain Query Tool Tip](images/AlternateTerrainQuery.jpg)
 
 ### Advanced Query Tool Tips
