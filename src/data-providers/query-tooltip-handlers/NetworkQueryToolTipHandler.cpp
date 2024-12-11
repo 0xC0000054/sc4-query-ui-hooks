@@ -312,6 +312,20 @@ namespace
 			}
 		}
 	}
+
+	struct cSC4NetworkOccupant
+	{
+		void* vtable;
+		uint8_t unknown1[252];
+		uint32_t underTextureID;
+	};
+
+	static_assert(offsetof(cSC4NetworkOccupant, underTextureID) == 0x100);
+
+	uint32_t GetUnderTextureID(const cISC4NetworkOccupant* pNetworkOccupant)
+	{
+		return reinterpret_cast<const cSC4NetworkOccupant*>(pNetworkOccupant)->underTextureID;
+	}
 }
 
 NetworkQueryToolTipHandler::NetworkQueryToolTipHandler()
@@ -420,6 +434,7 @@ void NetworkQueryToolTipHandler::SetDebugQueryText(
 	{
 		GZStringUtil::AppendLine(GetNetworkTypesString(pNetworkOccupant), text);
 		GZStringUtil::AppendLineFormatted(text, "Network Piece ID: 0x%08x\n", pNetworkOccupant->PieceId());
+		GZStringUtil::AppendLineFormatted(text, "Network Piece Base Texture: 0x%08x\n", GetUnderTextureID(pNetworkOccupant));
 		GZStringUtil::AppendLineFormatted(text, "Network Piece Wealth: %d\n", pNetworkOccupant->GetVariation());
 		GZStringUtil::AppendLine(GetNetworkOrientation(pNetworkOccupant), text);
 
