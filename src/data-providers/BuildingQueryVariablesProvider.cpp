@@ -308,7 +308,7 @@ namespace
 		return result;
 	}
 
-	bool GetBuildingSummaryToken(const UnknownTokenContext* context, cIGZString& outReplacement)
+	bool GetBuildingSummaryToken(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
 
@@ -390,7 +390,7 @@ namespace
 		return result;
 	}
 
-	bool GetBuildingWallToWallToken(const UnknownTokenContext* context, cIGZString& outReplacement)
+	bool GetBuildingWallToWallToken(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
 
@@ -464,7 +464,7 @@ namespace
 		return result;
 	}
 
-	bool GetGrowthStageToken(const UnknownTokenContext* context, cIGZString& outReplacement)
+	bool GetGrowthStageToken(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
 
@@ -484,7 +484,7 @@ namespace
 		return result;
 	}
 
-	bool GetMySimResidentName(const UnknownTokenContext* context, cIGZString& outReplacement)
+	bool GetMySimResidentName(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
 
@@ -556,44 +556,44 @@ namespace
 	}
 }
 
-typedef bool (*TokenDataCallback)(const UnknownTokenContext*, cIGZString&);
+typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
 static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 32> tokenDataCallbacks =
 {
-	{ "building_full_funding_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
-	{ "building_full_funding_coverage", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
+	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
+	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
 	{ "building_is_w2w", GetBuildingWallToWallToken },
-	{ "building_styles", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, BuildingStylesTokenSeparatorType::Pipe); } },
-	{ "building_style_lines", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, BuildingStylesTokenSeparatorType::NewLine); } },
+	{ "building_styles", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, BuildingStylesTokenSeparatorType::Pipe); } },
+	{ "building_style_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, BuildingStylesTokenSeparatorType::NewLine); } },
 	{ "building_summary", GetBuildingSummaryToken },
 	{ "growth_stage", GetGrowthStageToken },
 	{ "mysim_name", GetMySimResidentName },
-	{ "r1_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
-	{ "r1_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
-	{ "r2_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },
-	{ "r2_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },
-	{ "r3_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialHighWealth); } },
-	{ "r3_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialHighWealth); } },
-	{ "cs1_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesLowWealth); } },
-	{ "cs1_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesLowWealth); } },
-	{ "cs2_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesMediumWealth); } },
-	{ "cs2_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesMediumWealth); } },
-	{ "cs3_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesHighWealth); } },
-	{ "cs3_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesHighWealth); } },
-	{ "co2_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialOfficeMediumWealth); } },
-	{ "co2_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialOfficeMediumWealth); } },
-	{ "co3_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialOfficeHighWealth); } },
-	{ "co3_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialOfficeHighWealth); } },
-	{ "ir_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialAgriculture); } },
-	{ "ir_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialAgriculture); } },
-	{ "id_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialProcessing); } },
-	{ "id_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialProcessing); } },
-	{ "im_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
-	{ "im_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
-	{ "iht_occupancy", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
-	{ "iht_capacity", [](const UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
+	{ "r1_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
+	{ "r1_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
+	{ "r2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },
+	{ "r2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },
+	{ "r3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialHighWealth); } },
+	{ "r3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialHighWealth); } },
+	{ "cs1_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesLowWealth); } },
+	{ "cs1_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesLowWealth); } },
+	{ "cs2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesMediumWealth); } },
+	{ "cs2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesMediumWealth); } },
+	{ "cs3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesHighWealth); } },
+	{ "cs3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesHighWealth); } },
+	{ "co2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialOfficeMediumWealth); } },
+	{ "co2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialOfficeMediumWealth); } },
+	{ "co3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialOfficeHighWealth); } },
+	{ "co3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialOfficeHighWealth); } },
+	{ "ir_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialAgriculture); } },
+	{ "ir_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialAgriculture); } },
+	{ "id_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialProcessing); } },
+	{ "id_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialProcessing); } },
+	{ "im_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
+	{ "im_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
+	{ "iht_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
+	{ "iht_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
 };
 
 static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplacement, void* pContext)
@@ -604,7 +604,7 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 
 	if (entry != tokenDataCallbacks.end())
 	{
-		const UnknownTokenContext* context = static_cast<UnknownTokenContext*>(pContext);
+		UnknownTokenContext* context = static_cast<UnknownTokenContext*>(pContext);
 
 		// The string may have been set to an error message by some other token callback method.
 		outReplacement.Erase(0, outReplacement.Strlen());
