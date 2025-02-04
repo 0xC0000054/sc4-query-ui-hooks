@@ -25,6 +25,38 @@ namespace
 		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
 	}
 
+	enum class ModifierKeys : uint32_t
+	{
+		None = 0,
+		Control = 1 << 0,
+		Alt = 1 << 1,
+		Shift = 1 << 2,
+		ControlAltShift = Control | Alt | Shift
+	};
+	DEFINE_ENUM_FLAG_OPERATORS(ModifierKeys);
+
+	ModifierKeys GetActiveModifierKeys()
+	{
+		ModifierKeys modifiers = ModifierKeys::None;
+
+		if (IsKeyDownNow(VK_CONTROL))
+		{
+			modifiers |= ModifierKeys::Control;
+		}
+
+		if (IsKeyDownNow(VK_MENU))
+		{
+			modifiers |= ModifierKeys::Alt;
+		}
+
+		if (IsKeyDownNow(VK_SHIFT))
+		{
+			modifiers |= ModifierKeys::Shift;
+		}
+
+		return modifiers;
+	}
+
 	typedef int32_t(__cdecl* RZString_Sprintf)(void* thisPtr, const char* format, ...);
 
 	static const RZString_Sprintf RealRZStringSprintf = reinterpret_cast<RZString_Sprintf>(0x90F574);
@@ -48,12 +80,32 @@ namespace
 
 		if (spWeatherSimulator)
 		{
-			// Pressing the Alt key will show the humidity and ambient wind information, this data appears
-			// to be for the entire tile instead of varying per-cell.
-			// It is not shown in the advanced query to reduce the amount of text that is shown in that mode.
+			const ModifierKeys modifiers = GetActiveModifierKeys();
 
-			if (IsKeyDownNow(VK_MENU) && !IsKeyDownNow(VK_SHIFT) && !IsKeyDownNow(VK_CONTROL))
+			if (modifiers == ModifierKeys::None
+				|| (modifiers & ModifierKeys::ControlAltShift) == ModifierKeys::ControlAltShift)
 			{
+				// Show the standard query with the cell moisture added.
+				// This info is also appended to the end of the Control + Alt + Shift advanced/debug
+				// queries, so it need to be fairly short.
+
+				uint8_t cellMoisture = spWeatherSimulator->GetMoistureValue(x, z);
+
+				result = RealRZStringSprintf(
+					rzStringThisPtr,
+					"x=%f y=%f z=%f\ncell x=%d cell z=%d cell moisture=%d",
+					x,
+					y,
+					z,
+					cellX,
+					cellZ,
+					cellMoisture);
+			}
+			else if ((modifiers & ModifierKeys::ControlAltShift) == ModifierKeys::Alt)
+			{
+				// Pressing the Alt key will show the humidity and ambient wind information, this data appears
+				// to be for the entire tile instead of varying per-cell.
+
 				float humidity = spWeatherSimulator->GetHumidity(x, z);
 
 				cS3DVector2 ambientWindDirection;
@@ -73,20 +125,6 @@ namespace
 					ambientWindSpeed,
 					ambientWindDirection.fX,
 					ambientWindDirection.fY);
-			}
-			else
-			{
-				uint8_t cellMoisture = spWeatherSimulator->GetMoistureValue(x, z);
-
-				result = RealRZStringSprintf(
-					rzStringThisPtr,
-					"x=%f y=%f z=%f\ncell x=%d cell z=%d cell moisture=%d",
-					x,
-					y,
-					z,
-					cellX,
-					cellZ,
-					cellMoisture);
 			}
 		}
 		else
