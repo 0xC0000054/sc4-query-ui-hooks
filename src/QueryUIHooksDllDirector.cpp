@@ -76,6 +76,9 @@ FloraQueryToolTipHookServer* spFloraQueryToolTipHookServer = nullptr;
 NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer = nullptr;
 PropQueryToolTipHookServer* spPropQueryToolTipHookServer = nullptr;
 
+cISC4FlammabilitySimulator* spFlammabilitySimulator = nullptr;
+cISC4LandValueSimulator* spLandValueSimulator = nullptr;
+cISC4PollutionSimulator* spPollutionSimulator = nullptr;
 cISC4WeatherSimulator* spWeatherSimulator = nullptr;
 
 namespace
@@ -188,6 +191,9 @@ public:
 
 		if (pCity)
 		{
+			spFlammabilitySimulator = pCity->GetFlammabilitySimulator();
+			spLandValueSimulator = pCity->GetLandValueSimulator();
+			spPollutionSimulator = pCity->GetPollutionSimulator();
 			spWeatherSimulator = pCity->GetWeatherSimulator();
 		}
 
@@ -197,6 +203,9 @@ public:
 
 	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
 	{
+		spFlammabilitySimulator = nullptr;
+		spLandValueSimulator = nullptr;
+		spPollutionSimulator = nullptr;
 		spWeatherSimulator = nullptr;
 		buildingQueryVariablesProvider.PreCityShutdown(pStandardMsg, mpCOM);
 		queryToolTipProvider.PreCityShutdown(pStandardMsg, mpCOM);

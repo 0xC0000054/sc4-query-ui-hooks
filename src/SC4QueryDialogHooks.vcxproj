@@ -72,6 +72,8 @@
     <ClInclude Include="..\vendor\gzcom-dll\include\cIS3DModelInstance.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4App.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4BuildingDevelopmentSimulator.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4FlammabilitySimulator.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4LandValueSimulator.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4LotManager.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4NetworkOccupant.h" />
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4Occupant.h" />

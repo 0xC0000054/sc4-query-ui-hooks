@@ -15,10 +15,10 @@ class cISC4PollutionSimulator : public cIGZUnknown
 		virtual bool Shutdown(void) = 0;
 
 		virtual cISC4SimGrid<short>* GetPollutionGrid(uint32_t dwPollutionType) = 0;
-		virtual uint16_t GetPollutionValue(uint32_t dwPollutionType, uint32_t dwCellX, uint32_t dwCellZ) = 0;
-		virtual bool GetAirValue(uint32_t dwCellX, uint32_t dwCellZ, int16_t& wValue) = 0;
-		virtual bool GetWaterValue(uint32_t dwCellX, uint32_t dwCellZ, int16_t& wValue) = 0;
-		virtual bool GetGarbageValue(uint32_t dwCellX, uint32_t dwCellZ, int16_t& wValue) = 0;
+		virtual uint32_t GetPollutionValue(uint32_t dwPollutionType, uint32_t dwCellX, uint32_t dwCellZ) = 0;
+		virtual bool GetAirValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t& wValue) = 0;
+		virtual bool GetWaterValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t& wValue) = 0;
+		virtual bool GetGarbageValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t& wValue) = 0;
 
 		virtual int32_t GetAverageAirValue(void) = 0;
 		virtual int32_t GetAverageWaterValue(void) = 0;
@@ -29,9 +29,9 @@ class cISC4PollutionSimulator : public cIGZUnknown
 		virtual bool IsGarbageAccumulated(uint32_t dwCellX, uint32_t dwCellZ) = 0;
 		virtual bool IsRadioactive(uint32_t dwCellX, uint32_t dwCellZ) = 0;
 
-		virtual bool GetWorstAirTract(uint32_t& dwCellX, uint32_t& dwCellZ, int16_t& wValue) = 0;
-		virtual bool GetWorstWaterTract(uint32_t& dwCellX, uint32_t& dwCellZ, int16_t& wValue) = 0;
-		virtual bool GetWorstGarbageTract(uint32_t& dwCellX, uint32_t& dwCellZ, int16_t& wValue) = 0;
+		virtual bool GetWorstAirTract(uint32_t& dwCellX, uint32_t& dwCellZ, int32_t& wValue) = 0;
+		virtual bool GetWorstWaterTract(uint32_t& dwCellX, uint32_t& dwCellZ, int32_t& wValue) = 0;
+		virtual bool GetWorstGarbageTract(uint32_t& dwCellX, uint32_t& dwCellZ, int32_t& wValue) = 0;
 
 		virtual uint32_t GetGarbageSupply(void) = 0;
 		virtual int32_t GetLandfillTileCapacity(void) = 0;
@@ -42,9 +42,9 @@ class cISC4PollutionSimulator : public cIGZUnknown
 
 		virtual bool SetIsRadioactive(uint32_t dwCellX, uint32_t dwCellZ, bool bRadioactive) = 0;
 
-		virtual bool SetAirValue(uint32_t dwCellX, uint32_t dwCellZ, int16_t wValue) = 0;
-		virtual bool SetWaterValue(uint32_t dwCellX, uint32_t dwCellZ, int16_t wValue) = 0;
-		virtual bool SetGarbageValue(uint32_t dwCellX, uint32_t dwCellZ, int16_t wValue) = 0;
+		virtual bool SetAirValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t wValue) = 0;
+		virtual bool SetWaterValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t wValue) = 0;
+		virtual bool SetGarbageValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t wValue) = 0;
 
 		virtual bool AddToGarbageSupply(int32_t nGarbage) = 0;
 		virtual bool SetGarbageCapacity(int32_t nCapacity) = 0;

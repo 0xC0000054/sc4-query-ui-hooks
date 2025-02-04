@@ -78,11 +78,17 @@ The _TerrainQuery_ command now shows the _x_, _y_, and _z_ variables without tru
 cell moisture value is now provided as part of the standard query info.    
 ![Extended Terrain Query Tool Tip](images/ExtendedTerrainQuery.jpg)
 
-#### Alternate Terrain Query
+#### Alternate Weather Terrain Query
 
 This mode is accessed by holding the `Alt` key. It shows the humidity and ambient wind information, this data appears
 to be for the entire tile instead of varying per-cell.    
-![Alternate Terrain Query Tool Tip](images/AlternateTerrainQuery.jpg)
+![Alternate Weather Terrain Query Tool Tip](images/AlternateWeatherTerrainQuery.jpg)
+
+#### Pollution Terrain Query
+
+This mode is accessed by holding the `Ctrl` key. It shows the flammability, land value, and pollution (air, water,
+garbage, and radiation).    
+![Pollution Terrain Query Tool Tip](images/PollutionTerrainQuery.jpg)
 
 ### Advanced Query Tool Tips
 

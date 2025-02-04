@@ -11,6 +11,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "TerrainQueryHooks.h"
+#include "cISC4FlammabilitySimulator.h"
+#include "cISC4LandValueSimulator.h"
+#include "cISC4PollutionSimulator.h"
+#include "cISC4SimGrid.h"
 #include "cISC4WeatherSimulator.h"
 #include "cS3DVector2.h"
 #include "GlobalSC4InterfacePointers.h"
@@ -61,6 +65,11 @@ namespace
 
 	static const RZString_Sprintf RealRZStringSprintf = reinterpret_cast<RZString_Sprintf>(0x90F574);
 
+	template<typename T> T GetSimGridCellValue(const cISC4SimGrid<T>* grid, int32_t x, int32_t z)
+	{
+		return grid->GetCellValue(x, z);
+	}
+
 	int32_t HookedTerrainQuerySprintf(void* rzStringThisPtr, const char* format, ...)
 	{
 		// Unpack the arguments that were passed to the function.
@@ -78,7 +87,7 @@ namespace
 
 		int32_t result = 0;
 
-		if (spWeatherSimulator)
+		if (spFlammabilitySimulator && spLandValueSimulator && spPollutionSimulator && spWeatherSimulator)
 		{
 			const ModifierKeys modifiers = GetActiveModifierKeys();
 
@@ -125,6 +134,65 @@ namespace
 					ambientWindSpeed,
 					ambientWindDirection.fX,
 					ambientWindDirection.fY);
+			}
+			else if ((modifiers & ModifierKeys::ControlAltShift) == ModifierKeys::Control)
+			{
+				// Pressing the Control key will show the flammability, land value, and pollution.
+
+				uint8_t flammability = GetSimGridCellValue(
+					spFlammabilitySimulator->GetFlammabilityGrid(),
+					cellX,
+					cellZ);
+
+				// Our land value fields use the same order as SC4's advanced/debug query.
+
+				uint8_t intrinsicLandValue = GetSimGridCellValue(
+					spLandValueSimulator->GetIntrinsicLandValueMap(),
+					cellX,
+					cellZ);
+				uint8_t totalLandValue = spLandValueSimulator->GetLandValue(cellX, cellZ);
+				const char* landValueDescription = "Unknown";
+
+				switch (spLandValueSimulator->GetLandValueType(cellX, cellZ))
+				{
+				case cISC4LandValueSimulator::LandValueType::Low:
+					landValueDescription = "Low";
+					break;
+				case cISC4LandValueSimulator::LandValueType::Medium:
+					landValueDescription = "Medium";
+					break;
+				case cISC4LandValueSimulator::LandValueType::High:
+					landValueDescription = "High";
+					break;
+				}
+
+				int32_t airPollution = 0;
+				int32_t waterPollution = 0;
+				int32_t garbagePollution = 0;
+
+				spPollutionSimulator->GetAirValue(cellX, cellZ, airPollution);
+				spPollutionSimulator->GetWaterValue(cellX, cellZ, waterPollution);
+				spPollutionSimulator->GetGarbageValue(cellX, cellZ, garbagePollution);
+				bool radioactive = spPollutionSimulator->IsRadioactive(cellX, cellZ);
+
+				result = RealRZStringSprintf(
+					rzStringThisPtr,
+					"x=%f y=%f z=%f\ncell x=%d cell z=%d flam=%d\n"
+					"land value %d:%d (%s) pollution:\n"
+					"air=%d water=%d garbage=%d rad?=%d",
+					x,
+					y,
+					z,
+					cellX,
+					cellZ,
+					flammability,
+					intrinsicLandValue,
+					totalLandValue,
+					landValueDescription,
+					airPollution,
+					waterPollution,
+					garbagePollution,
+					radioactive);
 			}
 		}
 		else
