@@ -317,26 +317,26 @@ namespace
 	{
 		cRZAutoRefCount<cISC4Occupant> occupant;
 
-				cISC43DRender* pRenderer = view3D.GetRenderer();
+		cISC43DRender* pRenderer = view3D.GetRenderer();
 
-				if (pRenderer)
+		if (pRenderer)
+		{
+			cRZAutoRefCount<cISC4OccupantFilter> filter(
+				new ClickToCopyOccupantFilter(),
+				cRZAutoRefCount<cISC4OccupantFilter>::kAddRef);
+
+			cRZAutoRefCount<cIS3DModelInstance> modelInstance;
+
+			if (pRenderer->Pick(mouseX, mouseY, filter, modelInstance.AsPPObj()))
+			{
+				cIGZUnknown* pOwner = modelInstance->GetOwner();
+
+				if (pOwner)
 				{
-					cRZAutoRefCount<cISC4OccupantFilter> filter(
-						new ClickToCopyOccupantFilter(),
-						cRZAutoRefCount<cISC4OccupantFilter>::kAddRef);
-
-					cRZAutoRefCount<cIS3DModelInstance> modelInstance;
-
-					if (pRenderer->Pick(mouseX, mouseY, filter, modelInstance.AsPPObj()))
-					{
-						cIGZUnknown* pOwner = modelInstance->GetOwner();
-
-						if (pOwner)
-						{
-							pOwner->QueryInterface(GZIID_cISC4Occupant, occupant.AsPPVoid());
-						}
-					}
+					pOwner->QueryInterface(GZIID_cISC4Occupant, occupant.AsPPVoid());
 				}
+			}
+		}
 
 		return occupant;
 	}
