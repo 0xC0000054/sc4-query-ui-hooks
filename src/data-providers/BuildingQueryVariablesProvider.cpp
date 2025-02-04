@@ -42,6 +42,7 @@
 #include "cISC4MySim.h"
 #include "cISC4MySimAgentSimulator.h"
 #include "cISC4Occupant.h"
+#include "cISC4TrafficSimulator.h"
 #include "cRZAutoRefCount.h"
 #include "cRZBaseString.h"
 #include "cS3DVector3.h"
@@ -484,6 +485,82 @@ namespace
 		return result;
 	}
 
+	enum class JobType
+	{
+		LowWealth = 0,
+		MediumWealth,
+		HighWealth
+	};
+
+	bool GetLotJobCount(UnknownTokenContext* context, cIGZString& outReplacement, JobType type)
+	{
+		float jobCount = 0;
+
+		cISC4Lot* pLot = GetOccupantLot(context);
+
+		if (pLot)
+		{
+			std::array<float, 4> jobs{};
+
+			if (pLot->GetJobs(jobs.data()))
+			{
+				switch (type)
+				{
+				case JobType::LowWealth:
+					jobCount = jobs[1];
+					break;
+				case JobType::MediumWealth:
+					jobCount = jobs[2];
+					break;
+				case JobType::HighWealth:
+					jobCount = jobs[3];
+					break;
+				}
+			}
+		}
+
+		return MakeNumberStringForCurrentLanguage(lroundf(jobCount), outReplacement);
+	}
+
+	bool GetLotTravelJobCount(UnknownTokenContext* context, cIGZString& outReplacement, JobType type)
+	{
+		uint32_t travelJobs = 0;
+
+		cISC4Lot* pLot = GetOccupantLot(context);
+
+		if (pLot)
+		{
+			// Industrial lots without their own road access will have an industrial anchor lot
+			// provide road access for their workers.
+			// This internal commuting is invisible to the traffic simulator, so when querying
+			// an industrial anchor lot the number of workers is often higher that what that
+			// lot supports on its own.
+			// We report zero travel jobs for industrial lots without their own road access.
+			if (pLot->GetTravelDesignate() == nullptr)
+			{
+				cISC4TrafficSimulator* pTrafficSim = context->pCity->GetTrafficSimulator();
+
+				if (pTrafficSim)
+				{
+					switch (type)
+					{
+					case JobType::LowWealth:
+						travelJobs = pTrafficSim->GetMaxTripCapacity(pLot->AsPropertyHolder(), 0);
+						break;
+					case JobType::MediumWealth:
+						travelJobs = pTrafficSim->GetMaxTripCapacity(pLot->AsPropertyHolder(), 1);
+						break;
+					case JobType::HighWealth:
+						travelJobs = pTrafficSim->GetMaxTripCapacity(pLot->AsPropertyHolder(), 2);
+						break;
+					}
+				}
+			}
+		}
+
+		return MakeNumberStringForCurrentLanguage(travelJobs, outReplacement);
+	}
+
 	bool GetMySimResidentName(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
@@ -560,7 +637,7 @@ typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 32> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 38> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
@@ -570,6 +647,12 @@ static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 32> to
 	{ "building_summary", GetBuildingSummaryToken },
 	{ "growth_stage", GetGrowthStageToken },
 	{ "mysim_name", GetMySimResidentName },
+	{ "jobs_low_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::LowWealth); }},
+	{ "jobs_mediim_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::MediumWealth); }},
+	{ "jobs_high_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::HighWealth); }},
+	{ "travel_jobs_low_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::LowWealth); }},
+	{ "travel_jobs_mediim_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::MediumWealth); }},
+	{ "travel_jobs_high_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::HighWealth); }},
 	{ "r1_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
 	{ "r1_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
 	{ "r2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },

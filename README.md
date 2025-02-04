@@ -36,6 +36,12 @@ of a building query dialog in the form of `#variable_name#`.
 | building_style_lines | Shows a list of the building's styles, with each style after the first one on its own line.<br>E.g:`Chicago 1890`<br>`New York 1940` |
 | building_summary | The building summary the game shows in its hover tool tips. E.g: `Low-Wealth Residential` |
 | growth_stage | The growth stage of the building's lot. |
+| jobs_low_wealth | The building's current low wealth jobs rounded to the nearest whole number. |
+| jobs_medium_wealth | The building's current medium wealth jobs rounded to the nearest whole number. |
+| jobs_high_wealth | The building's current high wealth jobs rounded to the nearest whole number. |
+| travel_jobs_low_wealth | The number of low wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots.  |
+| travel_jobs_medium_wealth | The number of medium wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots. |
+| travel_jobs_high_wealth | The number of high wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots. |
 | mysim_name | The name of the MySim that lives in the selected residence. |
 | r1_occupancy | The current number of R§ occupants. |
 | r1_capacity | The R§ occupant capacity. |
