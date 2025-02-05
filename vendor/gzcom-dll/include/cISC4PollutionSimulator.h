@@ -11,11 +11,19 @@ template <typename T> class cISC4SimGrid;
 class cISC4PollutionSimulator : public cIGZUnknown
 {
 	public:
+		enum class PollutionType : uint32_t
+		{
+			Air = 0,
+			Water = 1,
+			Garbage = 2,
+			Radiation = 3
+		};
+
 		virtual bool Init(void) = 0;
 		virtual bool Shutdown(void) = 0;
 
-		virtual cISC4SimGrid<short>* GetPollutionGrid(uint32_t dwPollutionType) = 0;
-		virtual uint32_t GetPollutionValue(uint32_t dwPollutionType, uint32_t dwCellX, uint32_t dwCellZ) = 0;
+		virtual cISC4SimGrid<int16_t>* GetPollutionGrid(PollutionType type) = 0;
+		virtual int16_t GetPollutionValue(PollutionType type, uint32_t dwCellX, uint32_t dwCellZ) = 0;
 		virtual bool GetAirValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t& wValue) = 0;
 		virtual bool GetWaterValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t& wValue) = 0;
 		virtual bool GetGarbageValue(uint32_t dwCellX, uint32_t dwCellZ, int32_t& wValue) = 0;
@@ -23,7 +31,7 @@ class cISC4PollutionSimulator : public cIGZUnknown
 		virtual int32_t GetAverageAirValue(void) = 0;
 		virtual int32_t GetAverageWaterValue(void) = 0;
 		virtual int32_t GetAverageGarbageValue(void) = 0;
-		
+
 		virtual bool IsAirPolluted(uint32_t dwCellX, uint32_t dwCellZ) = 0;
 		virtual bool IsWaterPolluted(uint32_t dwCellX, uint32_t dwCellZ) = 0;
 		virtual bool IsGarbageAccumulated(uint32_t dwCellX, uint32_t dwCellZ) = 0;
@@ -65,15 +73,15 @@ class cISC4PollutionSimulator : public cIGZUnknown
 		virtual uint32_t GetWasteToEnergyBuildingCount(void) = 0;
 		virtual uint32_t GetRecyclingCenterCount(void) = 0;
 		virtual uint32_t GetWaterTreatmentPlantCount(void) = 0;
-		
+
 		virtual bool GetGarbageBuildings(std::list<cISC4Occupant*>& sList) = 0;
 		virtual uint32_t GetBuildingGarbageCapacity(cISC4Occupant* pOccupant) = 0;
 		virtual float GetGarbageScalingFactor(void) = 0;
-		
+
 		virtual bool IsActiveLandfill(uint32_t dwCellX, uint32_t dwCellZ) = 0;
 		virtual bool SetIsActiveLandfill(uint32_t dwCellX, uint32_t dwCellZ, bool bActive) = 0;
 		virtual int64_t GarbagePutInLandfill(int32_t nGarbage) = 0;
-		
+
 		virtual bool GetMaxCapacity(uint32_t dwProperty, cISC4Occupant* pOccupant, uint32_t& dwResult) = 0;
 		virtual bool GetCurrentCapacity(uint32_t dwProperty, cISC4Occupant* pOccupant, uint32_t& dwResult) = 0;
 
@@ -82,7 +90,7 @@ class cISC4PollutionSimulator : public cIGZUnknown
 
 		virtual bool GetCurrentOccupantCondition(cISC4Occupant* pOccupant, SC4Percentage& sCapacity) = 0;
 		virtual bool GetCurrentOccupantEfficiency(cISC4Occupant* pOccupant, SC4Percentage& sCapacity) = 0;
-		
+
 		virtual bool GetIncineratorUsedCapacity(cISC4Occupant* pOccupant, uint32_t& dwCapacity) = 0;
 		virtual bool GetWasteToEnergyUsedCapacity(cISC4Occupant* pOccupant, uint32_t& dwCapacity) = 0;
 
@@ -94,7 +102,7 @@ class cISC4PollutionSimulator : public cIGZUnknown
 		virtual bool GetWaterTreatmentUsedCapacity(cISC4Occupant* pOccupant, uint32_t& dwCapacity) = 0;
 
 		virtual bool CalcOccupantMaintenanceCost(cISC4Occupant* pOccupant, uint64_t& dwCost) = 0;
-		
+
 		virtual void AddRadiationToCity(cS3DVector3& sCenter, float fRadiusX, float fRadiusZ) = 0;
 
 		// Does this belong here? It's in the vtable...
