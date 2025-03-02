@@ -383,6 +383,12 @@
     <ClInclude Include="data-providers\DataProviderBase.h">
       <Filter>Header Files\Data Providers</Filter>
     </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4LandValueSimulator.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4FlammabilitySimulator.h">
+      <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
