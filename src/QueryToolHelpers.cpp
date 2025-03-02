@@ -11,18 +11,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "QueryToolHelpers.h"
+#include "Windows.h"
 #include <cstdint>
 
 namespace
 {
-	typedef bool(__cdecl* pfnIsDebugQueryEnabled)();
-
-	static const pfnIsDebugQueryEnabled RealIsDebugQueryEnabled = reinterpret_cast<pfnIsDebugQueryEnabled>(0x4C4700);
+	bool IsKeyDownNow(int32_t vKey)
+	{
+		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
+	}
 }
 
 bool QueryToolHelpers::IsDebugQueryEnabled()
 {
-	return RealIsDebugQueryEnabled();
+	// Check for the Control + Alt + Shift key combination.
+	// We don't call the method that the Maxis query dialog uses because it only
+	// checks for the key combination if the game's debug functionality is enabled.
+	return IsKeyDownNow(VK_CONTROL) && IsKeyDownNow(VK_MENU) && IsKeyDownNow(VK_SHIFT);
 }
 
 cISC4Occupant* QueryToolHelpers::GetOccupant(void* thisPtr)
