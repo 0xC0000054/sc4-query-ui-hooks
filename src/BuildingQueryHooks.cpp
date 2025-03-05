@@ -373,7 +373,7 @@ namespace
 						int32_t cellX = 0;
 						int32_t cellZ = 0;
 
-						pCity->PositionToCell(data[0], data[2], cellX, cellX);
+						pCity->PositionToCell(data[0], data[2], cellX, cellZ);
 
 						pLot = pLotManager->GetLot(cellX, cellZ, false);
 					}
