@@ -47,6 +47,7 @@
 #include "cRZBaseString.h"
 #include "cS3DVector3.h"
 #include "GZServPtrs.h"
+#include "SCPropertyUtil.h"
 #include "SC4String.h"
 
 #include <algorithm>
@@ -631,13 +632,57 @@ namespace
 
 		return result;
 	}
+
+	bool GetWaterBuildingSource(UnknownTokenContext* context, cIGZString& outReplacement)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant)
+		{
+			constexpr uint32_t kWaterSourcePropertyID = 0x48F23A7E;
+
+			enum class WaterSource : uint8_t
+			{
+				FreshWater = 0,
+				SaltWater = 1,
+				Aquifer = 2
+			};
+
+			uint8_t waterSource = 0;
+
+			if (SCPropertyUtil::GetPropertyValue(context->pOccupant->AsPropertyHolder(), kWaterSourcePropertyID, waterSource))
+			{
+				switch (static_cast<WaterSource>(waterSource))
+				{
+				case WaterSource::FreshWater:
+					outReplacement.FromChar("Fresh Water");
+					result = true;
+					break;
+				case WaterSource::SaltWater:
+					outReplacement.FromChar("Salt Water");
+					result = true;
+					break;
+				case WaterSource::Aquifer:
+					outReplacement.FromChar("Aquifer");
+					result = true;
+					break;
+				default:
+					outReplacement.FromChar("Unknown");
+					result = true;
+					break;
+				}
+			}
+		}
+
+		return result;
+	}
 }
 
 typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 38> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 39> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
@@ -677,6 +722,7 @@ static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 38> to
 	{ "im_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
 	{ "iht_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
 	{ "iht_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
+	{ "water_building_source", GetWaterBuildingSource },
 };
 
 static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplacement, void* pContext)

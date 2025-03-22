@@ -67,6 +67,7 @@ of a building query dialog in the form of `#variable_name#`.
 | im_capacity | The I-M occupant capacity. |
 | iht_occupancy | The current number of I-HT occupants. |
 | iht_capacity | The I-HT occupant capacity. |
+| water_building_source | The water source for a water producing building. |
 </details>
 
 Multiple `*_occupancy` and `*_capacity` variables can be combined in a LTEXT query to show the filled/available occupancy.

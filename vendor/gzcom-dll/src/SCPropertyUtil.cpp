@@ -24,6 +24,24 @@ bool SCPropertyUtil::GetPropertyValue(const cISCPropertyHolder* propertyHolder, 
 	return false;
 }
 
+bool SCPropertyUtil::GetPropertyValue(const cISCPropertyHolder* propertyHolder, uint32_t id, uint8_t& value)
+{
+	const cISCProperty* property = propertyHolder->GetProperty(id);
+
+	if (property)
+	{
+		const cIGZVariant* data = property->GetPropertyValue();
+
+		if (data)
+		{
+			return data->GetValUint8(value);
+		}
+	}
+
+	value = 0;
+	return false;
+}
+
 bool SCPropertyUtil::GetPropertyValue(const cISCPropertyHolder* propertyHolder, uint32_t id, cIGZString& value)
 {
 	if (propertyHolder)
