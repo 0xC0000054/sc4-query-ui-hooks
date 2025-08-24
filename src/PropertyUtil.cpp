@@ -70,7 +70,7 @@ namespace
 
 		if (GetUserVisibleNameKey(pPropertyHolder, key))
 		{
-			result = StringResourceManager::GetLocalizedString(key, name.AsPPObj());
+			result = StringResourceManager::GetLocalizedString(key, name);
 		}
 
 		return result;

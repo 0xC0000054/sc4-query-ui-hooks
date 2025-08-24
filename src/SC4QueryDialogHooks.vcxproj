@@ -11,29 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\vendor\EASTL\source\assert.cpp" />
-    <ClCompile Include="..\vendor\EASTL\source\atomic.cpp" />
-    <ClCompile Include="..\vendor\EASTL\source\fixed_pool.cpp" />
-    <ClCompile Include="..\vendor\EASTL\source\hashtable.cpp" />
-    <ClCompile Include="..\vendor\EASTL\source\intrusive_list.cpp" />
-    <ClCompile Include="..\vendor\EASTL\source\numeric_limits.cpp" />
-    <ClCompile Include="..\vendor\EASTL\source\red_black_tree.cpp" />
-    <ClCompile Include="..\vendor\EASTL\source\string.cpp" />
-    <ClCompile Include="..\vendor\EASTL\source\thread_support.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cRZBaseString.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cRZBaseUnknown.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cRZBaseVariant.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cRZCOMDllDirector.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cRZMessage2.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cRZMessage2Standard.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cS3DVector2.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cS3DVector3.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cSC4BaseOccupantFilter.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\cSCBaseProperty.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\EASTLAllocatorSC4.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\SC4UI.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\SCPropertyUtil.cpp" />
-    <ClCompile Include="..\vendor\gzcom-dll\src\StringResourceManager.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cRZBaseString.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cRZBaseUnknown.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cRZBaseVariant.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cRZCOMDllDirector.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cRZMessage2.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cRZMessage2Standard.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cS3DVector2.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cS3DVector3.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cSC4BaseOccupantFilter.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cSCBaseProperty.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SC4UI.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SCPropertyUtil.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\StringResourceManager.cpp" />
     <ClCompile Include="ClickToCopyOccupantFilter.cpp" />
     <ClCompile Include="data-providers\BuildingQueryVariablesProvider.cpp" />
     <ClCompile Include="data-providers\DataProviderBase.cpp" />
@@ -65,28 +55,28 @@
     <ClCompile Include="TerrainQueryHooks.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\vendor\gzcom-dll\include\cGZPersistResourceKey.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cIGZPersistDBRecord.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cIGZPersistResource.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cIGZPersistResourceFactory.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cIGZPersistResourceManager.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cIS3DModelInstance.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4App.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4BuildingDevelopmentSimulator.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4FlammabilitySimulator.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4LandValueSimulator.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4LotManager.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4NetworkOccupant.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4Occupant.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISC4WeatherSimulator.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cISCStringDetokenizer.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cRZBaseUnknown.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cRZCOMDllDirector.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cSC4BaseOccupantFilter.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\cSC4EdgeConnectionStore.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\SCPropertyUtil.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceKey.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\include\StringResourceManager.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cGZPersistResourceKey.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistDBRecord.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResource.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResourceFactory.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResourceManager.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIS3DModelInstance.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4App.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4BuildingDevelopmentSimulator.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4FlammabilitySimulator.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4LandValueSimulator.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4LotManager.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4NetworkOccupant.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4Occupant.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4WeatherSimulator.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISCStringDetokenizer.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cRZBaseUnknown.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cRZCOMDllDirector.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cSC4BaseOccupantFilter.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cSC4EdgeConnectionStore.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\SCPropertyUtil.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\StringResourceKey.h" />
+    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\StringResourceManager.h" />
     <ClInclude Include="ClickToCopyOccupantFilter.h" />
     <ClInclude Include="data-providers\BuildingQueryVariablesProvider.h" />
     <ClInclude Include="data-providers\DataProviderBase.h" />
@@ -184,7 +174,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\include;..\vendor\EASTL\include;..\vendor\EABase\include\Common;.\;.\public\include;.\data-providers;.\more-building-styles;.\.\data-providers\query-tooltip-handlers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;.\;.\public\include;.\data-providers;.\more-building-styles;.\.\data-providers\query-tooltip-handlers</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <UseFullPaths>false</UseFullPaths>
@@ -210,7 +200,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\include;..\vendor\EASTL\include;..\vendor\EABase\include\Common;.\;.\public\include;.\data-providers;.\more-building-styles;.\.\data-providers\query-tooltip-handlers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;.\;.\public\include;.\data-providers;.\more-building-styles;.\.\data-providers\query-tooltip-handlers</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

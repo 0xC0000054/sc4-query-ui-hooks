@@ -270,7 +270,7 @@ namespace
 			{
 				view3D.SetCurrentViewInputControl(
 					placeLot,
-					cISC4View3DWin::ViewInputControlStackOperation::RemoveAllControls);
+					cISC4View3DWin::ViewInputControlStackOperation_RemoveAllControls);
 
 				int32_t cursorX = 0;
 				int32_t cursorZ = 0;
@@ -312,7 +312,7 @@ namespace
 			{
 				result = view3D.SetCurrentViewInputControl(
 					flora,
-					cISC4View3DWin::ViewInputControlStackOperation::RemoveAllControls);
+					cISC4View3DWin::ViewInputControlStackOperation_RemoveAllControls);
 			}
 		}
 
@@ -334,16 +334,18 @@ namespace
 				new ClickToCopyOccupantFilter(),
 				cRZAutoRefCount<cISC4OccupantFilter>::kAddRef);
 
-			cRZAutoRefCount<cIS3DModelInstance> modelInstance;
+			cIS3DModelInstance* pModelInstance = nullptr;
 
-			if (pRenderer->Pick(mouseX, mouseY, filter, modelInstance.AsPPObj()))
+			if (pRenderer->Pick(mouseX, mouseY, filter, pModelInstance))
 			{
-				cIGZUnknown* pOwner = modelInstance->GetOwner();
+				cIGZUnknown* pOwner = pModelInstance->GetOwner();
 
 				if (pOwner)
 				{
 					pOwner->QueryInterface(GZIID_cISC4Occupant, occupant.AsPPVoid());
 				}
+
+				pModelInstance->Release();
 			}
 		}
 

@@ -58,6 +58,7 @@
 #include "GZServPtrs.h"
 #include "SCPropertyUtil.h"
 #include "SC4String.h"
+#include "SC4Vector.h"
 #include "StringViewUtil.h"
 
 #include <algorithm>
@@ -189,7 +190,7 @@ namespace
 
 			if (pBudgetSim)
 			{
-				eastl::vector<cISC4BudgetSimulator::BudgetItem> budgetItems;
+				SC4Vector<cISC4BudgetSimulator::BudgetItem> budgetItems;
 
 				if (pBudgetSim->GetBudgetItemInfo(context->pOccupant->AsPropertyHolder(), budgetItems))
 				{

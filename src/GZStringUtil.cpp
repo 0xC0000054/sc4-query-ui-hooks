@@ -116,7 +116,7 @@ bool GZStringUtil::SetLocalizedStringValue(
 
 	cRZAutoRefCount<cIGZString> localizedString;
 
-	if (StringResourceManager::GetLocalizedString(key, localizedString.AsPPObj()))
+	if (StringResourceManager::GetLocalizedString(key, localizedString))
 	{
 		destination.Copy(*localizedString);
 		result = true;
