@@ -195,6 +195,9 @@
     <ClCompile Include="data-providers\DataProviderBase.cpp">
       <Filter>Source Files\Data Providers</Filter>
     </ClCompile>
+    <ClCompile Include="StringViewUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -388,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="..\vendor\gzcom-dll\include\cISC4FlammabilitySimulator.h">
       <Filter>Header Files\GZCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="StringViewUtil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

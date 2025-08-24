@@ -38,6 +38,7 @@ private:
 	void AfterDialogShown(cISC4Occupant* pOccupant) override;
 
 	void DebugLogTokenizerVariables();
+	void DebugLogDetokenizedValue(cIGZString const& token);
 
 	void LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant);
 

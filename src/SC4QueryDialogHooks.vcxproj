@@ -61,6 +61,7 @@
     <ClCompile Include="BuildingQueryHookServer.cpp" />
     <ClCompile Include="SC4VersionDetection.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="StringViewUtil.cpp" />
     <ClCompile Include="TerrainQueryHooks.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +127,7 @@
     <ClInclude Include="QueryToolHelpers.h" />
     <ClInclude Include="SC4VersionDetection.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="StringViewUtil.h" />
     <ClInclude Include="TerrainQueryHooks.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>

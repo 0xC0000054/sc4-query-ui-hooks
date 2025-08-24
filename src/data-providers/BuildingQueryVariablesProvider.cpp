@@ -49,6 +49,7 @@
 #include "GZServPtrs.h"
 #include "SCPropertyUtil.h"
 #include "SC4String.h"
+#include "StringViewUtil.h"
 
 #include <algorithm>
 #include <array>
@@ -676,6 +677,42 @@ namespace
 
 		return result;
 	}
+
+	bool GetBudgetPurposeTypeCost(
+		std::string_view const& token,
+		std::string_view const& prefix,
+		UnknownTokenContext* context,
+		cIGZString& destination)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant && context->pCity)
+		{
+			const std::string_view purposeIDHexString = StringViewUtil::RemoveLeft(token, prefix.length());
+
+			if (!purposeIDHexString.empty())
+			{
+				uint32_t purposeID = 0;
+
+				if (StringViewUtil::TryParse(purposeIDHexString, purposeID))
+				{
+					cISC4BudgetSimulator* pBudgetSim = context->pCity->GetBudgetSimulator();
+
+					if (pBudgetSim)
+					{
+						cISC4BudgetSimulator::BudgetItem budgetItem{};
+
+						if (pBudgetSim->GetBudgetItemForPurpose(context->pOccupant->AsPropertyHolder(), purposeID, budgetItem))
+						{
+							result = MakeNumberStringForCurrentLanguage(budgetItem.cost, destination, NumberType::Money);
+						}
+					}
+				}
+			}
+		}
+
+		return result;
+	}
 }
 
 typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
@@ -725,11 +762,38 @@ static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 39> to
 	{ "water_building_source", GetWaterBuildingSource },
 };
 
+typedef bool (*ParameterizedTokenDataCallback)(
+	std::string_view const& token,
+	std::string_view const& prefix,
+	UnknownTokenContext* context,
+	cIGZString& destination);
+
+static constexpr std::array<std::pair<std::string_view, ParameterizedTokenDataCallback>, 1> parameterizedTokenCallbacks =
+{
+	std::pair("budget_purpose_type_cost:"sv, GetBudgetPurposeTypeCost),
+};
+
+static bool GetParameterizedTokenCallback(std::string_view const& token, std::pair<std::string_view, ParameterizedTokenDataCallback>& entry)
+{
+	for (const auto& item : parameterizedTokenCallbacks)
+	{
+		if (token.starts_with(item.first))
+		{
+			entry = item;
+			return true;
+		}
+	}
+
+	return false;
+}
+
 static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplacement, void* pContext)
 {
 	bool result = false;
 
-	const auto& entry = tokenDataCallbacks.find(frozen::string(token.Data(), token.Strlen()));
+	const std::string_view tokenAsStringView(token.Data(), token.Strlen());
+
+	const auto& entry = tokenDataCallbacks.find(frozen::string(tokenAsStringView));
 
 	if (entry != tokenDataCallbacks.end())
 	{
@@ -746,6 +810,27 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 
 		// Let the game know that the token was handled.
 		result = true;
+	}
+	else
+	{
+		std::pair<std::string_view, ParameterizedTokenDataCallback> entry;
+
+		if (GetParameterizedTokenCallback(tokenAsStringView, entry))
+		{
+			UnknownTokenContext* context = static_cast<UnknownTokenContext*>(pContext);
+
+			// The string may have been set to an error message by some other token callback method.
+			outReplacement.Erase(0, outReplacement.Strlen());
+
+			if (!entry.second(tokenAsStringView, entry.first, context, outReplacement))
+			{
+				// Return an empty string if the handler method failed.
+				outReplacement.Erase(0, outReplacement.Strlen());
+			}
+
+			// Let the game know that the token was handled.
+			result = true;
+		}
 	}
 
 	return result;
@@ -861,12 +946,22 @@ void BuildingQueryVariablesProvider::DebugLogTokenizerVariables()
 		token.Append(entry.first.data(), entry.first.size());
 		token.Append("#", 1);
 
-		cRZBaseString result;
+		DebugLogDetokenizedValue(token);
+	}
 
-		if (pStringDetokenizer->Detokenize(token, result))
-		{
-			DebugUtil::PrintLineToDebugOutputFormatted("%s = %s", token.ToChar(), result.ToChar());
-		}
+	// Parameterized tokens
+
+	// 0xaa59670c is the Landmark Effect purpose id.
+	DebugLogDetokenizedValue(cRZBaseString("#budget_purpose_type_cost:0xaa59670c#"));
+}
+
+void BuildingQueryVariablesProvider::DebugLogDetokenizedValue(cIGZString const& token)
+{
+	cRZBaseString result;
+
+	if (pStringDetokenizer->Detokenize(token, result))
+	{
+		DebugUtil::PrintLineToDebugOutputFormatted("%s = %s", token.ToChar(), result.ToChar());
 	}
 }
 

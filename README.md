@@ -24,54 +24,7 @@ Note that this only works with the flora objects that have a hover query tool ti
 
 The DLL provides a number of new variables that can be used in the LTEXT files
 of a building query dialog in the form of `#variable_name#`.
-<details>
-<summary>Variable List</summary>
-
-| Name | Description |
-|------|-------------|
-| building_full_funding_capacity | The cost for Education, Fire, Health, Police and Power buildings at the full (100%) capacity. For Fire and Police stations this is the coverage radius. |
-| building_full_funding_coverage | The cost for Education, and Health buildings at the full (100%) coverage radius (School Bus/Ambulance). |
-| building_is_w2w | Shows a 'Yes' or 'No' value based on whether the building has a W2W occupant group. |
-| building_styles | Shows a building's styles in a pipe-separated list. |
-| building_style_lines | Shows a list of the building's styles, with each style after the first one on its own line.<br>E.g:`Chicago 1890`<br>`New York 1940` |
-| building_summary | The building summary the game shows in its hover tool tips. E.g: `Low-Wealth Residential` |
-| growth_stage | The growth stage of the building's lot. |
-| jobs_low_wealth | The building's current low wealth jobs rounded to the nearest whole number. |
-| jobs_medium_wealth | The building's current medium wealth jobs rounded to the nearest whole number. |
-| jobs_high_wealth | The building's current high wealth jobs rounded to the nearest whole number. |
-| travel_jobs_low_wealth | The number of low wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots.  |
-| travel_jobs_medium_wealth | The number of medium wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots. |
-| travel_jobs_high_wealth | The number of high wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots. |
-| mysim_name | The name of the MySim that lives in the selected residence. |
-| r1_occupancy | The current number of R§ occupants. |
-| r1_capacity | The R§ occupant capacity. |
-| r2_occupancy | The current number of R§§ occupants. |
-| r2_capacity | The R§§ occupant capacity. |
-| r3_occupancy | The current number of R§§§ occupants. |
-| r3_capacity | The R§§§ occupant capacity. |
-| cs1_occupancy | The current number of Cs§ occupants. |
-| cs1_capacity | The Cs§ occupant capacity. |
-| cs2_occupancy | The current number of Cs§§ occupants. |
-| cs2_capacity | The Cs§§ occupant capacity. |
-| cs3_occupancy | The current number of Cs§§§ occupants. |
-| cs3_capacity | The Cs§§§ occupant capacity. |
-| co2_occupancy | The current number of Co§§ occupants. |
-| co2_capacity | The Co§§ occupant capacity. |
-| co3_occupancy | The current number of Co§§§ occupants. |
-| co3_capacity | The Co§§§ occupant capacity. |
-| ir_occupancy | The current number of I-R occupants. |
-| ir_capacity | The I-R occupant capacity. |
-| id_occupancy | The current number of I-D occupants. |
-| id_capacity | The I-D occupant capacity. |
-| im_occupancy | The current number of I-M occupants. |
-| im_capacity | The I-M occupant capacity. |
-| iht_occupancy | The current number of I-HT occupants. |
-| iht_capacity | The I-HT occupant capacity. |
-| water_building_source | The water source for a water producing building. |
-</details>
-
-Multiple `*_occupancy` and `*_capacity` variables can be combined in a LTEXT query to show the filled/available occupancy.
-e.g. `#cs1_occupancy#/#cs1_capacity#`.
+See the [Query Variable List page](https://github.com/0xC0000054/sc4-query-ui-hooks/blob/main/docs/Query_Variable_List.md).
 
 ### Extended Terrain Query
 
