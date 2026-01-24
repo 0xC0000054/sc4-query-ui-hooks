@@ -845,13 +845,86 @@ namespace
 
 		return outReplacement.Strlen() > 0;
 	}
+
+	enum class BuildingEffectType : uint32_t
+	{
+		// Values are the property id of the exemplar property.
+
+		Crime = 0xca5b9306,
+		Landmark = 0x2781284f,
+		MayorRating = 0xca5b9305,
+		Park = 0x27812850
+	};
+
+	bool GetBuildingEffectToken(
+		const UnknownTokenContext* context,
+		cIGZString& outReplacement,
+		BuildingEffectType type)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant)
+		{
+			const cISCPropertyHolder* pPropertyHolder = context->pOccupant->AsPropertyHolder();
+
+			const cISCProperty* pEffectProperty = pPropertyHolder->GetProperty(static_cast<uint32_t>(type));
+
+			if (pEffectProperty)
+			{
+				const cIGZVariant* pEffectPropertyVariant = pEffectProperty->GetPropertyValue();
+
+				const uint32_t count = pEffectPropertyVariant->GetCount();
+
+				// The effect properties have two values, a magnitude and radius.
+
+				if (count == 2)
+				{
+					int32_t magnitude = 0;
+					int32_t radius = 0;
+
+					if (type == BuildingEffectType::Crime)
+					{
+						const uint8_t* pData = pEffectPropertyVariant->RefUint8();
+
+						magnitude = pData[0];
+						radius = pData[1];
+					}
+					else
+					{
+						const int32_t* pData = pEffectPropertyVariant->RefSint32();
+
+						magnitude = pData[0];
+						radius = pData[1];
+					}
+
+					cRZBaseString formattedMagnitude;
+					cRZBaseString formattedRadius;
+
+					if (MakeNumberStringForCurrentLanguage(magnitude, formattedMagnitude) &&
+						MakeNumberStringForCurrentLanguage(radius, formattedRadius))
+					{
+						const std::string_view magnitudePrefix("Magnitude=");
+						const std::string_view radiusPrefix(" | Radius=");
+
+						outReplacement.Append(magnitudePrefix.data(), magnitudePrefix.size());
+						outReplacement.Append(formattedMagnitude);
+						outReplacement.Append(radiusPrefix.data(), radiusPrefix.size());
+						outReplacement.Append(formattedRadius);
+						result = true;
+					}
+				}
+			}
+		}
+
+		return result;
+	}
 }
 
 typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 41> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 45> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
@@ -894,6 +967,10 @@ static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 41> to
 	{ "water_building_source", GetWaterBuildingSource },
 	{ "cap_relief", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapReliefToken(ctx, dest, TokenSeparatorType::Pipe); } },
 	{ "cap_relief_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapReliefToken(ctx, dest, TokenSeparatorType::NewLine); } },
+	{ "crime_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Crime); } },
+	{ "landmark_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Landmark); } },
+	{ "park_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Park); } },
+	{ "mayor_rating_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::MayorRating); } },
 };
 
 typedef bool (*ParameterizedTokenDataCallback)(
