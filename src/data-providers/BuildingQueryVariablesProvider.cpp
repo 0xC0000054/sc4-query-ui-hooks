@@ -118,6 +118,16 @@ namespace
 		Money
 	};
 
+	// The currency symbol/Simolean string is the hexadecimal-escaped UTF-8
+	// encoding of the section symbol (§).
+	// The \xC2 value is the first byte in a two byte UTF-8 sequence, and the
+	// \xA7 value is the Unicode value of the section symbol (U+00A7).
+	// See the following page for more information on UTF-8 encoding:
+	// https://www.fileformat.info/info/unicode/utf8.htm
+	//
+	// UTF-8 is SC4's native string encoding.
+	#define SECTION_SYMBOL_UTF8 "\xC2\xA7"
+
 	bool MakeNumberStringForCurrentLanguage(
 		int64_t number,
 		cIGZString& destination,
@@ -139,16 +149,7 @@ namespace
 				}
 				else if (type == NumberType::Money)
 				{
-					// The currently symbol string is the hexadecimal-escaped UTF-8 encoding
-					// of the section symbol (§).
-					// The \xC2 value is the first byte in a two byte UTF-8 sequence, and the
-					// \xA7 value is the Unicode value of the section symbol (U+00A7).
-					// See the following page for more information on UTF-8 encoding:
-					// https://www.fileformat.info/info/unicode/utf8.htm
-					//
-					// UTF-8 is SC4's native string encoding.
-
-					static const cRZBaseString currencySymbol("\xC2\xA7");
+					static const cRZBaseString currencySymbol(SECTION_SYMBOL_UTF8);
 
 					result = pLU->MakeMoneyString(number, destination, &currencySymbol);
 				}
@@ -244,7 +245,7 @@ namespace
 		return result;
 	}
 
-	enum class BuildingStylesTokenSeparatorType
+	enum class TokenSeparatorType
 	{
 		// A pipe character, e.g. Chicago 1890 | New York 1940.
 		Pipe,
@@ -255,13 +256,13 @@ namespace
 		NewLine
 	};
 
-	std::string_view GetBuildingStylesTokenSeparator(BuildingStylesTokenSeparatorType type)
+	std::string_view GetTokenSeparator(TokenSeparatorType type)
 	{
 		switch (type)
 		{
-		case BuildingStylesTokenSeparatorType::NewLine:
+		case TokenSeparatorType::NewLine:
 			return "\n"sv;
-		case BuildingStylesTokenSeparatorType::Pipe:
+		case TokenSeparatorType::Pipe:
 		default:
 			return " | "sv;
 		}
@@ -270,13 +271,13 @@ namespace
 	bool GetBuildingStylesToken(
 		const UnknownTokenContext* context,
 		cIGZString& outReplacement,
-		BuildingStylesTokenSeparatorType type)
+		TokenSeparatorType type)
 	{
 		bool result = false;
 
 		if (context && context->pOccupant)
 		{
-			const std::string_view separator = GetBuildingStylesTokenSeparator(type);
+			const std::string_view separator = GetTokenSeparator(type);
 
 			cRZAutoRefCount<cIBuildingStyleInfo2> pBuildingStyleInfo;
 
@@ -723,19 +724,140 @@ namespace
 
 		return result;
 	}
+
+	static constexpr frozen::unordered_map <uint32_t, frozen::string, 9> capReliefNames =
+	{
+		// The C++ preprocessor will concentrate the string literals into a single string at compile time.
+
+		{0x00001810, "R" SECTION_SYMBOL_UTF8},
+		{0x00001820, "R" SECTION_SYMBOL_UTF8 SECTION_SYMBOL_UTF8},
+		{0x00001830, "R" SECTION_SYMBOL_UTF8 SECTION_SYMBOL_UTF8 SECTION_SYMBOL_UTF8},
+		{0x00003b20, "Co" SECTION_SYMBOL_UTF8 SECTION_SYMBOL_UTF8},
+		{0x00003b30, "Co" SECTION_SYMBOL_UTF8 SECTION_SYMBOL_UTF8 SECTION_SYMBOL_UTF8},
+		{0x00004900, "I-R"},
+		{0x00004a00, "I-D"},
+		{0x00004b00, "I-M"},
+		{0x00004c00, "I-HT"},
+	};
+
+	bool GetCapReliefToken(const UnknownTokenContext* context, cIGZString& outReplacement, TokenSeparatorType type)
+	{
+		outReplacement.Erase(0, outReplacement.Strlen());
+
+		if (context && context->pOccupant)
+		{
+			constexpr uint32_t kDemandSatisfiedPropertyID = 0x27812840;
+			constexpr uint32_t kDemandSatisfiedFloatPropertyID = 0x27812842;
+
+			const cISCPropertyHolder* pPropertyHolder = context->pOccupant->AsPropertyHolder();
+
+			const cISCProperty* pDemandSatisfiedProperty = pPropertyHolder->GetProperty(kDemandSatisfiedPropertyID);
+
+			if (pDemandSatisfiedProperty)
+			{
+				const std::string_view separator = GetTokenSeparator(type);
+
+				const cIGZVariant* pDemandSatisfiedPropertyVariant = pDemandSatisfiedProperty->GetPropertyValue();
+
+				const uint32_t* pDemandSatisfiedPropertyValues = pDemandSatisfiedPropertyVariant->RefUint32();
+
+				const cISCProperty* pDemandSatisfiedFloatProperty = pPropertyHolder->GetProperty(kDemandSatisfiedFloatPropertyID);
+
+				if (pDemandSatisfiedFloatProperty)
+				{
+					// Maxis added a Demand Satisfied (float) property, but it doesn't appear to be used in the game's exemplars.
+					// We check for it anyway to ensure our code reports the demand values the game is reading.
+
+					const cIGZVariant* pDemandSatisfiedFloatPropertyVariant = pDemandSatisfiedFloatProperty->GetPropertyValue();
+
+					const float* pDemandSatisfiedFloatPropertyValues = pDemandSatisfiedFloatPropertyVariant->RefFloat32();
+					const uint32_t count = pDemandSatisfiedFloatPropertyVariant->GetCount();
+
+					for (uint32_t i = 0; i < count; i++)
+					{
+						uint32_t demandID = pDemandSatisfiedPropertyValues[i * 2];
+						float demandValueFloat = pDemandSatisfiedFloatPropertyValues[i];
+
+						if (i > 0)
+						{
+							outReplacement.Append(separator.data(), separator.size());
+						}
+
+						char buffer[128]{};
+						auto nameEntry = capReliefNames.find(demandID);
+
+						if (nameEntry != capReliefNames.end())
+						{
+							const frozen::string& name = nameEntry->second;
+
+							outReplacement.Append(name.data(), name.size());
+							outReplacement.Append("=", 1);
+
+							int length = std::snprintf(buffer, sizeof(buffer), "%f", demandValueFloat);
+
+							outReplacement.Append(buffer, length);
+						}
+						else
+						{
+							int length = std::snprintf(buffer, sizeof(buffer), "0x%08x=%f", demandID, demandValueFloat);
+
+							outReplacement.Append(buffer, length);
+						}
+					}
+				}
+				else
+				{
+					const uint32_t count = pDemandSatisfiedPropertyVariant->GetCount();
+
+					for (uint32_t i = 0; i < count; i += 2)
+					{
+						uint32_t demandID = pDemandSatisfiedPropertyValues[i];
+						uint32_t demandValue = pDemandSatisfiedPropertyValues[i + 1];
+
+						if (i > 0)
+						{
+							outReplacement.Append(separator.data(), separator.size());
+						}
+
+						auto nameEntry = capReliefNames.find(demandID);
+						cRZBaseString formattedAmount;
+
+						if (nameEntry != capReliefNames.end() && MakeNumberStringForCurrentLanguage(demandValue, formattedAmount))
+						{
+							const frozen::string& name = nameEntry->second;
+
+							outReplacement.Append(name.data(), name.size());
+							outReplacement.Append("=", 1);
+							outReplacement.Append(formattedAmount);
+						}
+						else
+						{
+							char buffer[128]{};
+
+							int length = std::snprintf(buffer, sizeof(buffer), "0x%08x=%u", demandID, demandValue);
+
+							outReplacement.Append(buffer, length);
+						}
+					}
+				}
+			}
+		}
+
+		return outReplacement.Strlen() > 0;
+	}
 }
 
 typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 39> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 41> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
 	{ "building_is_w2w", GetBuildingWallToWallToken },
-	{ "building_styles", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, BuildingStylesTokenSeparatorType::Pipe); } },
-	{ "building_style_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, BuildingStylesTokenSeparatorType::NewLine); } },
+	{ "building_styles", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, TokenSeparatorType::Pipe); } },
+	{ "building_style_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, TokenSeparatorType::NewLine); } },
 	{ "building_summary", GetBuildingSummaryToken },
 	{ "growth_stage", GetGrowthStageToken },
 	{ "mysim_name", GetMySimResidentName },
@@ -770,6 +892,8 @@ static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 39> to
 	{ "iht_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
 	{ "iht_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
 	{ "water_building_source", GetWaterBuildingSource },
+	{ "cap_relief", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapReliefToken(ctx, dest, TokenSeparatorType::Pipe); } },
+	{ "cap_relief_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapReliefToken(ctx, dest, TokenSeparatorType::NewLine); } },
 };
 
 typedef bool (*ParameterizedTokenDataCallback)(

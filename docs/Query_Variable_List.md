@@ -18,6 +18,8 @@ The query variables come in two forms, one with required arguments and one witho
 | building_styles | Shows a building's styles in a pipe-separated list. |
 | building_style_lines | Shows a list of the building's styles, with each style after the first one on its own line.<br>E.g:`Chicago 1890`<br>`New York 1940` |
 | building_summary | The building summary the game shows in its hover tool tips. E.g: `Low-Wealth Residential` |
+| cap_relief | Shows the cap relief types that the building provides in a pipe-separated list. |
+| cap_relief_lines | Shows a list of cap relief types that the building provides, with each style after the first one on its own line. |
 | growth_stage | The growth stage of the building's lot. |
 | jobs_low_wealth | The building's current low wealth jobs rounded to the nearest whole number. |
 | jobs_medium_wealth | The building's current medium wealth jobs rounded to the nearest whole number. |
