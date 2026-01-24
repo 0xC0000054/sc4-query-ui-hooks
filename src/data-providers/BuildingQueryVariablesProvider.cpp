@@ -918,13 +918,93 @@ namespace
 
 		return result;
 	}
+
+	enum class BuildingPollutionType : uint32_t
+	{
+		// Values are the property id of the exemplar property.
+
+		AtCenter = 0x27812851,
+		Radii = 0x68ee9764
+	};
+
+	bool GetBuildingPollutionToken(
+		const UnknownTokenContext* context,
+		cIGZString& outReplacement,
+		BuildingPollutionType type)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant)
+		{
+			const cISCPropertyHolder* pPropertyHolder = context->pOccupant->AsPropertyHolder();
+
+			const cISCProperty* pPollutionProperty = pPropertyHolder->GetProperty(static_cast<uint32_t>(type));
+
+			if (pPollutionProperty)
+			{
+				const cIGZVariant* pPollutionPropertyVariant = pPollutionProperty->GetPropertyValue();
+
+				int32_t air = 0;
+				int32_t water = 0;
+				int32_t garbage = 0;
+				int32_t radiation = 0;
+
+				if (type == BuildingPollutionType::Radii)
+				{
+					const float* pData = pPollutionPropertyVariant->RefFloat32();
+
+					air = lroundf(pData[0]);
+					water = lroundf(pData[1]);
+					garbage = lroundf(pData[2]);
+					radiation = lroundf(pData[3]);
+				}
+				else
+				{
+					const int32_t* pData = pPollutionPropertyVariant->RefSint32();
+
+					air = pData[0];
+					water = pData[1];
+					garbage = pData[2];
+					radiation = pData[3];
+				}
+
+				cRZBaseString formattedAir;
+				cRZBaseString formattedWater;
+				cRZBaseString formattedGarbage;
+				cRZBaseString formattedRadiation;
+
+				if (MakeNumberStringForCurrentLanguage(air, formattedAir) &&
+					MakeNumberStringForCurrentLanguage(water, formattedWater) &&
+					MakeNumberStringForCurrentLanguage(garbage, formattedGarbage) &&
+					MakeNumberStringForCurrentLanguage(radiation, formattedRadiation))
+				{
+					const std::string_view airPrefix("Air: ");
+					const std::string_view waterPrefix(" Water: ");
+					const std::string_view garbagePrefix(" Garbage: ");
+					const std::string_view radiationPrefix(" Radiation: ");
+
+					outReplacement.Append(airPrefix.data(), airPrefix.size());
+					outReplacement.Append(formattedAir);
+					outReplacement.Append(waterPrefix.data(), waterPrefix.size());
+					outReplacement.Append(formattedWater);
+					outReplacement.Append(garbagePrefix.data(), garbagePrefix.size());
+					outReplacement.Append(formattedGarbage);
+					outReplacement.Append(radiationPrefix.data(), radiationPrefix.size());
+					outReplacement.Append(formattedRadiation);
+					result = true;
+				}
+			}
+		}
+
+		return result;
+	}
 }
 
 typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 45> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 47> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
@@ -971,6 +1051,8 @@ static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 45> to
 	{ "landmark_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Landmark); } },
 	{ "park_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Park); } },
 	{ "mayor_rating_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::MayorRating); } },
+	{ "pollution_at_center", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::AtCenter); } },
+	{ "pollution_radii", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::Radii); } },
 };
 
 typedef bool (*ParameterizedTokenDataCallback)(

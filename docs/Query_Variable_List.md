@@ -28,6 +28,8 @@ The query variables come in two forms, one with required arguments and one witho
 | landmark_effect | A string describing the magnitude and radius of the effect. |
 | mayor_rating_effect | A string describing the magnitude and radius of the effect. |
 | park_effect | A string describing the magnitude and radius of the effect. |
+| pollution_at_center | A string describing the air, water, garbage, and radiation pollution generated at center of the area of effect. |
+| pollution_radii | A string describing the radii of the generated air, water, garbage, and radiation pollution. |
 | travel_jobs_low_wealth | The number of low wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots.  |
 | travel_jobs_medium_wealth | The number of medium wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots. |
 | travel_jobs_high_wealth | The number of high wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots. |
