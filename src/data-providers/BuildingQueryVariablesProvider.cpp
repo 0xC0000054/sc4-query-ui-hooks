@@ -1095,7 +1095,7 @@ void BuildingQueryVariablesProvider::DebugLogDetokenizedValue(cIGZString const& 
 
 	if (pStringDetokenizer->Detokenize(token, result))
 	{
-		DebugUtil::PrintLineToDebugOutputFormatted("%s = %s", token.ToChar(), result.ToChar());
+		DebugUtil::PrintLineToDebugOutputFormattedUtf8("%s = %s", token.ToChar(), result.ToChar());
 	}
 }
 

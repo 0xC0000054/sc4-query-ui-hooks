@@ -21,12 +21,15 @@
 
 #pragma once
 
+class cIGZString;
 class cISC4Occupant;
 
 namespace DebugUtil
 {
 	void PrintLineToDebugOutput(const char* const line);
+	void PrintLineToDebugOutputUtf8(const char* const line);
 	void PrintLineToDebugOutputFormatted(const char* const format, ...);
+	void PrintLineToDebugOutputFormattedUtf8(const char* const format, ...);
 
 	void PrintOccupantNameToDebugOutput(cISC4Occupant* pOccupant);
 }
