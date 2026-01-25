@@ -23,12 +23,14 @@ The query variables come in two forms, one with required arguments and one witho
 | cap_relief | Shows the cap relief types that the building provides in a pipe-separated list. |
 | cap_relief_lines | Shows a list of cap relief types that the building provides, with each style after the first one on its own line. |
 | crime_effect | A string describing the magnitude and radius of the effect. |
+| flammability | The occupant's flammability rating. |
 | growth_stage | The growth stage of the building's lot. |
 | jobs_low_wealth | The building's current low wealth jobs rounded to the nearest whole number. |
 | jobs_medium_wealth | The building's current medium wealth jobs rounded to the nearest whole number. |
 | jobs_high_wealth | The building's current high wealth jobs rounded to the nearest whole number. |
 | landmark_effect | A string describing the magnitude and radius of the effect. |
 | mayor_rating_effect | A string describing the magnitude and radius of the effect. |
+| max_fire_stage | The highest fire stage this occupant can reach (0-5). |
 | park_effect | A string describing the magnitude and radius of the effect. |
 | pollution_at_center | A string describing the air, water, garbage, and radiation pollution generated at center of the area of effect. |
 | pollution_radii | A string describing the radii of the generated air, water, garbage, and radiation pollution. |

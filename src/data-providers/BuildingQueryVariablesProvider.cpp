@@ -999,7 +999,7 @@ namespace
 		return result;
 	}
 
-	bool GetBuildingWealthToken(UnknownTokenContext* context,	cIGZString& outReplacement)
+	bool GetBuildingWealthToken(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
 		bool result = false;
 
@@ -1074,13 +1074,36 @@ namespace
 
 		return result;
 	}
+
+	bool GetUint8NumberToken(
+		const UnknownTokenContext* context,
+		cIGZString& outReplacement,
+		uint32_t propertyID)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant)
+		{
+			uint8_t value = 0;
+
+			if (SCPropertyUtil::GetPropertyValue(
+				context->pOccupant->AsPropertyHolder(),
+				propertyID,
+				value))
+			{
+				result = MakeNumberStringForCurrentLanguage(value, outReplacement);
+			}
+		}
+
+		return result;
+	}
 }
 
 typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 49> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 51> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
@@ -1131,6 +1154,8 @@ static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 49> to
 	{ "pollution_radii", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::Radii); } },
 	{ "building_wealth", GetBuildingWealthToken },
 	{ "bulldoze_cost", GetBulldozeCostToken },
+	{ "flammability", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint8NumberToken(ctx, dest, 0x29244db5); } },
+	{ "max_fire_stage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint8NumberToken(ctx, dest, 0x49beda31); } },
 };
 
 typedef bool (*ParameterizedTokenDataCallback)(
