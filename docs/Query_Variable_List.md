@@ -31,13 +31,16 @@ The query variables come in two forms, one with required arguments and one witho
 | landmark_effect | A string describing the magnitude and radius of the effect. |
 | mayor_rating_effect | A string describing the magnitude and radius of the effect. |
 | max_fire_stage | The highest fire stage this occupant can reach (0-5). |
+| mysim_name | The name of the MySim that lives in the selected residence. |
 | park_effect | A string describing the magnitude and radius of the effect. |
 | pollution_at_center | A string describing the air, water, garbage, and radiation pollution generated at center of the area of effect. |
 | pollution_radii | A string describing the radii of the generated air, water, garbage, and radiation pollution. |
+| power_consumed | The power consumed by the building. |
 | travel_jobs_low_wealth | The number of low wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots.  |
 | travel_jobs_medium_wealth | The number of medium wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots. |
 | travel_jobs_high_wealth | The number of high wealth workers that travel to the specified lot. Industrial lots can have one lot providing road access for other industrial lots. |
-| mysim_name | The name of the MySim that lives in the selected residence. |
+| water_building_source | The water source for a water producing building. |
+| water_consumed | The water consumed by the building. |
 | r1_occupancy | The current number of R§ occupants. |
 | r1_capacity | The R§ occupant capacity. |
 | r2_occupancy | The current number of R§§ occupants. |
@@ -62,7 +65,6 @@ The query variables come in two forms, one with required arguments and one witho
 | im_capacity | The I-M occupant capacity. |
 | iht_occupancy | The current number of I-HT occupants. |
 | iht_capacity | The I-HT occupant capacity. |
-| water_building_source | The water source for a water producing building. |
 
 Multiple `*_occupancy` and `*_capacity` variables can be combined in a LTEXT query to show the filled/available occupancy.
 E.g. `#cs1_occupancy#/#cs1_capacity#`.
