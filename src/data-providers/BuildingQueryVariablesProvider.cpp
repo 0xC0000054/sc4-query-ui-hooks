@@ -998,13 +998,89 @@ namespace
 
 		return result;
 	}
+
+	bool GetBuildingWealthToken(UnknownTokenContext* context,	cIGZString& outReplacement)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant)
+		{
+			cISC4Lot* pOccupantLot = GetOccupantLot(context);
+
+			if (pOccupantLot)
+			{
+				cISC4BuildingOccupant::WealthType wealth = cISC4BuildingOccupant::WealthType::None;
+				const uint32_t buildingType = pOccupantLot->GetBuildingType(false);
+
+				if (buildingType == 0)
+				{
+					wealth = static_cast<cISC4BuildingOccupant::WealthType>(pOccupantLot->GetOccupantWealth());
+				}
+				else
+				{
+					cISC4BuildingOccupant* pBuildingOccupant = pOccupantLot->GetBuilding();
+
+					if (pBuildingOccupant)
+					{
+						const cISC4BuildingOccupant::BuildingProfile& profile = pBuildingOccupant->GetBuildingProfile();
+
+						wealth = profile.wealth;
+					}
+				}
+
+				switch (wealth)
+				{
+				case cISC4BuildingOccupant::WealthType::None:
+					outReplacement.FromChar("None");
+					result = true;
+					break;
+				case cISC4BuildingOccupant::WealthType::Low:
+					outReplacement.FromChar("Low Wealth");
+					result = true;
+					break;
+				case cISC4BuildingOccupant::WealthType::Medium:
+					outReplacement.FromChar("Medium Wealth");
+					result = true;
+					break;
+				case cISC4BuildingOccupant::WealthType::High:
+					outReplacement.FromChar("High Wealth");
+					result = true;
+					break;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	bool GetBulldozeCostToken(UnknownTokenContext* context, cIGZString& outReplacement)
+	{
+		bool result = false;
+
+		if (context && context->pOccupant)
+		{
+			constexpr uint32_t kBulldozeCostPropertyID = 0x099afacd;
+
+			int64_t value = 0;
+
+			if (SCPropertyUtil::GetPropertyValue(
+				context->pOccupant->AsPropertyHolder(),
+				kBulldozeCostPropertyID,
+				value))
+			{
+				result = MakeNumberStringForCurrentLanguage(value, outReplacement, NumberType::Money);
+			}
+		}
+
+		return result;
+	}
 }
 
 typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
 using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 47> tokenDataCallbacks =
+static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 49> tokenDataCallbacks =
 {
 	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
 	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
@@ -1053,6 +1129,8 @@ static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 47> to
 	{ "mayor_rating_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::MayorRating); } },
 	{ "pollution_at_center", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::AtCenter); } },
 	{ "pollution_radii", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::Radii); } },
+	{ "building_wealth", GetBuildingWealthToken },
+	{ "bulldoze_cost", GetBulldozeCostToken },
 };
 
 typedef bool (*ParameterizedTokenDataCallback)(
