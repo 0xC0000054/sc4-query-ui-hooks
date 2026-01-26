@@ -183,7 +183,7 @@ namespace
 		cIGZString& outReplacement,
 		BuildingFundingType type)
 	{
-		bool result = false;
+		int64_t value = 0;
 
 		if (context && context->pCity && context->pOccupant)
 		{
@@ -195,8 +195,6 @@ namespace
 
 				if (pBudgetSim->GetBudgetItemInfo(context->pOccupant->AsPropertyHolder(), budgetItems))
 				{
-					int64_t value = 0;
-
 					const size_t count = budgetItems.size();
 
 					for (size_t i = 0; i < count && value == 0; i++)
@@ -233,16 +231,11 @@ namespace
 							}
 						}
 					}
-
-					result = MakeNumberStringForCurrentLanguage(
-						value,
-						outReplacement,
-						NumberType::Money);
 				}
 			}
 		}
 
-		return result;
+		return MakeNumberStringForCurrentLanguage(value, outReplacement, NumberType::Money);
 	}
 
 	enum class TokenSeparatorType
@@ -317,6 +310,12 @@ namespace
 					result = true;
 				}
 			}
+		}
+
+		if (!result || outReplacement.Strlen() == 0)
+		{
+			outReplacement.FromChar("None");
+			result = true;
 		}
 
 		return result;
@@ -447,17 +446,16 @@ namespace
 		cIGZString& outReplacement,
 		cISC4BuildingDevelopmentSimulator::DeveloperType developerType)
 	{
-		bool result = false;
+		uint16_t capacity = 0;
 
 		cISC4Lot* pLot = GetOccupantLot(context);
 
 		if (pLot)
 		{
-			uint16_t capacity = pLot->GetCapacity(developerType, true);
-			result = MakeNumberStringForCurrentLanguage(capacity, outReplacement);
+			capacity = pLot->GetCapacity(developerType, true);
 		}
 
-		return result;
+		return MakeNumberStringForCurrentLanguage(capacity, outReplacement);
 	}
 
 	bool GetOccupancyToken(
@@ -465,23 +463,20 @@ namespace
 		cIGZString& outReplacement,
 		cISC4BuildingDevelopmentSimulator::DeveloperType developerType)
 	{
-		bool result = false;
+		uint16_t occupancy = 0;
 
 		cISC4Lot* pLot = GetOccupantLot(context);
 
 		if (pLot)
 		{
-			uint16_t occupancy = pLot->GetPopulation(developerType);
-			result = MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
+			occupancy = pLot->GetPopulation(developerType);
 		}
 
-		return result;
+		return MakeNumberStringForCurrentLanguage(occupancy, outReplacement);
 	}
 
 	bool GetGrowthStageToken(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
-		bool result = false;
-
 		cISC4Lot* pLot = GetOccupantLot(context);
 
 		if (pLot)
@@ -491,11 +486,12 @@ namespace
 			if (pLotConfiguration)
 			{
 				uint8_t growthStage = pLotConfiguration->GetGrowthStage();
-				result = MakeNumberStringForCurrentLanguage(growthStage, outReplacement);
+				return MakeNumberStringForCurrentLanguage(growthStage, outReplacement);
 			}
 		}
 
-		return result;
+		outReplacement.FromChar("Unknown");
+		return true;
 	}
 
 	enum class JobType
@@ -684,6 +680,11 @@ namespace
 					break;
 				}
 			}
+			else
+			{
+				outReplacement.FromChar("None");
+				result = true;
+			}
 		}
 
 		return result;
@@ -695,7 +696,7 @@ namespace
 		UnknownTokenContext* context,
 		cIGZString& destination)
 	{
-		bool result = false;
+		int64_t cost = 0;
 
 		if (context && context->pOccupant && context->pCity)
 		{
@@ -715,14 +716,14 @@ namespace
 
 						if (pBudgetSim->GetBudgetItemForPurpose(context->pOccupant->AsPropertyHolder(), purposeID, budgetItem))
 						{
-							result = MakeNumberStringForCurrentLanguage(budgetItem.cost, destination, NumberType::Money);
+							cost = budgetItem.cost;
 						}
 					}
 				}
 			}
 		}
 
-		return result;
+		return MakeNumberStringForCurrentLanguage(cost, destination, NumberType::Money);
 	}
 
 	static constexpr frozen::unordered_map <uint32_t, frozen::string, 9> capReliefNames =
@@ -742,8 +743,6 @@ namespace
 
 	bool GetCapReliefToken(const UnknownTokenContext* context, cIGZString& outReplacement, TokenSeparatorType type)
 	{
-		outReplacement.Erase(0, outReplacement.Strlen());
-
 		if (context && context->pOccupant)
 		{
 			constexpr uint32_t kDemandSatisfiedPropertyID = 0x27812840;
@@ -841,6 +840,10 @@ namespace
 					}
 				}
 			}
+			else
+			{
+				outReplacement.FromChar("None");
+			}
 		}
 
 		return outReplacement.Strlen() > 0;
@@ -913,6 +916,11 @@ namespace
 						result = true;
 					}
 				}
+			}
+			else
+			{
+				outReplacement.FromChar("None");
+				result = true;
 			}
 		}
 
@@ -994,6 +1002,11 @@ namespace
 					result = true;
 				}
 			}
+			else
+			{
+				outReplacement.FromChar("None");
+				result = true;
+			}
 		}
 
 		return result;
@@ -1001,8 +1014,6 @@ namespace
 
 	bool GetBuildingWealthToken(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
-		bool result = false;
-
 		if (context && context->pOccupant)
 		{
 			cISC4Lot* pOccupantLot = GetOccupantLot(context);
@@ -1032,47 +1043,42 @@ namespace
 				{
 				case cISC4BuildingOccupant::WealthType::None:
 					outReplacement.FromChar("None");
-					result = true;
-					break;
+					return true;
 				case cISC4BuildingOccupant::WealthType::Low:
 					outReplacement.FromChar("Low Wealth");
-					result = true;
-					break;
+					return true;
 				case cISC4BuildingOccupant::WealthType::Medium:
 					outReplacement.FromChar("Medium Wealth");
-					result = true;
-					break;
+					return true;
 				case cISC4BuildingOccupant::WealthType::High:
 					outReplacement.FromChar("High Wealth");
-					result = true;
-					break;
+					return true;
 				}
 			}
 		}
 
-		return result;
+		outReplacement.FromChar("None");
+		return true;
 	}
 
 	bool GetBulldozeCostToken(UnknownTokenContext* context, cIGZString& outReplacement)
 	{
-		bool result = false;
+		int64_t cost = 0;
 
 		if (context && context->pOccupant)
 		{
 			constexpr uint32_t kBulldozeCostPropertyID = 0x099afacd;
 
-			int64_t value = 0;
-
-			if (SCPropertyUtil::GetPropertyValue(
+			if (!SCPropertyUtil::GetPropertyValue(
 				context->pOccupant->AsPropertyHolder(),
 				kBulldozeCostPropertyID,
-				value))
+				cost))
 			{
-				result = MakeNumberStringForCurrentLanguage(value, outReplacement, NumberType::Money);
+				cost = 0;
 			}
 		}
 
-		return result;
+		return MakeNumberStringForCurrentLanguage(cost, outReplacement, NumberType::Money);
 	}
 
 	bool GetUint8NumberToken(
@@ -1080,22 +1086,20 @@ namespace
 		cIGZString& outReplacement,
 		uint32_t propertyID)
 	{
-		bool result = false;
+		uint8_t value = 0;
 
 		if (context && context->pOccupant)
 		{
-			uint8_t value = 0;
-
-			if (SCPropertyUtil::GetPropertyValue(
+			if (!SCPropertyUtil::GetPropertyValue(
 				context->pOccupant->AsPropertyHolder(),
 				propertyID,
 				value))
 			{
-				result = MakeNumberStringForCurrentLanguage(value, outReplacement);
+				value = 0;
 			}
 		}
 
-		return result;
+		return MakeNumberStringForCurrentLanguage(value, outReplacement);
 	}
 
 	bool GetUint32NumberToken(
@@ -1103,22 +1107,20 @@ namespace
 		cIGZString& outReplacement,
 		uint32_t propertyID)
 	{
-		bool result = false;
+		uint32_t value = 0;
 
 		if (context && context->pOccupant)
 		{
-			uint32_t value = 0;
-
 			if (SCPropertyUtil::GetPropertyValue(
 				context->pOccupant->AsPropertyHolder(),
 				propertyID,
 				value))
 			{
-				result = MakeNumberStringForCurrentLanguage(value, outReplacement);
+				value = 0;
 			}
 		}
 
-		return result;
+		return MakeNumberStringForCurrentLanguage(value, outReplacement);
 	}
 }
 
