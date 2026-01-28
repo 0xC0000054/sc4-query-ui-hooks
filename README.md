@@ -47,8 +47,8 @@ to be for the entire tile instead of varying per-cell.
 
 #### Pollution Terrain Query
 
-This mode is accessed by holding the `Ctrl` key. It shows the flammability, land value, and pollution (air, water,
-garbage, and radiation).    
+This mode is accessed by holding the `Ctrl` key. It shows the flammability, land value, mayor rating, and pollution
+(air, water, garbage, and radiation) for the selected cell.    
 ![Pollution Terrain Query Tool Tip](images/PollutionTerrainQuery.jpg)
 
 ### Advanced Query Tool Tips

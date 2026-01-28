@@ -86,6 +86,7 @@ NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer = nullptr;
 PropQueryToolTipHookServer* spPropQueryToolTipHookServer = nullptr;
 
 cRZAutoRefCount<cIGZLanguageManager> spLanguageManager;
+cISC4AuraSimulator* spAuraSimulator = nullptr;
 cISC4FlammabilitySimulator* spFlammabilitySimulator = nullptr;
 cISC4LandValueSimulator* spLandValueSimulator = nullptr;
 cISC4PollutionSimulator* spPollutionSimulator = nullptr;
@@ -202,6 +203,7 @@ public:
 
 		if (pCity)
 		{
+			spAuraSimulator = pCity->GetAuraSimulator();
 			spFlammabilitySimulator = pCity->GetFlammabilitySimulator();
 			spLandValueSimulator = pCity->GetLandValueSimulator();
 			spPollutionSimulator = pCity->GetPollutionSimulator();
@@ -214,6 +216,7 @@ public:
 
 	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
 	{
+		spAuraSimulator = nullptr;
 		spFlammabilitySimulator = nullptr;
 		spLandValueSimulator = nullptr;
 		spPollutionSimulator = nullptr;

@@ -20,6 +20,7 @@
  */
 
 #include "TerrainQueryHooks.h"
+#include "cISC4AuraSimulator.h"
 #include "cISC4FlammabilitySimulator.h"
 #include "cISC4LandValueSimulator.h"
 #include "cISC4PollutionSimulator.h"
@@ -175,6 +176,11 @@ namespace
 					break;
 				}
 
+				int8_t mayorRating = GetSimGridCellValue(
+					spAuraSimulator->GetAuraGrid(),
+					cellX,
+					cellZ);
+
 				int32_t airPollution = 0;
 				int32_t waterPollution = 0;
 				int32_t garbagePollution = 0;
@@ -186,9 +192,9 @@ namespace
 
 				result = RealRZStringSprintf(
 					rzStringThisPtr,
-					"x=%f y=%f z=%f\ncell x=%d cell z=%d flam=%d\n"
-					"land value %d:%d (%s) pollution:\n"
-					"air=%d water=%d garbage=%d rad?=%d",
+					"x=%f y=%f z=%f\ncell x=%d cell z=%d flam=%u\n"
+					"land value %u:%u (%s) mayor rating=%d\n"
+					"pollution: air=%d water=%d garbage=%d rad?=%d",
 					x,
 					y,
 					z,
@@ -198,6 +204,7 @@ namespace
 					intrinsicLandValue,
 					totalLandValue,
 					landValueDescription,
+					mayorRating,
 					airPollution,
 					waterPollution,
 					garbagePollution,
