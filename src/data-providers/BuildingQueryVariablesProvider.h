@@ -23,9 +23,9 @@
 #include "DataProviderBase.h"
 #include "cIBuildingQueryDialogHookTarget.h"
 #include "ISettings.h"
+#include "QueryUILuaExtensions.h"
 
 class cISC4City;
-class cISCStringDetokenizer;
 
 class BuildingQueryVariablesProvider final
 	: public DataProviderBase,
@@ -38,7 +38,6 @@ public:
 	uint32_t AddRef() override;
 	uint32_t Release() override;
 
-	void PostAppInit(cIGZCOM* pCOM);
 	void PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM) override;
 	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM) override;
 
@@ -47,11 +46,10 @@ private:
 	void AfterDialogShown(cISC4Occupant* pOccupant) override;
 
 	void DebugLogTokenizerVariables();
-	void DebugLogDetokenizedValue(cIGZString const& token);
 
 	void LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant);
 
 	const ISettings& settings;
 	cISC4City* pCity;
-	cISCStringDetokenizer* pStringDetokenizer;
+	QueryUILuaExtensions queryUILuaExtensions;
 };

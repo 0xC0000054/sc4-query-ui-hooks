@@ -22,11 +22,14 @@
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cSC4BaseOccupantFilter.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cSCBaseProperty.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SC4UI.cpp" />
+    <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SCLuaUtil.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SCPropertyUtil.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\StringResourceManager.cpp" />
     <ClCompile Include="ClickToCopyOccupantFilter.cpp" />
     <ClCompile Include="data-providers\BuildingQueryVariablesProvider.cpp" />
     <ClCompile Include="data-providers\DataProviderBase.cpp" />
+    <ClCompile Include="data-providers\lua\LuaHelper.cpp" />
+    <ClCompile Include="data-providers\lua\QueryUILuaExtensions.cpp" />
     <ClCompile Include="data-providers\query-tooltip-handlers\FloraQueryToolTipHandler.cpp" />
     <ClCompile Include="data-providers\query-tooltip-handlers\NetworkQueryToolTipHandler.cpp" />
     <ClCompile Include="data-providers\query-tooltip-handlers\PropQueryToolTipHandler.cpp" />
@@ -80,6 +83,8 @@
     <ClInclude Include="ClickToCopyOccupantFilter.h" />
     <ClInclude Include="data-providers\BuildingQueryVariablesProvider.h" />
     <ClInclude Include="data-providers\DataProviderBase.h" />
+    <ClInclude Include="data-providers\lua\LuaHelper.h" />
+    <ClInclude Include="data-providers\lua\QueryUILuaExtensions.h" />
     <ClInclude Include="data-providers\query-tooltip-handlers\FloraQueryToolTipHandler.h" />
     <ClInclude Include="data-providers\query-tooltip-handlers\NetworkQueryToolTipHandler.h" />
     <ClInclude Include="data-providers\query-tooltip-handlers\PropQueryToolTipHandler.h" />
@@ -174,7 +179,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;.\;.\public\include;.\data-providers;.\more-building-styles;.\.\data-providers\query-tooltip-handlers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;..\vendor\SafeInt;.\;.\public\include;.\data-providers;.\more-building-styles;.\data-providers\query-tooltip-handlers;.\data-providers\lua</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <UseFullPaths>false</UseFullPaths>
@@ -200,7 +205,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;.\;.\public\include;.\data-providers;.\more-building-styles;.\.\data-providers\query-tooltip-handlers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;..\vendor\SafeInt;.\;.\public\include;.\data-providers;.\more-building-styles;.\data-providers\query-tooltip-handlers;.\data-providers\lua</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

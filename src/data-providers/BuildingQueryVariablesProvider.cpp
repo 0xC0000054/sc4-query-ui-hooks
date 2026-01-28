@@ -41,7 +41,6 @@
 #include "cISCPropertyHolder.h"
 #include "cISCStringDetokenizer.h"
 #include "cISC4Advisor.h"
-#include "cISC4App.h"
 #include "cISC4BudgetSimulator.h"
 #include "cISC4BuildingDevelopmentSimulator.h"
 #include "cISC4City.h"
@@ -55,6 +54,7 @@
 #include "cRZAutoRefCount.h"
 #include "cRZBaseString.h"
 #include "cS3DVector3.h"
+#include "GlobalSC4InterfacePointers.h"
 #include "GZServPtrs.h"
 #include "SCPropertyUtil.h"
 #include "SC4String.h"
@@ -1265,8 +1265,8 @@ static UnknownTokenContext sCurrentTokenContext;
 
 BuildingQueryVariablesProvider::BuildingQueryVariablesProvider(const ISettings& settings)
 	: settings(settings),
-	  pStringDetokenizer(nullptr),
-	  pCity(nullptr)
+	  pCity(nullptr),
+	  queryUILuaExtensions()
 {
 }
 
@@ -1293,16 +1293,6 @@ uint32_t BuildingQueryVariablesProvider::Release()
 	return DataProviderBase::Release();
 }
 
-void BuildingQueryVariablesProvider::PostAppInit(cIGZCOM* pCOM)
-{
-	cISC4AppPtr pSC4App;
-
-	if (pSC4App)
-	{
-		pStringDetokenizer = pSC4App->GetStringDetokenizer();
-	}
-}
-
 void BuildingQueryVariablesProvider::PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM)
 {
 	pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
@@ -1316,6 +1306,8 @@ void BuildingQueryVariablesProvider::PostCityInit(cIGZMessage2Standard* pStandar
 	{
 		hookServer->AddNotification(this);
 	}
+
+	queryUILuaExtensions.PostCityInit(pCity->GetAdvisorSystem());
 }
 
 void BuildingQueryVariablesProvider::PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM)
@@ -1331,6 +1323,8 @@ void BuildingQueryVariablesProvider::PreCityShutdown(cIGZMessage2Standard* pStan
 	{
 		hookServer->RemoveNotification(this);
 	}
+
+	queryUILuaExtensions.PreCityShutdown();
 }
 
 void BuildingQueryVariablesProvider::BeforeDialogShown(cISC4Occupant* pOccupant)
@@ -1340,25 +1334,29 @@ void BuildingQueryVariablesProvider::BeforeDialogShown(cISC4Occupant* pOccupant)
 		LogBuildingOccupantPluginPath(pOccupant);
 	}
 
-	if (pStringDetokenizer)
+	if (spStringDetokenizer)
 	{
 		sCurrentTokenContext.pOccupant = pOccupant;
 		sCurrentTokenContext.pCity = pCity;
 
-		pStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &sCurrentTokenContext, true);
+		spStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &sCurrentTokenContext, true);
 
 #ifdef _DEBUG
 		DebugLogTokenizerVariables();
 #endif // _DEBUG
 	}
+
+	queryUILuaExtensions.BeforeDialogShown(pOccupant);
 }
 
 void BuildingQueryVariablesProvider::AfterDialogShown(cISC4Occupant* pOccupant)
 {
-	if (pStringDetokenizer)
+	if (spStringDetokenizer)
 	{
-		pStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &sCurrentTokenContext, false);
+		spStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &sCurrentTokenContext, false);
 	}
+
+	queryUILuaExtensions.AfterDialogShown(pOccupant);
 }
 
 void BuildingQueryVariablesProvider::DebugLogTokenizerVariables()
@@ -1369,23 +1367,13 @@ void BuildingQueryVariablesProvider::DebugLogTokenizerVariables()
 		token.Append(entry.first.data(), entry.first.size());
 		token.Append("#", 1);
 
-		DebugLogDetokenizedValue(token);
+		DebugUtil::PrintDetokenizedValueToDebugOutput(token);
 	}
 
 	// Parameterized tokens
 
 	// 0xaa59670c is the Landmark Effect purpose id.
-	DebugLogDetokenizedValue(cRZBaseString("#budget_purpose_type_cost:0xaa59670c#"));
-}
-
-void BuildingQueryVariablesProvider::DebugLogDetokenizedValue(cIGZString const& token)
-{
-	cRZBaseString result;
-
-	if (pStringDetokenizer->Detokenize(token, result))
-	{
-		DebugUtil::PrintLineToDebugOutputFormattedUtf8("%s = %s", token.ToChar(), result.ToChar());
-	}
+	DebugUtil::PrintDetokenizedValueToDebugOutput(cRZBaseString("#budget_purpose_type_cost:0xaa59670c#"));
 }
 
 void BuildingQueryVariablesProvider::LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant)

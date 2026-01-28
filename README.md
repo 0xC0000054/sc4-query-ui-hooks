@@ -26,6 +26,13 @@ The DLL provides a number of new variables that can be used in the LTEXT files
 of a building query dialog in the form of `#variable_name#`.
 See the [Query Variable List page](https://github.com/0xC0000054/sc4-query-ui-hooks/blob/main/docs/Query_Variable_List.md).
 
+#### Lua Function to Read Occupant Properties
+
+A `null45_query_ui_extensions.get_property_value` function is provided to allow query UIs to read occupant exemplar properties.
+This can be used to show properties that are not in the [Query Variable List page](https://github.com/0xC0000054/sc4-query-ui-hooks/blob/main/docs/Query_Variable_List.md),
+or use Lua code to customize the display formatting of the occupant property values.
+See [null45_query_ui_extensions.lua](https://github.com/0xC0000054/sc4-query-ui-hooks/blob/main/dat/null45_query_ui_extensions.lua) for details.
+
 ### Extended Terrain Query
 
 The _TerrainQuery_ command now shows the _x_, _y_, and _z_ variables without truncating to the first decimal place, and the
@@ -128,7 +135,7 @@ The plugin may work on Windows 7 or later with the [Microsoft Visual C++ 2022 x8
 ## Installation
 
 1. Close SimCity 4.
-2. Copy `SC4QueryUIHooks.dll` and `SC4QueryUIHooks.ini` into the top-level of the Plugins folder in the SimCity 4 installation directory or Documents/SimCity 4 directory.
+2. Copy `SC4QueryUIHooks.dll`, `SC4QueryUIHooks.dat`, and `SC4QueryUIHooks.ini` into the top-level of the Plugins folder in the SimCity 4 installation directory or Documents/SimCity 4 directory.
 3. Start SimCity 4.
 
 ## Troubleshooting
@@ -152,6 +159,7 @@ These headers are located in the src/public/include folder.
 [gzcom-dll](https://github.com/nsgomez/gzcom-dll/tree/master) Located in the vendor folder, MIT License.    
 [Windows Implementation Library](https://github.com/microsoft/wil) - MIT License    
 [SC4Fix](https://github.com/nsgomez/sc4fix) - MIT License    
+[SafeInt](https://github.com/dcleblanc/SafeInt) - MIT License    
 [Frozen](https://github.com/serge-sans-paille/frozen) - Apache 2.0 License.    
 [Boost.Algorithm](https://www.boost.org/doc/libs/1_84_0/libs/algorithm/doc/html/index.html) - Boost Software License, Version 1.0.    
 [Boost.PropertyTree](https://www.boost.org/doc/libs/1_84_0/doc/html/property_tree.html) - Boost Software License, Version 1.0.    

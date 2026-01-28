@@ -21,6 +21,9 @@
 
 #include "DebugUtil.h"
 #include "OccupantUtil.h"
+#include "cISCStringDetokenizer.h"
+#include "cRZBaseString.h"
+#include "GlobalSC4InterfacePointers.h"
 #include <memory>
 #include <Windows.h>
 
@@ -153,6 +156,21 @@ void DebugUtil::PrintOccupantNameToDebugOutput(cISC4Occupant* pOccupant)
 	if (OccupantUtil::GetUserVisibleName(pOccupant, name))
 	{
 		PrintLineToDebugOutputUtf8(name->ToChar());
+	}
+#endif // _DEBUG
+}
+
+void DebugUtil::PrintDetokenizedValueToDebugOutput(cIGZString const& token)
+{
+#ifdef _DEBUG
+	if (spStringDetokenizer)
+	{
+		cRZBaseString result;
+
+		if (spStringDetokenizer->Detokenize(token, result))
+		{
+			PrintLineToDebugOutputFormattedUtf8("%s = %s", token.ToChar(), result.ToChar());
+		}
 	}
 #endif // _DEBUG
 }

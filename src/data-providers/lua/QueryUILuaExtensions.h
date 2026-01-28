@@ -21,16 +21,18 @@
 
 #pragma once
 
-class cIGZString;
+class cISC4AdvisorSystem;
 class cISC4Occupant;
 
-namespace DebugUtil
+class QueryUILuaExtensions
 {
-	void PrintLineToDebugOutput(const char* const line);
-	void PrintLineToDebugOutputUtf8(const char* const line);
-	void PrintLineToDebugOutputFormatted(const char* const format, ...);
-	void PrintLineToDebugOutputFormattedUtf8(const char* const format, ...);
+public:
+	QueryUILuaExtensions();
 
-	void PrintOccupantNameToDebugOutput(cISC4Occupant* pOccupant);
-	void PrintDetokenizedValueToDebugOutput(cIGZString const& token);
-}
+	void PostCityInit(cISC4AdvisorSystem* pAdvisorSystem);
+	void PreCityShutdown();
+
+	void BeforeDialogShown(cISC4Occupant* pOccupant);
+	void AfterDialogShown(cISC4Occupant* pOccupant);
+};
+

@@ -89,6 +89,7 @@ cISC4FlammabilitySimulator* spFlammabilitySimulator = nullptr;
 cISC4LandValueSimulator* spLandValueSimulator = nullptr;
 cISC4PollutionSimulator* spPollutionSimulator = nullptr;
 cISC4WeatherSimulator* spWeatherSimulator = nullptr;
+cISCStringDetokenizer* spStringDetokenizer = nullptr;
 
 namespace
 {
@@ -257,6 +258,18 @@ public:
 			for (uint32_t messageID : RequiredNotifications)
 			{
 				pMsgServ->AddNotification(this, messageID);
+			}
+		}
+
+		cIGZApp* const pApp = mpFrameWork->Application();
+
+		if (pApp)
+		{
+			cRZAutoRefCount<cISC4App> pSC4App;
+
+			if (pApp->QueryInterface(GZIID_cISC4App, pSC4App.AsPPVoid()))
+			{
+				spStringDetokenizer = pSC4App->GetStringDetokenizer();
 			}
 		}
 

@@ -25,8 +25,10 @@ class cISC4FlammabilitySimulator;
 class cISC4LandValueSimulator;
 class cISC4PollutionSimulator;
 class cISC4WeatherSimulator;
+class cISCStringDetokenizer;
 
 extern cISC4FlammabilitySimulator* spFlammabilitySimulator;
 extern cISC4LandValueSimulator* spLandValueSimulator;
 extern cISC4PollutionSimulator* spPollutionSimulator;
 extern cISC4WeatherSimulator* spWeatherSimulator;
+extern cISCStringDetokenizer* spStringDetokenizer;
