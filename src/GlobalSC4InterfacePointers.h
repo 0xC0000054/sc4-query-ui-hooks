@@ -20,13 +20,16 @@
  */
 
 #pragma once
+#include "cRZAutoRefCount.h"
 
+class cIGZLanguageManager;
 class cISC4FlammabilitySimulator;
 class cISC4LandValueSimulator;
 class cISC4PollutionSimulator;
 class cISC4WeatherSimulator;
 class cISCStringDetokenizer;
 
+extern cRZAutoRefCount<cIGZLanguageManager> spLanguageManager;
 extern cISC4FlammabilitySimulator* spFlammabilitySimulator;
 extern cISC4LandValueSimulator* spLandValueSimulator;
 extern cISC4PollutionSimulator* spPollutionSimulator;

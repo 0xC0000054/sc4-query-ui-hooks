@@ -55,7 +55,6 @@
 #include "cRZBaseString.h"
 #include "cS3DVector3.h"
 #include "GlobalSC4InterfacePointers.h"
-#include "GZServPtrs.h"
 #include "SCPropertyUtil.h"
 #include "SC4String.h"
 #include "SC4Vector.h"
@@ -135,24 +134,19 @@ namespace
 	{
 		bool result = false;
 
-		cIGZLanguageManagerPtr pLM;
+		cIGZLanguageUtility* pLU = spLanguageManager->GetLanguageUtility(0);
 
-		if (pLM)
+		if (pLU)
 		{
-			cIGZLanguageUtility* pLU = pLM->GetLanguageUtility(pLM->GetCurrentLanguage());
-
-			if (pLU)
+			if (type == NumberType::Number)
 			{
-				if (type == NumberType::Number)
-				{
-					result = pLU->MakeNumberString(number, destination);
-				}
-				else if (type == NumberType::Money)
-				{
-					static const cRZBaseString currencySymbol(SECTION_SYMBOL_UTF8);
+				result = pLU->MakeNumberString(number, destination);
+			}
+			else if (type == NumberType::Money)
+			{
+				static const cRZBaseString currencySymbol(SECTION_SYMBOL_UTF8);
 
-					result = pLU->MakeMoneyString(number, destination, &currencySymbol);
-				}
+				result = pLU->MakeMoneyString(number, destination, &currencySymbol);
 			}
 		}
 

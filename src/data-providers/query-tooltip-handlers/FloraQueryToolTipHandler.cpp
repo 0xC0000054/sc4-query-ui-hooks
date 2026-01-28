@@ -21,17 +21,18 @@
 
 #include "FloraQueryToolTipHandler.h"
 #include "cIFloraQueryToolTipHookServer.h"
+#include "cIGZLanguageManager.h"
 #include "cIGZLanguageUtility.h"
 #include "cISC4City.h"
 #include "cISC4FloraOccupant.h"
 #include "cISC4Occupant.h"
 #include "cISC4Simulator.h"
+#include "GlobalSC4InterfacePointers.h"
 #include "GZStringUtil.h"
 #include "OccupantUtil.h"
-#include "GZServPtrs.h"
 
 FloraQueryToolTipHandler::FloraQueryToolTipHandler()
-	: refCount(0), pDate(nullptr), pLM(nullptr)
+	: refCount(0), pDate(nullptr)
 {
 }
 
@@ -69,24 +70,6 @@ void FloraQueryToolTipHandler::PreCityShutdown(cIGZMessage2Standard* pStandardMs
 		hookServer.AsPPVoid()))
 	{
 		hookServer->RemoveNotification(this);
-	}
-}
-
-void FloraQueryToolTipHandler::PostAppInit(cIGZCOM* pCOM)
-{
-	cIGZLanguageManagerPtr languageManager;
-	pLM = languageManager;
-	languageManager->AddRef();
-}
-
-void FloraQueryToolTipHandler::PreAppShutdown(cIGZCOM* pCOM)
-{
-	cIGZLanguageManager* localLM = pLM;
-	pLM = nullptr;
-
-	if (localLM)
-	{
-		localLM->Release();
 	}
 }
 
@@ -158,7 +141,7 @@ cRZBaseString FloraQueryToolTipHandler::GetDateNumberString(uint32_t dateNumber)
 	uint32_t day = pDate->DayOfMonth();
 	uint32_t year = pDate->Year();
 
-	pLM->GetLanguageUtility(0)->MakeDateString(month, day, year, result, 0);
+	spLanguageManager->GetLanguageUtility(0)->MakeDateString(month, day, year, result, 0);
 
 	return result;
 }

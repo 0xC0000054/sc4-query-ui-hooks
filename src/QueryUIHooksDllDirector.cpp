@@ -85,6 +85,7 @@ FloraQueryToolTipHookServer* spFloraQueryToolTipHookServer = nullptr;
 NetworkQueryToolTipHookServer* spNetworkQueryToolTipHookServer = nullptr;
 PropQueryToolTipHookServer* spPropQueryToolTipHookServer = nullptr;
 
+cRZAutoRefCount<cIGZLanguageManager> spLanguageManager;
 cISC4FlammabilitySimulator* spFlammabilitySimulator = nullptr;
 cISC4LandValueSimulator* spLandValueSimulator = nullptr;
 cISC4PollutionSimulator* spPollutionSimulator = nullptr;
@@ -273,6 +274,9 @@ public:
 			}
 		}
 
+		cIGZLanguageManagerPtr pLM;
+		spLanguageManager = pLM;
+
 		buildingQueryVariablesProvider.PostAppInit(mpCOM);
 		queryToolTipProvider.PostAppInit(mpCOM);
 
@@ -283,6 +287,7 @@ public:
 	{
 		buildingQueryVariablesProvider.PreAppShutdown(mpCOM);
 		queryToolTipProvider.PreAppShutdown(mpCOM);
+		spLanguageManager.Reset();
 
 		return true;
 	}
