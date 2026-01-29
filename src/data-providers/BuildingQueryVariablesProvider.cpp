@@ -1105,7 +1105,7 @@ namespace
 
 		if (context && context->pOccupant)
 		{
-			if (SCPropertyUtil::GetPropertyValue(
+			if (!SCPropertyUtil::GetPropertyValue(
 				context->pOccupant->AsPropertyHolder(),
 				propertyID,
 				value))
