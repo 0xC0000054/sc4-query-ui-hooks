@@ -21,6 +21,6 @@
 
 #pragma once
 
-#define PLUGIN_VERSION_STR	    "2.6.0"
-#define RESOURCE_VERSION         2,6,0,0
-#define RESOURCE_VERSION_STR    "2.6.0.0"
+#define PLUGIN_VERSION_STR	    "2.6.1"
+#define RESOURCE_VERSION         2,6,1,0
+#define RESOURCE_VERSION_STR    "2.6.1.0"
