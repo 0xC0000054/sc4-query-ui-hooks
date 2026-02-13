@@ -900,8 +900,8 @@ namespace
 					if (MakeNumberStringForCurrentLanguage(magnitude, formattedMagnitude) &&
 						MakeNumberStringForCurrentLanguage(radius, formattedRadius))
 					{
-						const std::string_view magnitudePrefix("Magnitude=");
-						const std::string_view radiusPrefix(" | Radius=");
+						const std::string_view magnitudePrefix("Magnitude: ");
+						const std::string_view radiusPrefix(" | Radius: ");
 
 						outReplacement.Append(magnitudePrefix.data(), magnitudePrefix.size());
 						outReplacement.Append(formattedMagnitude);
