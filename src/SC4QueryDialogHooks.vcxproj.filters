@@ -180,6 +180,9 @@
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SCLuaUtil.cpp">
       <Filter>Source Files\GZCOM</Filter>
     </ClCompile>
+    <ClCompile Include="data-providers\lua\QueryUILuaExtensionsTest.cpp">
+      <Filter>Source Files\Data Providers\Lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -381,6 +384,9 @@
       <Filter>Header Files\Data Providers\Lua</Filter>
     </ClInclude>
     <ClInclude Include="data-providers\lua\LuaHelper.h">
+      <Filter>Header Files\Data Providers\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\lua\QueryUILuaExtensionsTest.h">
       <Filter>Header Files\Data Providers\Lua</Filter>
     </ClInclude>
   </ItemGroup>

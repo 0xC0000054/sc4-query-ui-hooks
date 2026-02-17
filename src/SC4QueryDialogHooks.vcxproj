@@ -30,6 +30,7 @@
     <ClCompile Include="data-providers\DataProviderBase.cpp" />
     <ClCompile Include="data-providers\lua\LuaHelper.cpp" />
     <ClCompile Include="data-providers\lua\QueryUILuaExtensions.cpp" />
+    <ClCompile Include="data-providers\lua\QueryUILuaExtensionsTest.cpp" />
     <ClCompile Include="data-providers\query-tooltip-handlers\FloraQueryToolTipHandler.cpp" />
     <ClCompile Include="data-providers\query-tooltip-handlers\NetworkQueryToolTipHandler.cpp" />
     <ClCompile Include="data-providers\query-tooltip-handlers\PropQueryToolTipHandler.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="data-providers\DataProviderBase.h" />
     <ClInclude Include="data-providers\lua\LuaHelper.h" />
     <ClInclude Include="data-providers\lua\QueryUILuaExtensions.h" />
+    <ClInclude Include="data-providers\lua\QueryUILuaExtensionsTest.h" />
     <ClInclude Include="data-providers\query-tooltip-handlers\FloraQueryToolTipHandler.h" />
     <ClInclude Include="data-providers\query-tooltip-handlers\NetworkQueryToolTipHandler.h" />
     <ClInclude Include="data-providers\query-tooltip-handlers\PropQueryToolTipHandler.h" />

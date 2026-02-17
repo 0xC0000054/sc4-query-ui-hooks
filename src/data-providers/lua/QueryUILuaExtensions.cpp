@@ -32,6 +32,7 @@
 #include "LuaHelper.h"
 #include "Logger.h"
 #include "SCLuaUtil.h"
+#include "QueryUILuaExtensionsTest.h"
 
 namespace
 {
@@ -72,15 +73,6 @@ namespace
 		}
 
 		return 1;
-	}
-
-	void DebugTestLuaFunctions()
-	{
-#ifdef _DEBUG
-		// Property id 32 is the Exemplar Name property.
-		DebugUtil::PrintDetokenizedValueToDebugOutput(
-			cRZBaseString("#tostring(null45_query_ui_extensions.get_property_value(32))#"));
-#endif // _DEBUG
 	}
 }
 
@@ -123,7 +115,7 @@ void QueryUILuaExtensions::BeforeDialogShown(cISC4Occupant* pOccupant)
 	spOccupant = pOccupant;
 
 #ifdef _DEBUG
-	DebugTestLuaFunctions();
+	QueryUILuaExtensionsTest::Run();
 #endif // _DEBUG
 }
 

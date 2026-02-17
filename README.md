@@ -31,7 +31,8 @@ See the [Query Variable List page](https://github.com/0xC0000054/sc4-query-ui-ho
 A `null45_query_ui_extensions.get_property_value` function is provided to allow query UIs to read occupant exemplar properties.
 This can be used to show properties that are not in the [Query Variable List page](https://github.com/0xC0000054/sc4-query-ui-hooks/blob/main/docs/Query_Variable_List.md),
 or use Lua code to customize the display formatting of the occupant property values.
-See [null45_query_ui_extensions.lua](https://github.com/0xC0000054/sc4-query-ui-hooks/blob/main/dat/null45_query_ui_extensions.lua) for details.
+See [null45_query_ui_extensions.lua](https://github.com/0xC0000054/sc4-query-ui-hooks/blob/main/dat/null45_query_ui_extensions.lua) for a list of provided functions,
+and [null45_query_ui_extensions_test.lua](https://github.com/0xC0000054/sc4-query-ui-hooks/blob/main/dat/null45_query_ui_extensions_test.lua) for examples of their use.
 
 ### Extended Terrain Query
 
