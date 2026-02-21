@@ -23,6 +23,7 @@
 #include "cIGZVariant.h"
 #include "cISCLua.h"
 #include "SafeInt.hpp"
+#include <charconv>
 
 namespace LuaHelper
 {
@@ -31,27 +32,66 @@ namespace LuaHelper
 	{
 		bool result = false;
 
-		if (pLua && pLua->IsNumber(parameterIndex))
+		if (pLua)
 		{
-			double number = pLua->ToNumber(parameterIndex);
+			if (pLua->IsNumber(parameterIndex))
+			{
+				double number = pLua->ToNumber(parameterIndex);
 
-			// The native number format of SimCity 4's Lua 5.0 implementation is Float64/double.
-			// We perform our own casting for integer types in order to get an error for values
-			// that are out of range for the destination type.
+				// The native number format of SimCity 4's Lua 5.0 implementation is Float64/double.
+				// We perform our own casting for integer types in order to get an error for values
+				// that are out of range for the destination type.
 
-			if constexpr (std::is_same_v<T, double>)
-			{
-				outValue = number;
-				result = true;
+				if constexpr (std::is_same_v<T, double>)
+				{
+					outValue = number;
+					result = true;
+				}
+				else if constexpr (std::is_same_v<T, float>)
+				{
+					outValue = static_cast<float>(number);
+					result = true;
+				}
+				else
+				{
+					result = SafeCast(number, outValue);
+				}
 			}
-			else if constexpr (std::is_same_v<T, float>)
+			else if constexpr (std::is_same_v<T, uint32_t>)
 			{
-				outValue = static_cast<float>(number);
-				result = true;
-			}
-			else
-			{
-				result = SafeCast(number, outValue);
+				// Uint32 values can also be specified as a hexadecimal string
+				// in the format 1234abcd or 0x1234abcd.
+				// This makes the Lua methods more intuitive to use by
+				// letting callers skip using the hex2dec function.
+
+				if (pLua->IsString(parameterIndex))
+				{
+					const char* const text = pLua->ToString(parameterIndex);
+					const uint32_t textLength = pLua->Strlen(parameterIndex);
+
+					// The string must have an even number of characters.
+					if (textLength > 0 && (textLength % 2) == 0)
+					{
+						const char* start = text;
+						const char* end = text + textLength;
+
+						if (textLength > 2 && text[0] == '0')
+						{
+							const char second = text[1];
+
+							if (second == 'x' || second == 'X')
+							{
+								// std::from_chars can't parse hexadecimal numbers with the 0x prefix.
+								start += 2;
+							}
+						}
+
+						constexpr int base = 16;
+
+						const auto fromCharsResult = std::from_chars(start, end, outValue, base);
+						result = fromCharsResult.ec == std::errc{} && fromCharsResult.ptr == end;
+					}
+				}
 			}
 		}
 
