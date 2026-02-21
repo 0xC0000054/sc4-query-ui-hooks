@@ -8,6 +8,7 @@
 null45_query_ui_extensions = {}
 
 -- Reads the specified property.
+-- The property_id value can be either a number or a hexadecimal string.
 -- The returned type will depend on the property type.
 -- Nil is returned if the property does not exist.
 null45_query_ui_extensions.get_property_value = function(property_id) return nil end

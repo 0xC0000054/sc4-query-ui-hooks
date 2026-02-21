@@ -9,7 +9,7 @@
 
 -- Demonstrates getting the exemplar name property, a string value.
 function null45_query_ui_extensions_test_get_exemplar_name()
-  local exemplar_name = null45_query_ui_extensions.get_property_value(hex2dec('00000020'))
+  local exemplar_name = null45_query_ui_extensions.get_property_value('00000020')
   
   if exemplar_name == nil then
     -- Return an empty string if the item does not have an exemplar name property.
