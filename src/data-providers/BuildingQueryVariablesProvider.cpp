@@ -794,7 +794,7 @@ namespace
 							const frozen::string& name = nameEntry->second;
 
 							outReplacement.Append(name.data(), name.size());
-							outReplacement.Append("=", 1);
+							outReplacement.Append(": ", 2);
 
 							int length = std::snprintf(buffer, sizeof(buffer), "%f", demandValueFloat);
 
@@ -802,7 +802,7 @@ namespace
 						}
 						else
 						{
-							int length = std::snprintf(buffer, sizeof(buffer), "0x%08x=%f", demandID, demandValueFloat);
+							int length = std::snprintf(buffer, sizeof(buffer), "0x%08x: %f", demandID, demandValueFloat);
 
 							outReplacement.Append(buffer, length);
 						}
@@ -830,14 +830,14 @@ namespace
 							const frozen::string& name = nameEntry->second;
 
 							outReplacement.Append(name.data(), name.size());
-							outReplacement.Append("=", 1);
+							outReplacement.Append(": ", 2);
 							outReplacement.Append(formattedAmount);
 						}
 						else
 						{
 							char buffer[128]{};
 
-							int length = std::snprintf(buffer, sizeof(buffer), "0x%08x=%u", demandID, demandValue);
+							int length = std::snprintf(buffer, sizeof(buffer), "0x%08x: %u", demandID, demandValue);
 
 							outReplacement.Append(buffer, length);
 						}
