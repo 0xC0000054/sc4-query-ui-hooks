@@ -475,12 +475,22 @@ namespace
 
 		if (pLot)
 		{
-			cISC4LotConfiguration* pLotConfiguration = pLot->GetLotConfiguration();
+			cISC4ZoneManager::ZoneType zone = pLot->GetZoneType();
 
-			if (pLotConfiguration)
+			if (zone == cISC4ZoneManager::ZoneType::Plopped)
 			{
-				uint8_t growthStage = pLotConfiguration->GetGrowthStage();
-				return MakeNumberStringForCurrentLanguage(growthStage, outReplacement);
+				outReplacement.FromChar("Plop");
+				return true;
+			}
+			else
+			{
+				cISC4LotConfiguration* pLotConfiguration = pLot->GetLotConfiguration();
+
+				if (pLotConfiguration)
+				{
+					uint8_t growthStage = pLotConfiguration->GetGrowthStage();
+					return MakeNumberStringForCurrentLanguage(growthStage, outReplacement);
+				}
 			}
 		}
 
