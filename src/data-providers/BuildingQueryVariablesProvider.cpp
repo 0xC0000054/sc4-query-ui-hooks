@@ -77,11 +77,9 @@ namespace
 	struct UnknownTokenContext
 	{
 		cISC4Occupant* pOccupant;
-		cISC4City* pCity;
 
 		UnknownTokenContext()
-			: pOccupant(nullptr),
-			  pCity(nullptr)
+			: pOccupant(nullptr)
 		{
 		}
 	};
@@ -98,9 +96,9 @@ namespace
 	{
 		cISC4Lot* pLot = nullptr;
 
-		if (context && context->pCity && context->pOccupant)
+		if (context && spCity && context->pOccupant)
 		{
-			cISC4LotManager* pLotManager = context->pCity->GetLotManager();
+			cISC4LotManager* pLotManager = spCity->GetLotManager();
 
 			if (pLotManager)
 			{
@@ -179,9 +177,9 @@ namespace
 	{
 		int64_t value = 0;
 
-		if (context && context->pCity && context->pOccupant)
+		if (context && spCity && context->pOccupant)
 		{
-			cISC4BudgetSimulator* pBudgetSim = context->pCity->GetBudgetSimulator();
+			cISC4BudgetSimulator* pBudgetSim = spCity->GetBudgetSimulator();
 
 			if (pBudgetSim)
 			{
@@ -551,7 +549,7 @@ namespace
 			// We report zero travel jobs for industrial lots without their own road access.
 			if (pLot->GetTravelDesignate() == nullptr)
 			{
-				cISC4TrafficSimulator* pTrafficSim = context->pCity->GetTrafficSimulator();
+				cISC4TrafficSimulator* pTrafficSim = spCity->GetTrafficSimulator();
 
 				if (pTrafficSim)
 				{
@@ -578,13 +576,13 @@ namespace
 	{
 		bool result = false;
 
-		if (context && context->pOccupant && context->pCity)
+		if (context && context->pOccupant && spCity)
 		{
 			cRZAutoRefCount<cISC4BuildingOccupant> pBuildingOccupant;
 
 			if (context->pOccupant->QueryInterface(GZIID_cISC4BuildingOccupant, pBuildingOccupant.AsPPVoid()))
 			{
-				cISC4MySimAgentSimulator* pMySimAgentSimulator = context->pCity->GetMySimAgentSimulator();
+				cISC4MySimAgentSimulator* pMySimAgentSimulator = spCity->GetMySimAgentSimulator();
 
 				if (pMySimAgentSimulator)
 				{
@@ -702,7 +700,7 @@ namespace
 	{
 		int64_t cost = 0;
 
-		if (context && context->pOccupant && context->pCity)
+		if (context && context->pOccupant && spCity)
 		{
 			const std::string_view purposeIDHexString = StringViewUtil::RemoveLeft(token, prefix.length());
 
@@ -712,7 +710,7 @@ namespace
 
 				if (StringViewUtil::TryParse(purposeIDHexString, purposeID))
 				{
-					cISC4BudgetSimulator* pBudgetSim = context->pCity->GetBudgetSimulator();
+					cISC4BudgetSimulator* pBudgetSim = spCity->GetBudgetSimulator();
 
 					if (pBudgetSim)
 					{
@@ -1269,7 +1267,6 @@ static UnknownTokenContext sCurrentTokenContext;
 
 BuildingQueryVariablesProvider::BuildingQueryVariablesProvider(const ISettings& settings)
 	: settings(settings),
-	  pCity(nullptr),
 	  queryUILuaExtensions()
 {
 }
@@ -1299,7 +1296,7 @@ uint32_t BuildingQueryVariablesProvider::Release()
 
 void BuildingQueryVariablesProvider::PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM)
 {
-	pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
+	cISC4City* pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
 
 	cRZAutoRefCount<cIBuildingQueryHookServer> hookServer;
 
@@ -1316,8 +1313,6 @@ void BuildingQueryVariablesProvider::PostCityInit(cIGZMessage2Standard* pStandar
 
 void BuildingQueryVariablesProvider::PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM)
 {
-	pCity = nullptr;
-
 	cRZAutoRefCount<cIBuildingQueryHookServer> hookServer;
 
 	if (pCOM->GetClassObject(
@@ -1341,7 +1336,6 @@ void BuildingQueryVariablesProvider::BeforeDialogShown(cISC4Occupant* pOccupant)
 	if (spStringDetokenizer)
 	{
 		sCurrentTokenContext.pOccupant = pOccupant;
-		sCurrentTokenContext.pCity = pCity;
 
 		spStringDetokenizer->AddUnknownTokenReplacementMethod(&UnknownTokenCallback, &sCurrentTokenContext, true);
 
@@ -1382,13 +1376,13 @@ void BuildingQueryVariablesProvider::DebugLogTokenizerVariables()
 
 void BuildingQueryVariablesProvider::LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant)
 {
-	if (pOccupant && pCity)
+	if (pOccupant && spCity)
 	{
 		cRZAutoRefCount<cISC4BuildingOccupant> pBuildingOccupant;
 
 		if (pOccupant->QueryInterface(GZIID_cISC4BuildingOccupant, pBuildingOccupant.AsPPVoid()))
 		{
-			cISC4BuildingDevelopmentSimulator* pBuildingDevelpmentSim = pCity->GetBuildingDevelopmentSimulator();
+			cISC4BuildingDevelopmentSimulator* pBuildingDevelpmentSim = spCity->GetBuildingDevelopmentSimulator();
 
 			if (pBuildingDevelpmentSim)
 			{

@@ -87,6 +87,7 @@ PropQueryToolTipHookServer* spPropQueryToolTipHookServer = nullptr;
 
 cRZAutoRefCount<cIGZLanguageManager> spLanguageManager;
 cISC4AuraSimulator* spAuraSimulator = nullptr;
+cISC4City* spCity = nullptr;
 cISC4FlammabilitySimulator* spFlammabilitySimulator = nullptr;
 cISC4LandValueSimulator* spLandValueSimulator = nullptr;
 cISC4PollutionSimulator* spPollutionSimulator = nullptr;
@@ -199,15 +200,15 @@ public:
 
 	void PostCityInit(cIGZMessage2Standard* pStandardMsg)
 	{
-		cISC4City* pCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
+		spCity = static_cast<cISC4City*>(pStandardMsg->GetVoid1());
 
-		if (pCity)
+		if (spCity)
 		{
-			spAuraSimulator = pCity->GetAuraSimulator();
-			spFlammabilitySimulator = pCity->GetFlammabilitySimulator();
-			spLandValueSimulator = pCity->GetLandValueSimulator();
-			spPollutionSimulator = pCity->GetPollutionSimulator();
-			spWeatherSimulator = pCity->GetWeatherSimulator();
+			spAuraSimulator = spCity->GetAuraSimulator();
+			spFlammabilitySimulator = spCity->GetFlammabilitySimulator();
+			spLandValueSimulator = spCity->GetLandValueSimulator();
+			spPollutionSimulator = spCity->GetPollutionSimulator();
+			spWeatherSimulator = spCity->GetWeatherSimulator();
 		}
 
 		buildingQueryVariablesProvider.PostCityInit(pStandardMsg, mpCOM);
@@ -217,6 +218,7 @@ public:
 	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg)
 	{
 		spAuraSimulator = nullptr;
+		spCity = nullptr;
 		spFlammabilitySimulator = nullptr;
 		spLandValueSimulator = nullptr;
 		spPollutionSimulator = nullptr;

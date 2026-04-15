@@ -25,8 +25,6 @@
 #include "ISettings.h"
 #include "QueryUILuaExtensions.h"
 
-class cISC4City;
-
 class BuildingQueryVariablesProvider final
 	: public DataProviderBase,
 	  private cIBuildingQueryDialogHookTarget
@@ -50,6 +48,5 @@ private:
 	void LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant);
 
 	const ISettings& settings;
-	cISC4City* pCity;
 	QueryUILuaExtensions queryUILuaExtensions;
 };

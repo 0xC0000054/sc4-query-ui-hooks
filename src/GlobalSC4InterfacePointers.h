@@ -24,6 +24,7 @@
 
 class cIGZLanguageManager;
 class cISC4AuraSimulator;
+class cISC4City;
 class cISC4FlammabilitySimulator;
 class cISC4LandValueSimulator;
 class cISC4PollutionSimulator;
@@ -32,6 +33,7 @@ class cISCStringDetokenizer;
 
 extern cRZAutoRefCount<cIGZLanguageManager> spLanguageManager;
 extern cISC4AuraSimulator* spAuraSimulator;
+extern cISC4City* spCity;
 extern cISC4FlammabilitySimulator* spFlammabilitySimulator;
 extern cISC4LandValueSimulator* spLandValueSimulator;
 extern cISC4PollutionSimulator* spPollutionSimulator;
