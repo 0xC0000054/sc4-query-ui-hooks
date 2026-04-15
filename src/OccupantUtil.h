@@ -23,11 +23,13 @@
 #include "cIGZString.h"
 #include "cRZAutoRefCount.h"
 
+class cISC4Lot;
 class cISC4Occupant;
 
 namespace OccupantUtil
 {
 	bool GetDisplayName(cISC4Occupant* pOccupant, cIGZString& name);
 	bool GetExemplarName(cISC4Occupant* pOccupant, cIGZString& name);
+	cISC4Lot* GetLot(cISC4Occupant* pOccupant);
 	bool GetUserVisibleName(cISC4Occupant* pOccupant, cRZAutoRefCount<cIGZString>& name);
 }

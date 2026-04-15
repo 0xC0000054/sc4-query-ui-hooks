@@ -96,14 +96,9 @@ namespace
 	{
 		cISC4Lot* pLot = nullptr;
 
-		if (context && spCity && context->pOccupant)
+		if (context && context->pOccupant)
 		{
-			cISC4LotManager* pLotManager = spCity->GetLotManager();
-
-			if (pLotManager)
-			{
-				pLot = pLotManager->GetOccupantLot(context->pOccupant);
-			}
+			pLot = OccupantUtil::GetLot(context->pOccupant);
 		}
 
 		return pLot;
