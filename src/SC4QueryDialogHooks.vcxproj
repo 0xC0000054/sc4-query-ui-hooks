@@ -26,6 +26,7 @@
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SCPropertyUtil.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\StringResourceManager.cpp" />
     <ClCompile Include="ClickToCopyOccupantFilter.cpp" />
+    <ClCompile Include="data-providers\BuildingPluginInfo.cpp" />
     <ClCompile Include="data-providers\BuildingQueryVariablesProvider.cpp" />
     <ClCompile Include="data-providers\DataProviderBase.cpp" />
     <ClCompile Include="data-providers\lua\LuaHelper.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\StringResourceManager.h" />
     <ClInclude Include="ClickToCopyOccupantFilter.h" />
     <ClInclude Include="data-providers\BuildingQueryVariablesProvider.h" />
+    <ClInclude Include="data-providers\BuildingPluginInfo.h" />
     <ClInclude Include="data-providers\DataProviderBase.h" />
     <ClInclude Include="data-providers\lua\LuaHelper.h" />
     <ClInclude Include="data-providers\lua\QueryUILuaExtensions.h" />

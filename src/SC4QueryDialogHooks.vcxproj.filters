@@ -183,6 +183,9 @@
     <ClCompile Include="data-providers\lua\QueryUILuaExtensionsTest.cpp">
       <Filter>Source Files\Data Providers\Lua</Filter>
     </ClCompile>
+    <ClCompile Include="data-providers\BuildingPluginInfo.cpp">
+      <Filter>Source Files\Data Providers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -388,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="data-providers\lua\QueryUILuaExtensionsTest.h">
       <Filter>Header Files\Data Providers\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="data-providers\BuildingPluginInfo.h">
+      <Filter>Header Files\Data Providers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,31 +20,10 @@
  */
 
 #pragma once
-#include "DataProviderBase.h"
-#include "cIBuildingQueryDialogHookTarget.h"
-#include "ISettings.h"
-#include "QueryUILuaExtensions.h"
 
-class BuildingQueryVariablesProvider final
-	: public DataProviderBase,
-	  private cIBuildingQueryDialogHookTarget
+class cISC4Occupant;
+
+namespace BuildingPluginInfo
 {
-public:
-	BuildingQueryVariablesProvider(const ISettings& settings);
-
-	bool QueryInterface(uint32_t riid, void** ppvObj) override;
-	uint32_t AddRef() override;
-	uint32_t Release() override;
-
-	void PostCityInit(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM) override;
-	void PreCityShutdown(cIGZMessage2Standard* pStandardMsg, cIGZCOM* pCOM) override;
-
-private:
-	void BeforeDialogShown(cISC4Occupant* pOccupant) override;
-	void AfterDialogShown(cISC4Occupant* pOccupant) override;
-
-	void DebugLogTokenizerVariables();
-
-	const ISettings& settings;
-	QueryUILuaExtensions queryUILuaExtensions;
-};
+	void WriteToLog(cISC4Occupant* pOccupant);
+}

@@ -20,6 +20,7 @@
  */
 
 #include "BuildingQueryVariablesProvider.h"
+#include "BuildingPluginInfo.h"
 #include "cIBuildingStyleInfo2.h"
 #include "cIBuildingQueryHookServer.h"
 #include "DebugUtil.h"
@@ -592,45 +593,6 @@ namespace
 							result = CopySC4StringValue(asAdvisor->GetPersonalName(), outReplacement);
 						}
 					}
-				}
-			}
-		}
-
-		return result;
-	}
-
-	bool GetResourceFilePath(const cGZPersistResourceKey& key, cRZBaseString& path)
-	{
-		bool result = false;
-
-		cIGZPersistResourceManagerPtr pResMan;
-
-		if (pResMan)
-		{
-			cRZAutoRefCount<cIGZPersistDBSegment> pSegment;
-
-			if (pResMan->FindDBSegment(key, pSegment.AsPPObj()))
-			{
-				cRZAutoRefCount<cIGZPersistDBSegmentMultiPackedFiles> pMultiPackedFile;
-
-				if (pSegment->QueryInterface(GZIID_cIGZPersistDBSegmentMultiPackedFiles, pMultiPackedFile.AsPPVoid()))
-				{
-					// cIGZPersistDBSegmentMultiPackedFiles is a collection of DAT files in a specific folder
-					// and its sub-folders.
-					// Call its FindDBSegment method to get the actual file.
-
-					cRZAutoRefCount<cIGZPersistDBSegment> pMultiPackedSegment;
-
-					if (pMultiPackedFile->FindDBSegment(key, pMultiPackedSegment.AsPPObj()))
-					{
-						pMultiPackedSegment->GetPath(path);
-						result = true;
-					}
-				}
-				else
-				{
-					pSegment->GetPath(path);
-					result = true;
 				}
 			}
 		}
@@ -1325,7 +1287,7 @@ void BuildingQueryVariablesProvider::BeforeDialogShown(cISC4Occupant* pOccupant)
 {
 	if (settings.LogBuildingPluginPath())
 	{
-		LogBuildingOccupantPluginPath(pOccupant);
+		BuildingPluginInfo::WriteToLog(pOccupant);
 	}
 
 	if (spStringDetokenizer)
@@ -1368,54 +1330,3 @@ void BuildingQueryVariablesProvider::DebugLogTokenizerVariables()
 	// 0xaa59670c is the Landmark Effect purpose id.
 	DebugUtil::PrintDetokenizedValueToDebugOutput(cRZBaseString("#budget_purpose_type_cost:0xaa59670c#"));
 }
-
-void BuildingQueryVariablesProvider::LogBuildingOccupantPluginPath(cISC4Occupant* pOccupant)
-{
-	if (pOccupant && spCity)
-	{
-		cRZAutoRefCount<cISC4BuildingOccupant> pBuildingOccupant;
-
-		if (pOccupant->QueryInterface(GZIID_cISC4BuildingOccupant, pBuildingOccupant.AsPPVoid()))
-		{
-			cISC4BuildingDevelopmentSimulator* pBuildingDevelpmentSim = spCity->GetBuildingDevelopmentSimulator();
-
-			if (pBuildingDevelpmentSim)
-			{
-				const uint32_t buildingType = pBuildingOccupant->GetBuildingType();
-
-				cGZPersistResourceKey key;
-
-				if (pBuildingDevelpmentSim->GetBuildingKeyFromType(buildingType, key))
-				{
-					cRZBaseString path;
-
-					if (GetResourceFilePath(key, path))
-					{
-						Logger& logger = Logger::GetInstance();
-
-						cRZAutoRefCount<cIGZString> userVisibleName;
-
-						if (OccupantUtil::GetUserVisibleName(pOccupant, userVisibleName))
-						{
-							logger.WriteLineFormatted(
-								LogLevel::Info,
-								"%s (%s): %s",
-								pBuildingOccupant->GetExemplarName()->ToChar(),
-								userVisibleName->ToChar(),
-								path.ToChar());
-						}
-						else
-						{
-							logger.WriteLineFormatted(
-								LogLevel::Info,
-								"%s: %s",
-								pBuildingOccupant->GetExemplarName()->ToChar(),
-								path.ToChar());
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
