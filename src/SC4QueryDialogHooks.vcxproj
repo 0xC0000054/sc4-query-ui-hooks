@@ -25,6 +25,15 @@
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SCLuaUtil.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\SCPropertyUtil.cpp" />
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\StringResourceManager.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\DebugUtil.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\Logger.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\OccupantUtil.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\Patcher.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\PropertyUtil.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\SC4VersionDetection.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\StringConversion.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\StringViewUtil.cpp" />
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\Utf8TextOFStream.cpp" />
     <ClCompile Include="ClickToCopyOccupantFilter.cpp" />
     <ClCompile Include="data-providers\BuildingPluginInfo.cpp" />
     <ClCompile Include="data-providers\BuildingQueryVariablesProvider.cpp" />
@@ -37,26 +46,19 @@
     <ClCompile Include="data-providers\query-tooltip-handlers\PropQueryToolTipHandler.cpp" />
     <ClCompile Include="data-providers\query-tooltip-handlers\QueryToolTipHandlerBase.cpp" />
     <ClCompile Include="data-providers\QueryToolTipProvider.cpp" />
-    <ClCompile Include="DebugUtil.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="FloraQueryHooks.cpp" />
     <ClCompile Include="FloraQueryToolTipHookServer.cpp" />
     <ClCompile Include="GZStringUtil.cpp" />
-    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="BuildingQueryHooks.cpp" />
     <ClCompile Include="NetworkQueryHooks.cpp" />
     <ClCompile Include="NetworkQueryToolTipHookServer.cpp" />
-    <ClCompile Include="OccupantUtil.cpp" />
-    <ClCompile Include="Patcher.cpp" />
-    <ClCompile Include="PropertyUtil.cpp" />
     <ClCompile Include="PropQueryHooks.cpp" />
     <ClCompile Include="PropQueryToolTipHookServer.cpp" />
     <ClCompile Include="QueryToolHelpers.cpp" />
     <ClCompile Include="QueryUIHooksDllDirector.cpp" />
     <ClCompile Include="BuildingQueryHookServer.cpp" />
-    <ClCompile Include="SC4VersionDetection.cpp" />
     <ClCompile Include="Settings.cpp" />
-    <ClCompile Include="StringViewUtil.cpp" />
     <ClCompile Include="TerrainQueryHooks.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +84,15 @@
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\SCPropertyUtil.h" />
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\StringResourceKey.h" />
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\StringResourceManager.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\DebugUtil.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\IniReader.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\Logger.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\OccupantUtil.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\Patcher.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\PropertyUtil.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\SC4VersionDetection.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\StringConversion.h" />
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\StringViewUtil.h" />
     <ClInclude Include="ClickToCopyOccupantFilter.h" />
     <ClInclude Include="data-providers\BuildingQueryVariablesProvider.h" />
     <ClInclude Include="data-providers\BuildingPluginInfo.h" />
@@ -98,17 +109,12 @@
     <ClInclude Include="FloraQueryToolTipHookServer.h" />
     <ClInclude Include="GlobalSC4InterfacePointers.h" />
     <ClInclude Include="more-building-styles\cIBuildingStyleInfo2.h" />
-    <ClInclude Include="OccupantUtil.h" />
-    <ClInclude Include="DebugUtil.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GlobalHookServerPointers.h" />
     <ClInclude Include="GZStringUtil.h" />
     <ClInclude Include="ISettings.h" />
-    <ClInclude Include="Logger.h" />
     <ClInclude Include="NetworkQueryHooks.h" />
     <ClInclude Include="NetworkQueryToolTipHookServer.h" />
-    <ClInclude Include="Patcher.h" />
-    <ClInclude Include="PropertyUtil.h" />
     <ClInclude Include="PropQueryHooks.h" />
     <ClInclude Include="PropQueryToolTipHookServer.h" />
     <ClInclude Include="public\include\cIBuildingQueryDialogHookTarget.h" />
@@ -124,9 +130,7 @@
     <ClInclude Include="public\include\cIPropQueryToolTipHookServer.h" />
     <ClInclude Include="public\include\cIQueryToolTipAppendTextHookTarget.h" />
     <ClInclude Include="QueryToolHelpers.h" />
-    <ClInclude Include="SC4VersionDetection.h" />
     <ClInclude Include="Settings.h" />
-    <ClInclude Include="StringViewUtil.h" />
     <ClInclude Include="TerrainQueryHooks.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
@@ -183,9 +187,9 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;..\vendor\SafeInt;.\;.\public\include;.\data-providers;.\more-building-styles;.\data-providers\query-tooltip-handlers;.\data-providers\lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;..\vendor\SafeInt;..\vendor\sc4-dll-utilities\sc4-dll-utilities\include;.\;.\public\include;.\data-providers;.\more-building-styles;.\data-providers\query-tooltip-handlers;.\data-providers\lua</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Link>
@@ -209,10 +213,10 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;..\vendor\SafeInt;.\;.\public\include;.\data-providers;.\more-building-styles;.\data-providers\query-tooltip-handlers;.\data-providers\lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\vendor\gzcom-dll\gzcom-dll\include;..\vendor\SafeInt;..\vendor\sc4-dll-utilities\sc4-dll-utilities\include;.\;.\public\include;.\data-providers;.\more-building-styles;.\data-providers\query-tooltip-handlers;.\data-providers\lua</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Link>

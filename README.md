@@ -130,8 +130,9 @@ See [BuildingQueryVariablesProvider.cpp](src/data-providers/BuildingQueryVariabl
 
 * SimCity 4 version 641
 * Windows 10 or later
+* [Microsoft Visual C++ 2022 x86 Redistribute](https://aka.ms/vs/17/release/vc_redist.x86.exe)
 
-The plugin may work on Windows 7 or later with the [Microsoft Visual C++ 2022 x86 Redistribute](https://aka.ms/vs/17/release/vc_redist.x86.exe) installed, but I do not have the ability to test that.
+The plugin may work on Windows 7 or later, but I do not have the ability to test that.
 
 ## Installation
 
@@ -157,13 +158,12 @@ These headers are located in the src/public/include folder.
 
 ## 3rd party code
 
-[gzcom-dll](https://github.com/nsgomez/gzcom-dll/tree/master) Located in the vendor folder, MIT License.    
+[gzcom-dll](https://github.com/nsgomez/gzcom-dll) - LGPL 2.1 or later License.   
+[sc4-dll-utilities](https://github.com/0xC0000054/sc4-dll-utilities) - LGPL 2.1 or later License.   
 [Windows Implementation Library](https://github.com/microsoft/wil) - MIT License    
 [SC4Fix](https://github.com/nsgomez/sc4fix) - MIT License    
 [SafeInt](https://github.com/dcleblanc/SafeInt) - MIT License    
 [Frozen](https://github.com/serge-sans-paille/frozen) - Apache 2.0 License.    
-[Boost.Algorithm](https://www.boost.org/doc/libs/1_84_0/libs/algorithm/doc/html/index.html) - Boost Software License, Version 1.0.    
-[Boost.PropertyTree](https://www.boost.org/doc/libs/1_84_0/doc/html/property_tree.html) - Boost Software License, Version 1.0.    
 [sc4-more-building-styles](https://github.com/0xC0000054/sc4-more-building-styles) - MIT License
 
 # Source Code

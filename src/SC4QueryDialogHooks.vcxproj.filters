@@ -43,11 +43,14 @@
     <Filter Include="Source Files\Data Providers\Lua">
       <UniqueIdentifier>{830902cf-621a-4238-9049-c8e3cb6e95b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\sc4-dll-utilities">
+      <UniqueIdentifier>{89c2ffd8-8a0c-4e2e-b60d-e6ec1e1e369a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sc4-dll-utilities">
+      <UniqueIdentifier>{46a06a22-7eda-4621-8f52-78132ef865c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Logger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\vendor\gzcom-dll\gzcom-dll\src\cRZBaseString.cpp">
       <Filter>Source Files\GZCOM</Filter>
     </ClCompile>
@@ -81,19 +84,10 @@
     <ClCompile Include="FileSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SC4VersionDetection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BuildingQueryHookServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BuildingQueryHooks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Patcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NetworkQueryHooks.cpp">
@@ -105,13 +99,7 @@
     <ClCompile Include="QueryToolHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GZStringUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Settings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OccupantUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ClickToCopyOccupantFilter.cpp">
@@ -127,9 +115,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FloraQueryToolTipHookServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PropertyUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PropQueryHooks.cpp">
@@ -168,9 +153,6 @@
     <ClCompile Include="data-providers\DataProviderBase.cpp">
       <Filter>Source Files\Data Providers</Filter>
     </ClCompile>
-    <ClCompile Include="StringViewUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="data-providers\lua\QueryUILuaExtensions.cpp">
       <Filter>Source Files\Data Providers\Lua</Filter>
     </ClCompile>
@@ -186,11 +168,38 @@
     <ClCompile Include="data-providers\BuildingPluginInfo.cpp">
       <Filter>Source Files\Data Providers</Filter>
     </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\DebugUtil.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\Logger.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\OccupantUtil.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\Patcher.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\PropertyUtil.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\SC4VersionDetection.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\StringConversion.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\StringViewUtil.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\src\Utf8TextOFStream.cpp">
+      <Filter>Source Files\sc4-dll-utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="GZStringUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -230,9 +239,6 @@
     <ClInclude Include="public\include\cIBuildingQueryDialogHookTarget.h">
       <Filter>Header Files\Public Headers</Filter>
     </ClInclude>
-    <ClInclude Include="SC4VersionDetection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BuildingQueryHookServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -242,14 +248,8 @@
     <ClInclude Include="BuildingQueryHooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DebugUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="public\include\cIBuildingQueryCustomToolTipHookTarget.h">
       <Filter>Header Files\Public Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Patcher.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GlobalHookServerPointers.h">
       <Filter>Header Files</Filter>
@@ -270,9 +270,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QueryToolHelpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GZStringUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4Occupant.h">
@@ -299,9 +296,6 @@
     <ClInclude Include="ISettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OccupantUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="more-building-styles\cIBuildingStyleInfo2.h">
       <Filter>Header Files\MoreBuildingStyles</Filter>
     </ClInclude>
@@ -321,9 +315,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FloraQueryToolTipHookServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PropertyUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="public\include\cIPropQueryCustomToolTipHookTarget.h">
@@ -380,9 +371,6 @@
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cISC4FlammabilitySimulator.h">
       <Filter>Header Files\GZCOM</Filter>
     </ClInclude>
-    <ClInclude Include="StringViewUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data-providers\lua\QueryUILuaExtensions.h">
       <Filter>Header Files\Data Providers\Lua</Filter>
     </ClInclude>
@@ -394,6 +382,36 @@
     </ClInclude>
     <ClInclude Include="data-providers\BuildingPluginInfo.h">
       <Filter>Header Files\Data Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\DebugUtil.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\IniReader.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\Logger.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\OccupantUtil.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\Patcher.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\PropertyUtil.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\SC4VersionDetection.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\StringConversion.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\sc4-dll-utilities\sc4-dll-utilities\include\StringViewUtil.h">
+      <Filter>Header Files\sc4-dll-utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="GZStringUtil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

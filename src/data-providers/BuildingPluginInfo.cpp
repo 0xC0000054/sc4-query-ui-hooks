@@ -106,7 +106,7 @@ namespace
 
 void BuildingPluginInfo::WriteToLog(cISC4Occupant* pOccupant)
 {
-	cISC4Lot* pLot = OccupantUtil::GetLot(pOccupant);
+	cISC4Lot* pLot = OccupantUtil::GetLot(pOccupant, spCity);
 
 	if (pLot)
 	{

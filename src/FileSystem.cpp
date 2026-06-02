@@ -27,7 +27,6 @@
 using namespace std::string_view_literals;
 
 static constexpr std::string_view PluginConfigFileName = "SC4QueryUIHooks.ini"sv;
-static constexpr std::string_view PluginLogFileName = "SC4QueryUIHooks.log"sv;
 
 namespace
 {
@@ -52,14 +51,6 @@ std::filesystem::path FileSystem::GetConfigFilePath()
 {
 	std::filesystem::path path = GetDllFolderPath();
 	path /= PluginConfigFileName;
-
-	return path;
-}
-
-std::filesystem::path FileSystem::GetLogFilePath()
-{
-	std::filesystem::path path = GetDllFolderPath();
-	path /= PluginLogFileName;
 
 	return path;
 }

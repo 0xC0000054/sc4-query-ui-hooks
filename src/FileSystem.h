@@ -25,5 +25,4 @@
 namespace FileSystem
 {
 	std::filesystem::path GetConfigFilePath();
-	std::filesystem::path GetLogFilePath();
 }

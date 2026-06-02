@@ -21,9 +21,8 @@
 
 #include "Settings.h"
 #include "FileSystem.h"
+#include "IniReader.h"
 #include "Logger.h"
-#include "boost/property_tree/ptree.hpp"
-#include "boost/property_tree/ini_parser.hpp"
 #include <fstream>
 
 Settings::Settings()
@@ -52,11 +51,12 @@ void Settings::Load()
 
 		if (stream)
 		{
-			boost::property_tree::ptree tree;
-			boost::property_tree::ini_parser::read_ini(stream, tree);
+			IniReader iniReader(stream);
 
-			enableOccupantQuerySounds = tree.get<bool>("QueryUIHooks.EnableOccupantQuerySounds");
-			logBuildingPluginPath = tree.get<bool>("QueryUIHooks.LogBuildingPluginPath");
+			const auto& queryUIHooksSection = iniReader.get_section("QueryUIHooks");
+
+			enableOccupantQuerySounds = queryUIHooksSection.get_converted_value<bool>("EnableOccupantQuerySounds");
+			logBuildingPluginPath = queryUIHooksSection.get_converted_value<bool>("LogBuildingPluginPath");
 		}
 		else
 		{

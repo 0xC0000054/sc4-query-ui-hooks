@@ -25,6 +25,7 @@
 #include "DebugUtil.h"
 #include "GlobalHookServerPointers.h"
 #include "Logger.h"
+#include "OccupantUtil.h"
 #include "Patcher.h"
 #include "QueryToolHelpers.h"
 #include "cGZPersistResourceKey.h"
@@ -63,7 +64,12 @@ namespace
 	bool __cdecl HookedDoQueryDialog(cISC4Occupant* pOccupant)
 	{
 #ifdef _DEBUG
-		DebugUtil::PrintOccupantNameToDebugOutput(pOccupant);
+		cRZAutoRefCount<cIGZString> name;
+
+		if (OccupantUtil::GetUserVisibleName(pOccupant, name))
+		{
+			DebugUtil::PrintLineToDebugOutputUtf8(name->ToChar());
+		}
 #endif // _DEBUG
 
 		bool result = false;

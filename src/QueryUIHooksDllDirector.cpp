@@ -100,7 +100,7 @@ namespace
 	{
 		Logger& logger = Logger::GetInstance();
 
-		const uint16_t gameVersion = SC4VersionDetection::GetInstance().GetGameVersion();
+		const uint16_t gameVersion = SC4VersionDetection::GetGameVersion();
 
 		if (gameVersion == 641)
 		{
@@ -147,7 +147,6 @@ public:
 		spPropQueryToolTipHookServer = &propQueryToolTipHookServer;
 
 		Logger& logger = Logger::GetInstance();
-		logger.Init(FileSystem::GetLogFilePath(), LogLevel::Info, false);
 		logger.WriteLogFileHeader("SC4QueryUIHooks v" PLUGIN_VERSION_STR);
 	}
 
@@ -182,7 +181,7 @@ public:
 		// This is also a more obvious error behavior for DLL plugin developers than
 		// having the classes be present, but not working.
 
-		const uint16_t gameVersion = SC4VersionDetection::GetInstance().GetGameVersion();
+		const uint16_t gameVersion = SC4VersionDetection::GetGameVersion();
 
 		if (gameVersion == 641)
 		{

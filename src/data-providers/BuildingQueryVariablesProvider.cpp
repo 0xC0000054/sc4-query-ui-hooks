@@ -75,6 +75,21 @@ using namespace std::string_view_literals;
 
 namespace
 {
+	void PrintDetokenizedValueToDebugOutput(cIGZString const& token)
+	{
+#ifdef _DEBUG
+		if (spStringDetokenizer)
+		{
+			cRZBaseString result;
+
+			if (spStringDetokenizer->Detokenize(token, result))
+			{
+				DebugUtil::PrintLineToDebugOutputFormattedUtf8("%s = %s", token.ToChar(), result.ToChar());
+			}
+		}
+#endif // _DEBUG
+	}
+
 	struct UnknownTokenContext
 	{
 		cISC4Occupant* pOccupant;
@@ -99,7 +114,7 @@ namespace
 
 		if (context && context->pOccupant)
 		{
-			pLot = OccupantUtil::GetLot(context->pOccupant);
+			pLot = OccupantUtil::GetLot(context->pOccupant, spCity);
 		}
 
 		return pLot;
@@ -659,7 +674,12 @@ namespace
 
 		if (context && context->pOccupant && spCity)
 		{
-			const std::string_view purposeIDHexString = StringViewUtil::RemoveLeft(token, prefix.length());
+			std::string_view purposeIDHexString;
+
+			if (token.length() > prefix.length())
+			{
+				purposeIDHexString = token.substr(prefix.length());
+			}
 
 			if (!purposeIDHexString.empty())
 			{
@@ -1322,11 +1342,11 @@ void BuildingQueryVariablesProvider::DebugLogTokenizerVariables()
 		token.Append(entry.first.data(), entry.first.size());
 		token.Append("#", 1);
 
-		DebugUtil::PrintDetokenizedValueToDebugOutput(token);
+		PrintDetokenizedValueToDebugOutput(token);
 	}
 
 	// Parameterized tokens
 
 	// 0xaa59670c is the Landmark Effect purpose id.
-	DebugUtil::PrintDetokenizedValueToDebugOutput(cRZBaseString("#budget_purpose_type_cost:0xaa59670c#"));
+	PrintDetokenizedValueToDebugOutput(cRZBaseString("#budget_purpose_type_cost:0xaa59670c#"));
 }
