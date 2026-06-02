@@ -1101,130 +1101,109 @@ namespace
 
 		return MakeNumberStringForCurrentLanguage(value, outReplacement);
 	}
-}
 
-typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
+	typedef bool (*TokenDataCallback)(UnknownTokenContext*, cIGZString&);
 
-using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
+	using DeveloperType = cISC4BuildingDevelopmentSimulator::DeveloperType;
 
-static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 53> tokenDataCallbacks =
-{
-	{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
-	{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
-	{ "building_is_w2w", GetBuildingWallToWallToken },
-	{ "building_styles", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, TokenSeparatorType::Pipe); } },
-	{ "building_style_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, TokenSeparatorType::NewLine); } },
-	{ "building_summary", GetBuildingSummaryToken },
-	{ "growth_stage", GetGrowthStageToken },
-	{ "mysim_name", GetMySimResidentName },
-	{ "jobs_low_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::LowWealth); }},
-	{ "jobs_medium_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::MediumWealth); }},
-	{ "jobs_high_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::HighWealth); }},
-	{ "travel_jobs_low_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::LowWealth); }},
-	{ "travel_jobs_medium_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::MediumWealth); }},
-	{ "travel_jobs_high_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::HighWealth); }},
-	{ "r1_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
-	{ "r1_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
-	{ "r2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },
-	{ "r2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },
-	{ "r3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialHighWealth); } },
-	{ "r3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialHighWealth); } },
-	{ "cs1_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesLowWealth); } },
-	{ "cs1_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesLowWealth); } },
-	{ "cs2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesMediumWealth); } },
-	{ "cs2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesMediumWealth); } },
-	{ "cs3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesHighWealth); } },
-	{ "cs3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesHighWealth); } },
-	{ "co2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialOfficeMediumWealth); } },
-	{ "co2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialOfficeMediumWealth); } },
-	{ "co3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialOfficeHighWealth); } },
-	{ "co3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialOfficeHighWealth); } },
-	{ "ir_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialAgriculture); } },
-	{ "ir_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialAgriculture); } },
-	{ "id_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialProcessing); } },
-	{ "id_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialProcessing); } },
-	{ "im_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
-	{ "im_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
-	{ "iht_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
-	{ "iht_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
-	{ "water_building_source", GetWaterBuildingSource },
-	{ "cap_relief", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapReliefToken(ctx, dest, TokenSeparatorType::Pipe); } },
-	{ "cap_relief_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapReliefToken(ctx, dest, TokenSeparatorType::NewLine); } },
-	{ "crime_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Crime); } },
-	{ "landmark_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Landmark); } },
-	{ "park_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Park); } },
-	{ "mayor_rating_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::MayorRating); } },
-	{ "pollution_at_center", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::AtCenter); } },
-	{ "pollution_radii", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::Radii); } },
-	{ "building_wealth", GetBuildingWealthToken },
-	{ "bulldoze_cost", GetBulldozeCostToken },
-	{ "flammability", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint8NumberToken(ctx, dest, 0x29244db5); } },
-	{ "max_fire_stage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint8NumberToken(ctx, dest, 0x49beda31); } },
-	{ "power_consumed", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint32NumberToken(ctx, dest, 0x27812854); } },
-	{ "water_consumed", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint32NumberToken(ctx, dest, 0xc8ed2d84); } },
-};
-
-typedef bool (*ParameterizedTokenDataCallback)(
-	std::string_view const& token,
-	std::string_view const& prefix,
-	UnknownTokenContext* context,
-	cIGZString& destination);
-
-static constexpr std::array<std::pair<std::string_view, ParameterizedTokenDataCallback>, 1> parameterizedTokenCallbacks =
-{
-	std::pair("budget_purpose_type_cost:"sv, GetBudgetPurposeTypeCost),
-};
-
-static bool GetParameterizedTokenCallback(std::string_view const& token, std::pair<std::string_view, ParameterizedTokenDataCallback>& entry)
-{
-	for (const auto& item : parameterizedTokenCallbacks)
+	static constexpr frozen::unordered_map<frozen::string, TokenDataCallback, 53> tokenDataCallbacks =
 	{
-		if (token.starts_with(item.first))
-		{
-			entry = item;
-			return true;
-		}
-	}
+		{ "building_full_funding_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Capacity); } },
+		{ "building_full_funding_coverage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingFullFundingToken(ctx, dest, BuildingFundingType::Coverage); } },
+		{ "building_is_w2w", GetBuildingWallToWallToken },
+		{ "building_styles", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, TokenSeparatorType::Pipe); } },
+		{ "building_style_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingStylesToken(ctx, dest, TokenSeparatorType::NewLine); } },
+		{ "building_summary", GetBuildingSummaryToken },
+		{ "growth_stage", GetGrowthStageToken },
+		{ "mysim_name", GetMySimResidentName },
+		{ "jobs_low_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::LowWealth); }},
+		{ "jobs_medium_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::MediumWealth); }},
+		{ "jobs_high_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotJobCount(ctx, dest, JobType::HighWealth); }},
+		{ "travel_jobs_low_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::LowWealth); }},
+		{ "travel_jobs_medium_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::MediumWealth); }},
+		{ "travel_jobs_high_wealth", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetLotTravelJobCount(ctx, dest, JobType::HighWealth); }},
+		{ "r1_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
+		{ "r1_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialLowWealth); } },
+		{ "r2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },
+		{ "r2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialMediumWealth); } },
+		{ "r3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::ResidentialHighWealth); } },
+		{ "r3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::ResidentialHighWealth); } },
+		{ "cs1_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesLowWealth); } },
+		{ "cs1_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesLowWealth); } },
+		{ "cs2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesMediumWealth); } },
+		{ "cs2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesMediumWealth); } },
+		{ "cs3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialServicesHighWealth); } },
+		{ "cs3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialServicesHighWealth); } },
+		{ "co2_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialOfficeMediumWealth); } },
+		{ "co2_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialOfficeMediumWealth); } },
+		{ "co3_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::CommercialOfficeHighWealth); } },
+		{ "co3_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::CommercialOfficeHighWealth); } },
+		{ "ir_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialAgriculture); } },
+		{ "ir_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialAgriculture); } },
+		{ "id_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialProcessing); } },
+		{ "id_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialProcessing); } },
+		{ "im_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
+		{ "im_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialManufacturing); } },
+		{ "iht_occupancy", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetOccupancyToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
+		{ "iht_capacity", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapacityToken(ctx, dest, DeveloperType::IndustrialHighTech); } },
+		{ "water_building_source", GetWaterBuildingSource },
+		{ "cap_relief", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapReliefToken(ctx, dest, TokenSeparatorType::Pipe); } },
+		{ "cap_relief_lines", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetCapReliefToken(ctx, dest, TokenSeparatorType::NewLine); } },
+		{ "crime_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Crime); } },
+		{ "landmark_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Landmark); } },
+		{ "park_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::Park); } },
+		{ "mayor_rating_effect", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingEffectToken(ctx, dest, BuildingEffectType::MayorRating); } },
+		{ "pollution_at_center", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::AtCenter); } },
+		{ "pollution_radii", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetBuildingPollutionToken(ctx, dest, BuildingPollutionType::Radii); } },
+		{ "building_wealth", GetBuildingWealthToken },
+		{ "bulldoze_cost", GetBulldozeCostToken },
+		{ "flammability", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint8NumberToken(ctx, dest, 0x29244db5); } },
+		{ "max_fire_stage", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint8NumberToken(ctx, dest, 0x49beda31); } },
+		{ "power_consumed", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint32NumberToken(ctx, dest, 0x27812854); } },
+		{ "water_consumed", [](UnknownTokenContext* ctx, cIGZString& dest) { return GetUint32NumberToken(ctx, dest, 0xc8ed2d84); } },
+	};
 
-	return false;
-}
+	typedef bool (*ParameterizedTokenDataCallback)(
+		std::string_view const& token,
+		std::string_view const& prefix,
+		UnknownTokenContext* context,
+		cIGZString& destination);
 
-static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplacement, void* pContext)
-{
-	bool result = false;
-
-	const std::string_view tokenAsStringView(token.Data(), token.Strlen());
-
-	const auto& entry = tokenDataCallbacks.find(frozen::string(tokenAsStringView));
-
-	if (entry != tokenDataCallbacks.end())
+	static constexpr std::array<std::pair<std::string_view, ParameterizedTokenDataCallback>, 1> parameterizedTokenCallbacks =
 	{
-		UnknownTokenContext* context = static_cast<UnknownTokenContext*>(pContext);
+		std::pair("budget_purpose_type_cost:"sv, GetBudgetPurposeTypeCost),
+	};
 
-		// The string may have been set to an error message by some other token callback method.
-		outReplacement.Erase(0, outReplacement.Strlen());
-
-		if (!entry->second(context, outReplacement))
+	bool GetParameterizedTokenCallback(std::string_view const& token, std::pair<std::string_view, ParameterizedTokenDataCallback>& entry)
+	{
+		for (const auto& item : parameterizedTokenCallbacks)
 		{
-			// Return an empty string if the handler method failed.
-			outReplacement.Erase(0, outReplacement.Strlen());
+			if (token.starts_with(item.first))
+			{
+				entry = item;
+				return true;
+			}
 		}
 
-		// Let the game know that the token was handled.
-		result = true;
+		return false;
 	}
-	else
-	{
-		std::pair<std::string_view, ParameterizedTokenDataCallback> entry;
 
-		if (GetParameterizedTokenCallback(tokenAsStringView, entry))
+	bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplacement, void* pContext)
+	{
+		bool result = false;
+
+		const std::string_view tokenAsStringView(token.Data(), token.Strlen());
+
+		const auto& entry = tokenDataCallbacks.find(frozen::string(tokenAsStringView));
+
+		if (entry != tokenDataCallbacks.end())
 		{
 			UnknownTokenContext* context = static_cast<UnknownTokenContext*>(pContext);
 
 			// The string may have been set to an error message by some other token callback method.
 			outReplacement.Erase(0, outReplacement.Strlen());
 
-			if (!entry.second(tokenAsStringView, entry.first, context, outReplacement))
+			if (!entry->second(context, outReplacement))
 			{
 				// Return an empty string if the handler method failed.
 				outReplacement.Erase(0, outReplacement.Strlen());
@@ -1233,14 +1212,35 @@ static bool UnknownTokenCallback(cIGZString const& token, cIGZString& outReplace
 			// Let the game know that the token was handled.
 			result = true;
 		}
+		else
+		{
+			std::pair<std::string_view, ParameterizedTokenDataCallback> entry;
+
+			if (GetParameterizedTokenCallback(tokenAsStringView, entry))
+			{
+				UnknownTokenContext* context = static_cast<UnknownTokenContext*>(pContext);
+
+				// The string may have been set to an error message by some other token callback method.
+				outReplacement.Erase(0, outReplacement.Strlen());
+
+				if (!entry.second(tokenAsStringView, entry.first, context, outReplacement))
+				{
+					// Return an empty string if the handler method failed.
+					outReplacement.Erase(0, outReplacement.Strlen());
+				}
+
+				// Let the game know that the token was handled.
+				result = true;
+			}
+		}
+
+		return result;
 	}
 
-	return result;
+	// The current token context is stored in a static variable to ensure that the
+	// memory remains valid between calls to BeforeDialogShown and AfterDialogShown.
+	static UnknownTokenContext sCurrentTokenContext;
 }
-
-// The current token context is stored in a static variable to ensure that the
-// memory remains valid between calls to BeforeDialogShown and AfterDialogShown.
-static UnknownTokenContext sCurrentTokenContext;
 
 BuildingQueryVariablesProvider::BuildingQueryVariablesProvider(const ISettings& settings)
 	: settings(settings),
