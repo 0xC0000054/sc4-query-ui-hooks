@@ -59,10 +59,11 @@ namespace LuaHelper
 			}
 			else if constexpr (std::is_same_v<T, uint32_t>)
 			{
-				// Uint32 values can also be specified as a hexadecimal string
-				// in the format 1234abcd or 0x1234abcd.
-				// This makes the Lua methods more intuitive to use by
-				// letting callers skip using the hex2dec function.
+				// For backwards compatibility with previous version of the DLL, some Uint32 values
+				// can be specified as a hexadecimal string in the format abcd1234 or 0xabcd1234.
+				// This code only works for hexadecimal strings that start with a-f or possibly 0x
+				// due to Lua automatically converting strings that start with numbers to a decimal
+				// integer which gets handled above.
 
 				if (pLua->IsString(parameterIndex))
 				{
