@@ -199,8 +199,8 @@ namespace
 		cSC4ViewInputControlPlaceLot* pThis,
 		int32_t isBuildingPlop,
 		uint32_t lotExemplarID,
-		uint32_t unknown1,
-		bool unknown2);
+		uint32_t buildingExemplarID,
+		bool useMonopoly);
 
 	static const pfn_cSC4ViewInputControlPlaceLot_ctor cSC4ViewInputControlPlaceLot_ctor = reinterpret_cast<pfn_cSC4ViewInputControlPlaceLot_ctor>(0x4c0430);
 
