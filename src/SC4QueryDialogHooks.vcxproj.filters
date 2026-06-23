@@ -198,6 +198,9 @@
     <ClCompile Include="GZStringUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OccupantCopyHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="version.h">
@@ -411,6 +414,9 @@
       <Filter>Header Files\sc4-dll-utilities</Filter>
     </ClInclude>
     <ClInclude Include="GZStringUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OccupantCopyHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

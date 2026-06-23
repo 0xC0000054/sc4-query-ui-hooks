@@ -53,6 +53,7 @@
     <ClCompile Include="BuildingQueryHooks.cpp" />
     <ClCompile Include="NetworkQueryHooks.cpp" />
     <ClCompile Include="NetworkQueryToolTipHookServer.cpp" />
+    <ClCompile Include="OccupantCopyHandler.cpp" />
     <ClCompile Include="PropQueryHooks.cpp" />
     <ClCompile Include="PropQueryToolTipHookServer.cpp" />
     <ClCompile Include="QueryToolHelpers.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="ISettings.h" />
     <ClInclude Include="NetworkQueryHooks.h" />
     <ClInclude Include="NetworkQueryToolTipHookServer.h" />
+    <ClInclude Include="OccupantCopyHandler.h" />
     <ClInclude Include="PropQueryHooks.h" />
     <ClInclude Include="PropQueryToolTipHookServer.h" />
     <ClInclude Include="public\include\cIBuildingQueryDialogHookTarget.h" />
