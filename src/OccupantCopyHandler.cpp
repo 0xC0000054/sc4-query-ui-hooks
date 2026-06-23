@@ -57,7 +57,7 @@ namespace
 
 	static const pfn_cSC4ViewInputControlPlaceLot_ctor cSC4ViewInputControlPlaceLot_ctor = reinterpret_cast<pfn_cSC4ViewInputControlPlaceLot_ctor>(0x4c0430);
 
-	bool CreateViewInputControlPlaceLot(uint32_t lotExemplarID, cRZAutoRefCount<cSC4ViewInputControlPlaceLot>& instance)
+	bool CreateViewInputControlPlaceLot(uint32_t lotExemplarID, uint32_t buildingExemplarID, cRZAutoRefCount<cSC4ViewInputControlPlaceLot>& instance)
 	{
 		bool result = false;
 
@@ -69,7 +69,7 @@ namespace
 
 			if (pControl)
 			{
-				cSC4ViewInputControlPlaceLot_ctor(pControl, 0, lotExemplarID, 0, false);
+				cSC4ViewInputControlPlaceLot_ctor(pControl, 0, lotExemplarID, buildingExemplarID, false);
 
 				instance = pControl;
 				result = true;
@@ -115,7 +115,7 @@ namespace
 		return result;
 	}
 
-	bool CopyLot(cISC4View3DWin& view3D, uint32_t lotExemplarID)
+	bool CopyLot(cISC4View3DWin& view3D, uint32_t lotExemplarID, uint32_t buildingExemplarID)
 	{
 		bool result = false;
 
@@ -125,7 +125,7 @@ namespace
 		{
 			cRZAutoRefCount<cSC4ViewInputControlPlaceLot> placeLot;
 
-			if (CreateViewInputControlPlaceLot(lotExemplarID, placeLot))
+			if (CreateViewInputControlPlaceLot(lotExemplarID, buildingExemplarID, placeLot))
 			{
 				view3D.SetCurrentViewInputControl(
 					placeLot,
@@ -211,13 +211,13 @@ namespace
 		return occupant;
 	}
 
-	cISC4LotConfiguration* GetOccupantLotConfiguration(
+	cISC4Lot* GetOccupantLot(
 		cISC4View3DWin& view3D,
 		int32_t mouseX,
 		int32_t mouseY,
 		cISC4Occupant* pOccupant)
 	{
-		cISC4LotConfiguration* pLotConfig = nullptr;
+		cISC4Lot* pLot = nullptr;
 
 		if (spCity)
 		{
@@ -225,8 +225,6 @@ namespace
 
 			if (pLotManager)
 			{
-				cISC4Lot* pLot = nullptr;
-
 				if (pOccupant)
 				{
 					pLot = pLotManager->GetOccupantLot(pOccupant);
@@ -245,15 +243,24 @@ namespace
 						pLot = pLotManager->GetLot(cellX, cellZ, false);
 					}
 				}
-
-				if (pLot)
-				{
-					pLotConfig = pLot->GetLotConfiguration();
-				}
 			}
 		}
 
-		return pLotConfig;
+		return pLot;
+	}
+
+	uint32_t GetBuildingExemplarID(cISC4Lot& lot)
+	{
+		uint32_t buildingExemplarID = 0;
+
+		cISC4BuildingOccupant* pBuilding = lot.GetBuilding();
+
+		if (pBuilding)
+		{
+			buildingExemplarID = pBuilding->GetBuildingType();
+		}
+
+		return buildingExemplarID;
 	}
 }
 
@@ -267,15 +274,23 @@ bool OccupantCopyHandler::Execute(int32_t mouseX, int32_t mouseY)
 	{
 		cRZAutoRefCount<cISC4Occupant> pOccupant = GetOccupantAtMousePosition(*pView3D, mouseX, mouseY);
 
-		cISC4LotConfiguration* pLotConfiguration = GetOccupantLotConfiguration(
+		cISC4Lot* pLot = GetOccupantLot(
 			*pView3D,
 			mouseX,
 			mouseY,
 			pOccupant);
 
-		if (pLotConfiguration)
+		if (pLot)
 		{
-			result = CopyLot(*pView3D, pLotConfiguration->GetID());
+			cISC4LotConfiguration* pLotConfiguration = pLot->GetLotConfiguration();
+
+			if (pLotConfiguration)
+			{
+				const uint32_t lotExemplarID = pLotConfiguration->GetID();
+				const uint32_t buildingExemplarID = GetBuildingExemplarID(*pLot);
+
+				result = CopyLot(*pView3D, lotExemplarID, buildingExemplarID);
+			}
 		}
 		else if (pOccupant)
 		{
