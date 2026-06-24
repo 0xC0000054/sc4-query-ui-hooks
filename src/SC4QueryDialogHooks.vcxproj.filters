@@ -224,9 +224,6 @@
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResourceManager.h">
       <Filter>Header Files\GZCOM</Filter>
     </ClInclude>
-    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResource.h">
-      <Filter>Header Files\GZCOM</Filter>
-    </ClInclude>
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResourceFactory.h">
       <Filter>Header Files\GZCOM</Filter>
     </ClInclude>

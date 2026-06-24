@@ -65,7 +65,6 @@
   <ItemGroup>
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cGZPersistResourceKey.h" />
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistDBRecord.h" />
-    <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResource.h" />
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResourceFactory.h" />
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIGZPersistResourceManager.h" />
     <ClInclude Include="..\vendor\gzcom-dll\gzcom-dll\include\cIS3DModelInstance.h" />
