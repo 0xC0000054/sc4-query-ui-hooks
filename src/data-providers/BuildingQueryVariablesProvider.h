@@ -43,8 +43,6 @@ private:
 	void BeforeDialogShown(cISC4Occupant* pOccupant) override;
 	void AfterDialogShown(cISC4Occupant* pOccupant) override;
 
-	void DebugLogTokenizerVariables();
-
 	const ISettings& settings;
 	QueryUILuaExtensions queryUILuaExtensions;
 };

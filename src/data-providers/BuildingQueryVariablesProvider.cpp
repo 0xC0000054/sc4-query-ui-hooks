@@ -1240,6 +1240,23 @@ namespace
 	// The current token context is stored in a static variable to ensure that the
 	// memory remains valid between calls to BeforeDialogShown and AfterDialogShown.
 	static UnknownTokenContext sCurrentTokenContext;
+
+	void DebugLogTokenizerVariables()
+	{
+		for (const auto& entry : tokenDataCallbacks)
+		{
+			cRZBaseString token("#", 1);
+			token.Append(entry.first.data(), entry.first.size());
+			token.Append("#", 1);
+
+			PrintDetokenizedValueToDebugOutput(token);
+		}
+
+		// Parameterized tokens
+
+		// 0xaa59670c is the Landmark Effect purpose id.
+		PrintDetokenizedValueToDebugOutput(cRZBaseString("#budget_purpose_type_cost:0xaa59670c#"));
+	}
 }
 
 BuildingQueryVariablesProvider::BuildingQueryVariablesProvider(const ISettings& settings)
@@ -1332,21 +1349,4 @@ void BuildingQueryVariablesProvider::AfterDialogShown(cISC4Occupant* pOccupant)
 	}
 
 	queryUILuaExtensions.AfterDialogShown(pOccupant);
-}
-
-void BuildingQueryVariablesProvider::DebugLogTokenizerVariables()
-{
-	for (const auto& entry : tokenDataCallbacks)
-	{
-		cRZBaseString token("#", 1);
-		token.Append(entry.first.data(), entry.first.size());
-		token.Append("#", 1);
-
-		PrintDetokenizedValueToDebugOutput(token);
-	}
-
-	// Parameterized tokens
-
-	// 0xaa59670c is the Landmark Effect purpose id.
-	PrintDetokenizedValueToDebugOutput(cRZBaseString("#budget_purpose_type_cost:0xaa59670c#"));
 }
