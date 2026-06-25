@@ -13,7 +13,6 @@ Some objects can be copied by holding down the shift key and clicking on them wi
 #### Buildings
 
 Clicking a building will activate the Place Lot tool with the building's lot selected.
-Note that the exact building may be different if the lot uses Building Families.
 
 #### Flora
 
